@@ -1,0 +1,31 @@
+.info {
+    margin: 1em;
+    box-shadow: 5px 5px 5px 1px gray;
+    width: 95%;
+    padding: 0px;
+    .user_data {
+        display: flex;
+        align-items: center;
+        float: left;
+        width: 100%;
+        justify-content: start;
+        background-color: #FFFFFF;
+        img {
+            width: 4em;
+            height: 4em;
+            align-self: right;
+            margin-right: 1em;
+            clear: right;
+        }
+    }
+    img {
+        width: 100%;
+    }
+    .user_action {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1em;
+        background-color: #f0f0f0;
+    }
+}
