@@ -19,16 +19,20 @@
         width: 100%;
         display: flex;
         justify-content: space-between;
-        align-items: center;
+        align-items: down;
         height: 4.5em;
         background-color: #FFFFFF;
     }
-    .button {
+    .search-button {
         width: 2em;
         height: 2em;
         align-self: right;
         margin: 0px;
         clear: right;
+        padding: 0.2em;
+        background-image: url("Temp/search.jpg") no-repeat;
+    }
+    .search-button:hover {
     }
 }
 
