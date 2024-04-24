@@ -1,0 +1,38 @@
+.button {
+    width: 2em;
+    height: 2em;
+    align-self: right;
+    margin: 0px;
+    clear: right;
+}
+.button_box {
+    padding: 3em;
+}
+.title {
+    align-self: left;
+}
+header {
+    top: 0px;
+    position: sticky;
+    display: flex;
+    align-items: center;
+    margin: 0px;
+    width: 100%;
+    display: flex;
+    position: sticky;
+    height: 5em;
+    justify-content: space-between;
+    padding: 1em;
+    background-color: #f0f0f0;
+}
+header ::sticky {
+    background-color: #f0f0f0;
+}
+.info {
+    margin: 1em;
+}
+body {
+    height: 100vh;
+    padding: 0px;
+    background-color: black;
+}
