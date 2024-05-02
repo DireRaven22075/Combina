@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Combina : Home</title>
+    <link rel="stylesheet" type="text/css" href="Style/header.css">
+    <link rel="stylesheet" type="text/css" href="Style/element.css">
+    <link rel="stylesheet" type="text/css" href="Style/style.css">
+    <link rel="stylesheet" type="text/css" href="Style/info.css"/>
+    <link rel="stylesheet" type="text/css" href="Style/static.css"/>
+    <link rel="stylesheet" type="text/css" href="Style/menu.css"/>
+    <script>
+        /*
+        window.onscroll = function(ev) {
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                window.scrollTo(0, 0);
+                location.href = "./temp.html";
+            }
+        };
+        */
+    </script>
+    <script src="Script/temp.js"></script>
+</head>
+<body style = "margin: 0px; padding: 0px;" class = "noselect">
+    <header class = "topbar">
+        <div class = "noselect">
+            <h1 class = "a">Home</h1>
+            <span class = "button_box">
+                <input class = "search-button" type = "button" name = "search"/>
+                <input class = "button list" type = "button" onclick="js:alert('Test')" name = "list"/>
+            </span>
+        </div>
+    </header>
+    <!--BODY-->
+    <div class = "upper" style = "margin-top: 6em;">
+        <div class = "info noselect">
+            <div class = "user_data">
+                <img class = "usr_img" src = "Temp/user_icon.png"/>
+                <span>
+                    <h2>(USERNAME)</h2>
+                    <p>(WHERE), (WHEN)</p>
+                </span>
+            </div>
+            <img src = "Temp/Image.avif"/>
+            <div class = "user_action">
+                <input class = "button_left" type = "button" name = "comment"/>
+                <input class = "button_left" type = "button" name = "like"/>
+                <input class = "button" type = "button" name = "list"/>
+            </div>
+        </div>
+        <div class = "info">
+            <div class = "user_data">
+                <img class = "usr_img" src = "Temp/user_icon.png"/>
+                <span>
+                    <h2>(USERNAME)</h2>
+                    <p>(WHERE), (WHEN)</p>
+                </span>
+            </div>
+            <h1>TRIP@YCNC</h1>
+            <div class = "user_action">
+                <input class = "button_left" type = "button" name = "comment"/>
+                <input class = "button_left" type = "button" name = "like"/>
+                <input class = "button" type = "button" name = "list"/>
+            </div>
+        </div>
+        <div class = "info">
+            <div class = "user_data">
+                <img class = "usr_img" src = "Temp/user_icon.png"/>
+                <span>
+                    <h2>(USERNAME)</h2>
+                    <p>(WHERE), (WHEN)</p>
+                </span>
+            </div>
+            <h1>TRIP@YCNC</h1>
+            <div class = "user_action">
+                <input class = "button_left" type = "button" name = "comment"/>
+                <input class = "button_left" type = "button" name = "like"/>
+                <input class = "button" type = "button" name = "list"/>
+            </div>
+        </div>
+    </div>
+    <footer id = "menu">
+        <input onclick="js:goto('home.html')"class="button"type="button"name="home"value="홈"/>
+        <input onclick="js:goto('search.html')"class="button"type="button"name="home"value="검색"/>
+        <input onclick="js:goto('create.html')"class="button"type="button"name="home"value="만들기"/>
+        <input onclick="js:goto('chat.html')"class="button"type="button"name="home"value="메세지"/>
+        <input onclick="js:goto('account.html')"class="button"type="button"name="home"value="계정"/>
+    </footer>
+</body>
+</html>

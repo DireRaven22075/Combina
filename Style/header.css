@@ -1,13 +1,12 @@
 .topbar {
     top: 0px;
-    position: sticky;
+    position: fixed;
     display: flex;
     align-items: upper;
     margin: 0px;
     width: 100%;
     margin-bottom:3em;
     display: flex;
-    position: sticky;
     height: 5em;
     justify-content: space-between;
     padding: 0px;
@@ -27,7 +26,7 @@
         width: 2em;
         height: 2em;
         align-self: right;
-        margin: 0px;
+        margin: 1em;
         clear: right;
         padding: 0.2em;
         background-image: url("Temp/search.jpg") no-repeat;

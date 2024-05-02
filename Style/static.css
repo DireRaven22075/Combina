@@ -6,3 +6,6 @@
     -ms-user-select: none;
     user-select: none;
 }
+body {
+    background-color: linear-gradient(0.25turn, #08dfa0, #208dfe);
+}
