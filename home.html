@@ -9,6 +9,9 @@
     <link rel="stylesheet" type="text/css" href="Style/static.css"/>
     <link rel="stylesheet" type="text/css" href="Style/menu.css"/>
     <script>
+        window.onload = function(ev) {
+            window.scrollTo(0, 0);
+        }
         /*
         window.onscroll = function(ev) {
             if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
@@ -31,7 +34,7 @@
         </div>
     </header>
     <!--BODY-->
-    <div class = "upper" style = "margin-top: 6em;">
+    <div class = "upper" style = "margin-top: 6em; margin-bottom: 3em; padding-bottom: 3em;">
         <div class = "info noselect">
             <div class = "user_data">
                 <img class = "usr_img" src = "Temp/user_icon.png"/>
@@ -77,6 +80,7 @@
                 <input class = "button" type = "button" name = "list"/>
             </div>
         </div>
+        <h1>최근 포스트를 전부 확인하셨습니다.</h1>
     </div>
     <footer id = "menu">
         <input onclick="js:goto('home.html')"class="button"type="button"name="home"value="홈"/>

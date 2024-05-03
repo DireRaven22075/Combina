@@ -1,26 +1,57 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Welcome to Combina</title>
-    <link rel="stylesheet" type="text/css" href="Style/menu.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meat charset="UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="Style/temp_index.css" />
+    <link rel="stylesheet" type="text/css" href="Style/menu.css" />
+    <link rel="stylesheet" type="text/css" href="Style/static.css" />
     <script src="Script/temp.js"></script>
+    <script>
+        window.onscroll = function (ev) {
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                location.href = "./home.html";
+                window.onload = window.scrollTo(0, 0);
+            }
+        };
+        //window.onscroll = null;
+    </script>
 </head>
-<body>
-    <div class = "container">
-        <h1>Combina</h1>
-        <h2>당신의 취향을 조합하세요</h2>
-        <input onclick="js:goto('login.html')"class="button"type="button"name="login"value="로그인"/>
-        <input onclick="js:goto('signup.html')"class="button"type="button"name="signup"value="회원가입"/>
+
+<body style="height:1500px">
+    <h3>환영합니다</h3>
+    <h1>(USERNAME)</h1>
+    <h2>오늘의 소식</h2>
+    <div class="container">
+        <div class="temp_element" style="background-color: red;"><img/></div>
+        <div class="temp_element" style="background-color: orange;"><img/></div>
+        <div class="temp_element" style="background-color: yellow;"><img/></div>
+        <div class="temp_element" style="background-color: green;"><img/></div>
+        <div class="temp_element" style="background-color: blue;"><img/></div>
+        <div class="temp_element" style="background-color: navy;"><img/></div>
+        <div class="temp_element" style="background-color: purple;"><img/></div>
+        <div class="temp_element" style="background-color: black;"><img/></div>
     </div>
-    <div>
-        <img src="Image/Combina.png" alt="Combina" width="100%" height="100%">
+    <h2>나의 포스트</h2>
+    <div class="container">
+        <div class="temp_element" style="background-color: red;"><img/></div>
+        <div class="temp_element" style="background-color: orange;"><img/></div>
+        <div class="temp_element" style="background-color: yellow;"><img/></div>
+        <div class="temp_element" style="background-color: green;"><img/></div>
+        <div class="temp_element" style="background-color: blue;"><img/></div>
+        <div class="temp_element" style="background-color: navy;"><img/></div>
+        <div class="temp_element" style="background-color: purple;"><img/></div>
+        <div class="temp_element" style="background-color: black;"><img/></div>
     </div>
-    <footer id = "menu">
-        <input onclick="js:goto('home.html')"class="button"type="button"name="home"value="홈"/>
-        <input onclick="js:goto('search.html')"class="button"type="button"name="home"value="검색"/>
-        <input onclick="js:goto('create.html')"class="button"type="button"name="home"value="만들기"/>
-        <input onclick="js:goto('chat.html')"class="button"type="button"name="home"value="메세지"/>
-        <input onclick="js:goto('account.html')"class="button"type="button"name="home"value="계정"/>
+    <footer id="menu">
+        <input onclick="js:goto('home.html')" class="button" type="button" name="home" value="홈" />
+        <input onclick="js:goto('search.html')" class="button" type="button" name="home" value="검색" />
+        <input onclick="js:goto('create.html')" class="button" type="button" name="home" value="만들기" />
+        <input onclick="js:goto('chat.html')" class="button" type="button" name="home" value="메세지" />
+        <input onclick="js:goto('account.html')" class="button" type="button" name="home" value="계정" />
     </footer>
 </body>
+
 </html>
