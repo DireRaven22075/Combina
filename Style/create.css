@@ -1,0 +1,28 @@
+#Create_body {
+    margin: 1em;
+    padding: 0px;
+    border: 2px solid black;
+    h3 {
+        float: left;
+        text-align: left;
+
+    }
+    #Title {
+        width: auto;
+        height: 1em;
+    }
+    #Article {
+
+    }
+    .title {
+        float: right;
+    }
+    .area {
+        width: 100%;
+        border : none;
+    }
+    .area:focus {
+        background-color: #08dfa0;
+        border: none;
+    }
+}
