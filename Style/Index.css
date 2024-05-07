@@ -7,6 +7,17 @@
             margin-top:0.2em;
             background: linear-gradient(0.25turn, #08dfa0, #208dfe);
         }
+        p:nth-child(1) {
+            margin: 0px;
+            padding: 0px;
+            font-size: 1.5em;
+            color: red;
+        }
+        p:nth-child(2) {
+            margin: 0px;
+            padding: 0px;
+            font-size: 1em;
+        }
     }
     .body {
         .container {

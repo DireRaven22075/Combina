@@ -19,9 +19,10 @@
     <header id="Header">
         <div class="upper">
             <h1 id="Title">Home</h1>
-            <button onclick="js:goto('index.html')">
-                필터
-            </button>
+        <input type="checkbox" id="layerPopup">
+        <label for="layerPopup">
+            버튼
+        </label>
         </div>
         <div class="lower">
             <input class="select" id="All" onclick="js:search('All')" type="button" value="전체" />
@@ -109,6 +110,15 @@
             <p>계정</p>
         </button>
     </footer>
+    <div id="popup_bg">
+        <div id="popup">
+            <h2>
+                계정 추가
+                <a onclick="js:closePopup()">X</a>
+            </h2>
+            <p>추가로 연결할 계정을 선택해 주십시오.</p>
+        </div>
+    </div>
 </body>
 
 </html>

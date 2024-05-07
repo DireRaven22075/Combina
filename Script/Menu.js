@@ -1,11 +1,6 @@
 function login(name) {
     temp(name);
     return;
-    switch (name) {
-        case "Facebook":
-            temp
-            return;
-    }
 }
 function showlist() {
     const body = document.getElementById("AccountList");
