@@ -1,4 +1,4 @@
-#Create_body {
+#Create {
     margin: 1em;
     padding: 0px;
     border: 2px solid black;
@@ -9,19 +9,18 @@
     #Title {
         width: auto;
         height: 1em;
+        right: 0px;
+        float:right;
     }
-    #Article {
-
+    #Content {
+        width: 98%;
+        border: none;
+    }
+    #Content:focus {
+        background-color: #08dfa0;
+        border: 0px;
     }
     .title {
         float: right;
-    }
-    .area {
-        width: 100%;
-        border : none;
-    }
-    .area:focus {
-        background-color: #08dfa0;
-        border: none;
     }
 }

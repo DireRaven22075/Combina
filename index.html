@@ -5,25 +5,16 @@
     <title>Welcome to Combina</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <!---->
+    <!-- Link StyleSheet -->
     <link rel="stylesheet" type="text/css" href="Style/temp_index.css" />
     <link rel="stylesheet" type="text/css" href="Style/static.css" />
-    <script src="Script/temp.js"></script>
-    <script>
-        window.onload = function() {
-            var body = document.body;
-            body.style.height = window.innerHeight + "px";
-        }
-        window.onscroll = function (ev) {
-            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-                location.href = "./home.html";
-                window.onload = window.scrollTo(0, 0);
-            }
-        };
-    </script>
+
+    <!-- Link Script -->
+    <script src="Script/static.js"></script>
+    <script src="Script/Index.js"></script>
 </head>
 
-<body style="height:1500px; background-color:rgb(135, 255, 150);">
+<body style="padding-top:0px;">
     <div style="margin-bottom: 0.2em; margin-left:1em; margin-right:1em; background-color:white; width:auto; margin-top: 0.5em; height:4em;">
         <img/>
     </div>

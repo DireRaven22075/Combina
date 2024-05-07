@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="Style/create.css" />
 
     <!-- Link Script -->
-    <script src="Script/temp.js"></script>
+    <script src="Script/static.js"></script>
     <script src="Script/Create.js"></script>
 </head>
 
@@ -22,7 +22,7 @@
         <input id="Content" type="text" placeholder="작성하기..."/>
         <div class="create_footer">
             <input type="button" onclick="" value="플랫폼 선택" />
-            <input type="button" onclick="" value="사진첨부" />
+            <input type="file" multiple accept =".gif, .png, .jpg, .jpeg, .webp, .avif" onclick="" value="사진첨부" />
             <input type="button" onclick="js:submit()" value="올리기" />
         </div>
     </form>
