@@ -3,3 +3,6 @@ function goto(location = "home.html") {
     window.location.href = location;
     return;
 }
+window.onload += function() {
+    const lower = document.getElementById("lower");
+}

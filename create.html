@@ -5,28 +5,33 @@
     <title>Combina : Home</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Link StyleSheet -->
     <link rel="stylesheet" type="text/css" href="Style/static.css" />
     <link rel="stylesheet" type="text/css" href="Style/create.css" />
+
+    <!-- Link Script -->
     <script src="Script/temp.js"></script>
+    <script src="Script/Create.js"></script>
 </head>
 
 <body>
     <header id="Header"><div class="upper"><h1>만들기</h1></div></header>
-    <div id="Create_body">
-        <h3>제목</h3><input class="title" type="text" />
-        <input class="area" type="text" placeholder="작성하기..."/>
+    <form id="Create" method="post" action="">
+        <h3>제목</h3><input id="Title" type="text" />
+        <input id="Content" type="text" placeholder="작성하기..."/>
         <div class="create_footer">
             <input type="button" onclick="" value="플랫폼 선택" />
             <input type="button" onclick="" value="사진첨부" />
-            <input type="button" onclick="" value="올리기" />
+            <input type="button" onclick="js:submit()" value="올리기" />
         </div>
-    </div>
+    </form>
     <footer id="Menu">
         <button onclick="js:goto('home.html')" class="button"><img src="Temp/WIP.png" /><p>홈</p></button>
         <button onclick="js:goto('search.html')" class="button"><img src="Temp/WIP.png" /><p>검색</p></button>
-        <button onclick="js:goto('create.html')" class="button"><img src="Temp/WIP.png" /><p>만들기</p></button>
+        <button disabled onclick="js:goto('create.html')" class="button"><img src="Temp/WIP.png" /><p>만들기</p></button>
         <button onclick="js:goto('chat.html')" class="button"><img src="Temp/WIP.png" /><p>메세지</p></button>
-        <button onclick="js:goto('account.html')" class="button"><img src="Temp/WIP.png" /><p>계정</p></button>
+        <button onclick="js:goto('menu.html')" class="button"><img src="Temp/WIP.png" /><p>계정</p></button>
     </footer>
 </body>
 
