@@ -5,12 +5,63 @@
     <title>Combina : Menu</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Link StyleSheet -->
     <link rel="stylesheet" type="text/css" href="Style/static.css" />
+    <link rel="stylesheet" type="text/css" href="Style/Menu.css" />
+
+    <link rel="stylesheet" type="text/css" href="Style/test.css" />
+
+    <!-- Link Script -->
     <script src="Script/static.js"></script>
+    <script src="Script/Menu.js"></script>
 </head>
 
 <body>
-    <footer id="Menu">
+    <header id="Header">
+        <div class="upper">
+            <h1 id="Title">Menu</h1>
+        </div>
+    </header>
+    <div id="Menu">
+        <div class = "account">
+            <div class = "element">
+                <img src = "Temp/WIP.png"/>
+                <p class = "T">(WHERE)</p> 
+                <p>계정 : </p> <p class = "accountID">(ACCOUNT)</p>
+                <input type="image" src = "Temp/WIP.png" alt = "로그아웃"/>
+            </div>
+        </div>
+        <button for="accountpopup">
+            <img src = "Temp/WIP.png"/>
+            <p>계정 추가</p>
+        </button>
+        <div style = "top:50%; height: 50%; transform: translate(-50%, -50%); display: none;">
+            <button for = "accountpopup">
+                <img src = "Temp/WIP.png"/>
+                <p>계정 관리</p>
+            </button>
+        </div>
+        <div class="시발">
+
+        </div>
+    </div>
+    <div>
+        <input type="checkbox" id="layerPopup">
+        <label for="layerPopup">
+            버튼
+        </label>
+        <div id="layer_bg">
+            <div id="popup">
+                <h2>
+                    계정 추가
+                    <label for="layerPopup">X</label>
+                </h2>
+                <p>추가로 연결할 계정을 선택해 주십시오.</p>
+            </div>
+        </div>
+    </div>
+    <footer id="Footer">
         <button onclick="js:goto('home.html')" class="button">
             <img src="Temp/WIP.png" />
             <p>홈</p>

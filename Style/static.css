@@ -6,7 +6,6 @@
     -ms-user-select: none;
     user-select: none;
 }
-
 body {
     padding:0px;
     padding-top:6em;
@@ -19,6 +18,10 @@ body {
 }
 
 /* Header ID */
+#HeaderMini {
+    top: 0px;
+    margin: 0px;
+}
 #Header {
     top: 0px;
     margin: 0px;
@@ -83,7 +86,7 @@ body {
     }
 }
 /* Footer ID */
-#Menu {
+#Footer {
     position: fixed;
     bottom: 0px;
     width: 100%;
