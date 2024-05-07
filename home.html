@@ -1,108 +1,104 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Combina : Home</title>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="stylesheet" type="text/css" href="Style/header.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" type="text/css" href="Style/element.css">
     <link rel="stylesheet" type="text/css" href="Style/style.css">
-    <link rel="stylesheet" type="text/css" href="Style/info.css"/>
-    <link rel="stylesheet" type="text/css" href="Style/static.css"/>
-    <link rel="stylesheet" type="text/css" href="Style/menu.css"/>
-    <script>
-        window.onload = function(ev) {
-            window.scrollTo(0, 0);
-        }
-        /*
-        window.onscroll = function(ev) {
-            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-                window.scrollTo(0, 0);
-                location.href = "./temp.html";
-            }
-        };
-        */
-    </script>
+    <link rel="stylesheet" type="text/css" href="Style/info.css" />
+    <link rel="stylesheet" type="text/css" href="Style/static.css" />
+    <script> window.onload = function (ev) { window.scrollTo(0, 0); }</script>
     <script src="Script/temp.js"></script>
 </head>
-<body style = "margin: 0px; padding: 0px;" class = "noselect">
-    <header class = "topbar">
-        <div class = "noselect">
-            <h1 class = "a">Home</h1>
-            <span class = "button_box">
-                <input class = "search-button" type = "button" name = "search"/>
-                <input class = "button list" type = "button" onclick="js:alert('Test')" name = "list"/>
-            </span>
+
+<body style="margin: 0px; padding: 0px;" class="noselect">
+    <header id="Header">
+        <div class="upper">
+            <h1>홈</h1>
+            <button onclick="js:goto('index.html')">
+                필터
+            </button>
+        </div>
+        <div class="lower">
+            <input class="select" type="button" value="전체" />
+            <input class="select" type="button" value="페이스북" />
+            <input class="select" type="button" value="인스타" />
+            <input class="select" type="button" value="X" />
         </div>
     </header>
     <!--BODY-->
-    <div class = "upper" style = "margin-top: 6em; margin-bottom: 3em; padding-bottom: 3em;">
-        <div class = "info noselect">
-            <div class = "user_data">
-                <img class = "usr_img" src = "Temp/user_icon.png"/>
+    <div class="upper" style="margin-top: 6em; margin-bottom: 3em; padding-bottom: 3em;">
+        <div class="info noselect">
+            <div class="user_data">
+                <img class="usr_img" src="Temp/user_icon.png" />
                 <span>
                     <h2>(USERNAME)</h2>
                     <p>(WHERE), (WHEN)</p>
                 </span>
             </div>
-            <img src = "Temp/Image.avif"/>
-            <div class = "user_action">
-                <input class = "button_left" type = "button" name = "comment"/>
-                <input class = "button_left" type = "button" name = "like"/>
-                <input class = "button" type = "button" name = "list"/>
+            <img src="Temp/Image.avif" />
+            <div class="user_action">
+                <input class="button_left" type="button" name="comment" />
+                <input class="button_left" type="button" name="like" />
+                <input class="button" type="button" name="list" />
             </div>
         </div>
-        <div class = "info">
-            <div class = "user_data">
-                <img class = "usr_img" src = "Temp/user_icon.png"/>
+        <div class="info">
+            <div class="user_data">
+                <img class="usr_img" src="Temp/user_icon.png" />
                 <span>
                     <h2>(USERNAME)</h2>
                     <p>(WHERE), (WHEN)</p>
                 </span>
             </div>
             <h1>TRIP@YCNC</h1>
-            <div class = "user_action">
-                <input class = "button_left" type = "button" name = "comment"/>
-                <input class = "button_left" type = "button" name = "like"/>
-                <input class = "button" type = "button" name = "list"/>
+            <div class="user_action">
+                <input class="button_left" type="button" name="comment" />
+                <input class="button_left" type="button" name="like" />
+                <input class="button" type="button" name="list" />
             </div>
         </div>
-        <div class = "info">
-            <div class = "user_data">
-                <img class = "usr_img" src = "Temp/user_icon.png"/>
+        <div class="info">
+            <div class="user_data">
+                <img class="usr_img" src="Temp/user_icon.png" />
                 <span>
                     <h2>(USERNAME)</h2>
                     <p>(WHERE), (WHEN)</p>
                 </span>
             </div>
             <h1>TRIP@YCNC</h1>
-            <div class = "user_action">
-                <input class = "button_left" type = "button" name = "comment"/>
-                <input class = "button_left" type = "button" name = "like"/>
-                <input class = "button" type = "button" name = "list"/>
+            <div class="user_action">
+                <input class="button_left" type="button" name="comment" />
+                <input class="button_left" type="button" name="like" />
+                <input class="button" type="button" name="list" />
             </div>
         </div>
         <h1>최근 포스트를 전부 확인하셨습니다.</h1>
     </div>
-    <footer id="menu">
-        <button onclick="js:goto('index.html')">
-            <img src="Temp/WIP.png"/>
-        </button>
-        <button onclick ="js:goto('home.html')" class="button">
-            <img src ="Temp/WIP.png"/><p>홈</p>
+    <footer id="Menu">
+        <button onclick="js:goto('home.html')" class="button">
+            <img src="Temp/WIP.png" />
+            <p>홈</p>
         </button>
         <button onclick="js:goto('search.html')" class="button">
-            <img src="Temp/WIP.png"/><p>검색</p>
+            <img src="Temp/WIP.png" />
+            <p>검색</p>
         </button>
         <button onclick="js:goto('create.html')" class="button">
-            <img src="Temp/WIP.png"/><p>만들기</p>
+            <img src="Temp/WIP.png" />
+            <p>만들기</p>
         </button>
         <button onclick="js:goto('chat.html')" class="button">
-            <img src="Temp/WIP.png"/><p>메세지</p>
+            <img src="Temp/WIP.png" />
+            <p>메세지</p>
         </button>
         <button onclick="js:goto('account.html')" class="button">
-            <img src="Temp/WIP.png"/><p>계정</p>
+            <img src="Temp/WIP.png" />
+            <p>계정</p>
         </button>
     </footer>
 </body>
+
 </html>
