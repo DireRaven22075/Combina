@@ -4,10 +4,10 @@
 <head>
     <title>Welcome to Combina</title>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Link StyleSheet -->
-    <link rel="stylesheet" type="text/css" href="Style/temp_index.css" />
     <link rel="stylesheet" type="text/css" href="Style/static.css" />
+    <link rel="stylesheet" type="text/css" href="Style/Index.css" />
 
     <!-- Link Script -->
     <script src="Script/static.js"></script>
@@ -15,61 +15,65 @@
 </head>
 
 <body style="padding-top:0px;">
-    <div style="margin-bottom: 0.2em; margin-left:1em; margin-right:1em; background-color:white; width:auto; margin-top: 0.5em; height:4em;">
-        <img/>
+    <div id="Index">
+        <div class="header">
+            <div class="box"></div>
+            <p>환영합니다</p>
+            <p>(USERNAME)</p>
+        </div>
+        <div class="body">
+            <div class="area">
+                <h2>오늘의 소식</h2>
+                <div class="container news">
+                    <div class="element" style="background-color: red;"><img /></div>
+                    <div class="element" style="background-color: orange;"><img /></div>
+                    <div class="element" style="background-color: yellow;"><img /></div>
+                    <div class="element" style="background-color: green;"><img /></div>
+                    <div class="element" style="background-color: blue;"><img /></div>
+                    <div class="element" style="background-color: navy;"><img /></div>
+                    <div class="element" style="background-color: purple;"><img /></div>
+                    <div class="element" style="background-color: black;"><img /></div>
+                </div>
+            </div>
+            <div class="area">
+                <h2>나의 포스트</h2>
+                <div class="container">
+                    <div class="element" style="background-color: red;"><img /></div>
+                    <div class="element" style="background-color: orange;"><img /></div>
+                    <div class="element" style="background-color: yellow;"><img /></div>
+                    <div class="element" style="background-color: green;"><img /></div>
+                    <div class="element" style="background-color: blue;"><img /></div>
+                    <div class="element" style="background-color: navy;"><img /></div>
+                    <div class="element" style="background-color: purple;"><img /></div>
+                    <div class="element" style="background-color: black;"><img /></div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <p>홈으로 들어가기</p>
+            <img src="Temp/WIP.png" />
+        </div>
     </div>
-    <h3>환영합니다</h3>
-    <h1>(USERNAME)</h1>
-    <br/>
-    <br/>
-    <br/>
-    <h2>오늘의 소식</h2>
-    <div class="container">
-        <template class="element" id="Image_News">
-            <img src = "Temp/WIP.png" />
-        </template>
-        <template clsss="element" id="Text_News">
-            <p>오늘의 소식</p>
-        </template>
-        <div class="element" style="background-color: red;"><img/></div>
-        <div class="element" style="background-color: orange;"><img/></div>
-        <div class="element" style="background-color: yellow;"><img/></div>
-        <div class="element" style="background-color: green;"><img/></div>
-        <div class="element" style="background-color: blue;"><img/></div>
-        <div class="element" style="background-color: navy;"><img/></div>
-        <div class="element" style="background-color: purple;"><img/></div>
-        <div class="element" style="background-color: black;"><img/></div>
-    </div>
-    <h2>나의 포스트</h2>
-    <div class="container">
-        <div class="element" style="background-color: red;"><img/></div>
-        <div class="element" style="background-color: orange;"><img/></div>
-        <div class="element" style="background-color: yellow;"><img/></div>
-        <div class="element" style="background-color: green;"><img/></div>
-        <div class="element" style="background-color: blue;"><img/></div>
-        <div class="element" style="background-color: navy;"><img/></div>
-        <div class="element" style="background-color: purple;"><img/></div>
-        <div class="element" style="background-color: black;"><img/></div>
-    </div>
-    <span class = "footer_text">
-        <p>홈으로 들어가기</p>
-        <img src="Temp/temp.jpg"/>
-    </span>
     <footer id="Menu">
-        <button onclick ="js:goto('home.html')" class="button">
-            <img src ="Temp/WIP.png"/><p>홈</p>
+        <button onclick="js:goto('home.html')" class="button">
+            <img src="Temp/WIP.png" />
+            <p>홈</p>
         </button>
         <button onclick="js:goto('search.html')" class="button">
-            <img src="Temp/WIP.png"/><p>검색</p>
+            <img src="Temp/WIP.png" />
+            <p>검색</p>
         </button>
         <button onclick="js:goto('create.html')" class="button">
-            <img src="Temp/WIP.png"/><p>만들기</p>
+            <img src="Temp/WIP.png" />
+            <p>만들기</p>
         </button>
         <button onclick="js:goto('chat.html')" class="button">
-            <img src="Temp/WIP.png"/><p>메세지</p>
+            <img src="Temp/WIP.png" />
+            <p>메세지</p>
         </button>
         <button onclick="js:goto('menu.html')" class="button">
-            <img src="Temp/WIP.png"/><p>계정</p>
+            <img src="Temp/WIP.png" />
+            <p>계정</p>
         </button>
     </footer>
 </body>

@@ -15,32 +15,33 @@
     <script src="Script/static.js"></script>
 </head>
 
-<body class="noselect">
+<body>
     <header id="Header">
         <div class="upper">
-            <h1>홈</h1>
+            <h1 id="Title">Home</h1>
             <button onclick="js:goto('index.html')">
                 필터
             </button>
         </div>
         <div class="lower">
-            <input class="select" type="button" value="전체" />
-            <input class="select" type="button" value="페이스북" />
-            <input class="select" type="button" value="인스타" />
-            <input class="select" type="button" value="X" />
+            <input class="select" id="All" onclick="js:search('All')" type="button" value="전체" />
+            <input class="select" id="Facebook" onclick="js:search('Facebook')" type="button" value="페이스북" />
+            <input class="select" id="Instagram" onclick="js:search('Instagram')" type="button" value="인스타" />
+            <input class="select" id="X" onclick="js:search('X')" type="button" value="X" />
         </div>
     </header>
     <div id="Home">
-        <div class="element">
-            <div class="header">
+        <div class="element Instagram">
+            <div class="header noselect">
                 <img class="icon" src="Temp/user_icon.png"/>
                 <span class="info">
-                    <h2>(USERNAME)</h2>
+                    <p>(USERNAME)</p>
                     <p>(WHERE), (WHEN)</p>
                 </span>
             </div>
             <div class="body">
-
+                <img class="noselect" src="Temp/Image.avif" />
+                <h1>TRIP@YCNC</h1>
             </div>
             <div class="footer">
                 <input class="button_left" type="button" name="comment" />
@@ -48,46 +49,37 @@
                 <input class="button" type="button" name="list" />
             </div>
         </div>
-        <div class="element noselect">
-            <div class="user_data">
-                <img class="icon" src="Temp/user_icon.png" />
-                <span>
-                    <h2>(USERNAME)</h2>
+        <div class="element Facebook">
+            <div class="header noselect">
+                <img class="icon" src="Temp/user_icon.png"/>
+                <span class="info">
+                    <p>(USERNAME)</p>
                     <p>(WHERE), (WHEN)</p>
                 </span>
             </div>
-            <img src="Temp/Image.avif" />
-            <div class="user_action">
+            <div class="body">
+                <img class="noselect" src="Temp/Image.avif" />
+                <h1>TRIP@YCNC</h1>
+            </div>
+            <div class="footer">
                 <input class="button_left" type="button" name="comment" />
                 <input class="button_left" type="button" name="like" />
                 <input class="button" type="button" name="list" />
             </div>
         </div>
-        <div class="element">
-            <div class="user_data">
-                <img class="usr_img" src="Temp/user_icon.png" />
-                <span>
-                    <h2>(USERNAME)</h2>
+        <div class="element X">
+            <div class="header noselect">
+                <img class="icon" src="Temp/user_icon.png"/>
+                <span class="info">
+                    <p>(USERNAME)</p>
                     <p>(WHERE), (WHEN)</p>
                 </span>
             </div>
-            <h1>TRIP@YCNC</h1>
-            <div class="user_action">
-                <input class="button_left" type="button" name="comment" />
-                <input class="button_left" type="button" name="like" />
-                <input class="button" type="button" name="list" />
+            <div class="body">
+                <img class="noselect" src="Temp/Image.avif" />
+                <h1>TRIP@YCNC</h1>
             </div>
-        </div>
-        <div class="element">
-            <div class="user_data">
-                <img class="usr_img" src="Temp/user_icon.png" />
-                <span>
-                    <h2>(USERNAME)</h2>
-                    <p>(WHERE), (WHEN)</p>
-                </span>
-            </div>
-            <h1>TRIP@YCNC</h1>
-            <div class="user_action">
+            <div class="footer">
                 <input class="button_left" type="button" name="comment" />
                 <input class="button_left" type="button" name="like" />
                 <input class="button" type="button" name="list" />
