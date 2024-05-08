@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang = "ko">
+<html lang="ko">
 
 <head>
     <title>Combina : Home</title>
@@ -7,8 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Link StyleSheet -->
-    <link rel="stylesheet" type="text/css" href="Style/static.css"/>
-    <link rel="stylesheet" type="text/css" href="Style/Home.css"/>
+    <link rel="stylesheet" type="text/css" href="Style/static.css" />
+    <link rel="stylesheet" type="text/css" href="Style/Home.css" />
 
     <!-- Link Script -->
     <script src="Script/Home.js"></script>
@@ -19,78 +19,89 @@
     <header id="Header">
         <div class="upper">
             <h1 id="Title">Home</h1>
-        <input type="checkbox" id="layerPopup">
-        <label for="layerPopup">
-            버튼
-        </label>
         </div>
         <div class="lower">
-            <input class="select" id="All" onclick="js:search('All')" type="button" value="전체" />
-            <input class="select" id="Facebook" onclick="js:search('Facebook')" type="button" value="페이스북" />
-            <input class="select" id="Instagram" onclick="js:search('Instagram')" type="button" value="인스타" />
-            <input class="select" id="X" onclick="js:search('X')" type="button" value="X" />
+            <input class="select" id="All" onclick="js:filter('All')" type="button" value="전체" />
+            <input class="select" id="Facebook" onclick="js:filter('Facebook')" type="button" value="페이스북" />
+            <input class="select" id="Instagram" onclick="js:filter('Instagram')" type="button" value="인스타" />
+            <input class="select" id="X" onclick="js:filter('X')" type="button" value="X" />
         </div>
     </header>
-    <div id="Home">
-        <div class="element Instagram">
-            <div class="header noselect">
-                <img class="icon" src="Temp/user_icon.png"/>
-                <span class="info">
-                    <p>(USERNAME)</p>
-                    <p>(WHERE), (WHEN)</p>
-                </span>
-            </div>
-            <div class="body">
-                <img class="noselect" src="Temp/Image.avif" />
-                <h1>TRIP@YCNC</h1>
-            </div>
-            <div class="footer">
-                <input class="button_left" type="button" name="comment" />
-                <input class="button_left" type="button" name="like" />
-                <input class="button" type="button" name="list" />
-            </div>
+    <div class="element Instagram">
+        <div class="header noselect">
+            <img class="icon" src="Temp/user_icon.png" />
+            <span class="info">
+                <p>(USERNAME)</p>
+                <p>(WHERE), (WHEN)</p>
+            </span>
         </div>
-        <div class="element Facebook">
-            <div class="header noselect">
-                <img class="icon" src="Temp/user_icon.png"/>
-                <span class="info">
-                    <p>(USERNAME)</p>
-                    <p>(WHERE), (WHEN)</p>
-                </span>
-            </div>
-            <div class="body">
-                <img class="noselect" src="Temp/Image.avif" />
-                <h1>TRIP@YCNC</h1>
-            </div>
-            <div class="footer">
-                <input class="button_left" type="button" name="comment" />
-                <input class="button_left" type="button" name="like" />
-                <input class="button" type="button" name="list" />
-            </div>
+        <div class="body">
+            <img class="noselect" src="Temp/Image.avif" />
+            <h1>TRIP@YCNC</h1>
         </div>
-        <div class="element X">
-            <div class="header noselect">
-                <img class="icon" src="Temp/user_icon.png"/>
-                <span class="info">
-                    <p>(USERNAME)</p>
-                    <p>(WHERE), (WHEN)</p>
-                </span>
-            </div>
-            <div class="body">
-                <img class="noselect" src="Temp/Image.avif" />
-                <h1>TRIP@YCNC</h1>
-            </div>
-            <div class="footer">
-                <input class="button_left" type="button" name="comment" />
-                <input class="button_left" type="button" name="like" />
-                <input class="button" type="button" name="list" />
-            </div>
+        <div class="footer">
+            <input class="button_left" type="button" name="comment" />
+            <input class="button_left" type="button" name="like" />
+            <input class="button" type="button" name="list" />
         </div>
-        <h1>최근 포스트를 전부 확인하셨습니다.</h1>
     </div>
+    <div class="element Instagram">
+        <div class="header noselect">
+            <img class="icon" src="Temp/user_icon.png" />
+            <span class="info">
+                <p>(USERNAME)</p>
+                <p>(WHERE), (WHEN)</p>
+            </span>
+        </div>
+        <div class="body">
+            <img class="noselect" src="Temp/Image.avif" />
+            <h1>TRIP@YCNC</h1>
+        </div>
+        <div class="footer">
+            <input class="button_left" type="button" name="comment" />
+            <input class="button_left" type="button" name="like" />
+            <input class="button" type="button" name="list" />
+        </div>
+    </div>
+    <div class="element Facebook">
+        <div class="header noselect">
+            <img class="icon" src="Temp/user_icon.png" />
+            <span class="info">
+                <p>(USERNAME)</p>
+                <p>(WHERE), (WHEN)</p>
+            </span>
+        </div>
+        <div class="body">
+            <img class="noselect" src="Temp/Image.avif" />
+            <h1>TRIP@YCNC</h1>
+        </div>
+        <div class="footer">
+            <input class="button_left" type="button" name="comment" />
+            <input class="button_left" type="button" name="like" />
+            <input class="button" type="button" name="list" />
+        </div>
+    </div>
+    <div class="element X">
+        <div class="header noselect">
+            <img class="icon" src="Temp/user_icon.png" />
+            <span class="info">
+                <p>(USERNAME)</p>
+                <p>(WHERE), (WHEN)</p>
+            </span>
+        </div>
+        <div class="body">
+            <img class="noselect" src="Temp/Image.avif" />
+            <h1>TRIP@YCNC</h1>
+        </div>
+        <div class="footer">
+            <input class="button_left" type="button" name="comment" />
+            <input class="button_left" type="button" name="like" />
+            <input class="button" type="button" name="list" />
+        </div>
+    </div>
+    <h1>최근 포스트를 전부 확인하셨습니다.</h1>
     <footer id="Footer">
-        <button disabled onclick="js:goto('home.html')" class="button">
-            <img src="Temp/WIP.png" />
+        <button disabled onclick="js:goto('home.html')" class="button"><img src="Temp/WIP.png" />
             <p>홈</p>
         </button>
         <button onclick="js:goto('search.html')" class="button">
@@ -110,15 +121,6 @@
             <p>계정</p>
         </button>
     </footer>
-    <div id="popup_bg">
-        <div id="popup">
-            <h2>
-                계정 추가
-                <a onclick="js:closePopup()">X</a>
-            </h2>
-            <p>추가로 연결할 계정을 선택해 주십시오.</p>
-        </div>
-    </div>
 </body>
 
 </html>

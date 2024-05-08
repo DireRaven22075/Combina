@@ -3,8 +3,30 @@ function goto(location = "home.html") {
     window.location.href = location;
     return;
 }
+function filter(name) {
+    const docs = document.body;
+    var children = Array.from(docs.children);
+    if (name == "All") {
+        children.forEach((child) => {
+            if (child.tagName.toUpperCase() == "DIV") {
+                child.style.display = "block";
+            }
+        });
+        return;
+    }
+    children.forEach((child) => {
+        if (child.tagName.toUpperCase() == "DIV") {
+            if (child.classList.contains(name)) {
+                child.style.display = "block";
+            } else {
+                child.style.display = "none";
+            }
+        }
+    });
+}
 var selectedTag = [];
 function search(type) {
+    return;
     var docs = document.title.split(" : ")[1];
     var home = document.getElementById(docs);
     var children = Array.from(home.children);
