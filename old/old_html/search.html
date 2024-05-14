@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <title>Combina : Search</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- StyleSheet Link -->
+    <link rel="styleshtt" type="text/css" href="Style/All_Header.css" />
+    <link rel="stylesheet" type="text/css" href="Style/All_Footer.css" />
+    <link rel="stylesheet" type="text/css" href="Style/container.css" />
+
+    <!-- Script Link -->
+    <script src="Script/static.js"></script>
+</head>
+
+<body>
+    <header id="Header">
+        <div class="upper">
+            <h1>Search : <h1 id="Title">All</h1>
+            </h1>
+        </div>
+        <div class="lower">
+            <input class="select" id="All" onclick="js:search('All')" type="button" value="전체" />
+            <input class="select" id="Facebook" onclick="js:search('Facebook')" type="button" value="페이스북" />
+            <input class="select" id="Instagram" onclick="js:search('Instagram')" type="button" value="인스타" />
+            <input class="select" id="X" onclick="js:search('X')" type="button" value="X" />
+        </div>
+    </header>
+    <div id="Search">
+        <div class="Facebook">
+            <h3>페이스북</h3>
+            <div class="container">
+                <div class="element" style="background-color: red;"><img /></div>
+                <div class="element" style="background-color: orange;"><img /></div>
+                <div class="element" style="background-color: yellow;"><img /></div>
+                <div class="element" style="background-color: green;"><img /></div>
+                <div class="element" style="background-color: blue;"><img /></div>
+                <div class="element" style="background-color: navy;"><img /></div>
+                <div class="element" style="background-color: purple;"><img /></div>
+                <div class="element" style="background-color: black;"><img /></div>
+            </div>
+        </div>
+        <div class="Instagram">
+            <h3>인스타그램</h3>
+            <div class="container">
+                <div class="element" style="background-color: red;"><img /></div>
+                <div class="element" style="background-color: orange;"><img /></div>
+                <div class="element" style="background-color: yellow;"><img /></div>
+                <div class="element" style="background-color: green;"><img /></div>
+                <div class="element" style="background-color: blue;"><img /></div>
+                <div class="element" style="background-color: navy;"><img /></div>
+                <div class="element" style="background-color: purple;"><img /></div>
+                <div class="element" style="background-color: black;"><img /></div>
+            </div>
+        </div>
+        <div class="X">
+            <h3>X</h3>
+            <div class="container">
+                <div class="element" style="background-color: red;"><img /></div>
+                <div class="element" style="background-color: orange;"><img /></div>
+                <div class="element" style="background-color: yellow;"><img /></div>
+                <div class="element" style="background-color: green;"><img /></div>
+                <div class="element" style="background-color: blue;"><img /></div>
+                <div class="element" style="background-color: navy;"><img /></div>
+                <div class="element" style="background-color: purple;"><img /></div>
+                <div class="element" style="background-color: black;"><img /></div>
+            </div>
+        </div>
+    </div>
+    <footer id="Footer">
+        <input type="image" onclick="js:goto('home.html')" src="IMG/home.svg"/>
+        <input type="image" onclick="js:goto('search.html')" src="IMG/search.svg"/>
+        <input type="image" onclick="js:goto('create.html')" src="IMG/create.svg"/>
+        <input type="image" onclick="js:goto('chat.html')" src="IMG/chat.svg"/>
+        <input type="image" onclick="js:goto('menu.html')" src="IMG/account.svg"/>
+    </footer>
+</body>
+
+</html>

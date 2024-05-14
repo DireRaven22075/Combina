@@ -1,0 +1,26 @@
+#Create {
+    margin: 1em;
+    padding: 0px;
+    border: 2px solid black;
+    h3 {
+        float: left;
+        text-align: left;
+    }
+    #Title {
+        width: auto;
+        height: 1em;
+        right: 0px;
+        float:right;
+    }
+    #Content {
+        width: 98%;
+        border: none;
+    }
+    #Content:focus {
+        background-color: #08dfa0;
+        border: 0px;
+    }
+    .title {
+        float: right;
+    }
+}

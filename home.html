@@ -1,122 +1,53 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html>
 
 <head>
     <title>Combina : Home</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Link StyleSheet -->
-    <link rel="stylesheet" type="text/css" href="Style/static.css" />
-    <link rel="stylesheet" type="text/css" href="Style/Home.css" />
+    <!-- StyleSheet Link -->
+    <link rel="styleshtt" type="text/css" href="Style/All_Header.css" />
+    <link rel="stylesheet" type="text/css" href="Style/All_Footer.css" />
+    <link rel="stylesheet" type="text/css" href="Style/container.css" />
 
-    <!-- Link Script -->
-    <script src="Script/Home.js"></script>
+    <!-- Script Link -->
     <script src="Script/static.js"></script>
 </head>
 
 <body>
     <header id="Header">
         <div class="upper">
-            <h1 id="Title">Home</h1>
+            <h1>홈</h1>
         </div>
-        <div class="lower">
-            <input class="select" id="All" onclick="js:filter('All')" type="button" value="전체" />
-            <input class="select" id="Facebook" onclick="js:filter('Facebook')" type="button" value="페이스북" />
-            <input class="select" id="Instagram" onclick="js:filter('Instagram')" type="button" value="인스타" />
-            <input class="select" id="X" onclick="js:filter('X')" type="button" value="X" />
+        <div id="Platform" class="lower">
+            <template id="Platform_Element">
+                <input type="button" onclick="js:find('')" value=""/>
+            </template>
         </div>
     </header>
-    <div class="element Instagram">
-        <div class="header noselect">
-            <img class="icon" src="Temp/user_icon.png" />
-            <span class="info">
-                <p>(USERNAME)</p>
+    <div class = "element Facebook">
+        <div class="header">
+            <img src = "Icon/account.svg"/>
+            <span>
+                <p>(ACCOUNT)</p>
                 <p>(WHERE), (WHEN)</p>
             </span>
         </div>
-        <div class="body">
-            <img class="noselect" src="Temp/Image.avif" />
-            <h1>TRIP@YCNC</h1>
-        </div>
-        <div class="footer">
-            <input class="button_left" type="button" name="comment" />
-            <input class="button_left" type="button" name="like" />
-            <input class="button" type="button" name="list" />
+        <div class ="footer">
+            <input disabled type="image" onclick="" src="Icon/account.svg"/>
+            <input disabled type="image" onclick="" src="Icon/account.svg"/>
+            <input disabled type="image" onclick="" src="Icon/account.svg"/>
+            <input disabled type="image" onclick="" src="Icon/account.svg"/>
+            <input disabled type="image" onclick="" src="Icon/account.svg"/>
         </div>
     </div>
-    <div class="element Instagram">
-        <div class="header noselect">
-            <img class="icon" src="Temp/user_icon.png" />
-            <span class="info"><p>(USERNAME)</p><p>(WHERE), (WHEN)</p></span>
-        </div>
-        <div class="body">
-            <img class="noselect" src="Temp/Image.avif" />
-            <h1>TRIP@YCNC</h1>
-        </div>
-        <div class="footer">
-            <input class="button_left" type="button" name="comment" />
-            <input class="button_left" type="button" name="like" />
-            <input class="button" type="button" name="list" />
-        </div>
-    </div>
-    <div class="element Facebook">
-        <div class="header noselect">
-            <img class="icon" src="Temp/user_icon.png" />
-            <span class="info">
-                <p>(USERNAME)</p>
-                <p>(WHERE), (WHEN)</p>
-            </span>
-        </div>
-        <div class="body">
-            <img class="noselect" src="Temp/Image.avif" />
-            <h1>TRIP@YCNC</h1>
-        </div>
-        <div class="footer">
-            <input class="button_left" type="button" name="comment" />
-            <input class="button_left" type="button" name="like" />
-            <input class="button" type="button" name="list" />
-        </div>
-    </div>
-    <div class="element X">
-        <div class="header noselect">
-            <img class="icon" src="Temp/user_icon.png" />
-            <span class="info">
-                <p>(USERNAME)</p>
-                <p>(WHERE), (WHEN)</p>
-            </span>
-        </div>
-        <div class="body">
-            <img class="noselect" src="Temp/Image.avif" />
-            <h1>TRIP@YCNC</h1>
-        </div>
-        <div class="footer">
-            <input class="button_left" type="button" name="comment" />
-            <input class="button_left" type="button" name="like" />
-            <input class="button" type="button" name="list" />
-        </div>
-    </div>
-    <h1>최근 포스트를 전부 확인하셨습니다.</h1>
     <footer id="Footer">
-        <button disabled onclick="js:goto('home.html')" class="button"><img src="Temp/WIP.png" />
-            <p>홈</p>
-        </button>
-        <button onclick="js:goto('search.html')" class="button">
-            <img src="Temp/WIP.png" />
-            <p>검색</p>
-        </button>
-        <button onclick="js:goto('create.html')" class="button">
-            <img src="Temp/WIP.png" />
-            <p>만들기</p>
-        </button>
-        <button onclick="js:goto('chat.html')" class="button">
-            <img src="Temp/WIP.png" />
-            <p>메세지</p>
-        </button>
-        <button onclick="js:goto('menu.html')" class="button">
-            <img src="Temp/WIP.png" />
-            <p>계정</p>
-        </button>
+        <input type="image" onclick="js:goto('home.html')" src="Icon/home.svg" />
+        <input type="image" onclick="js:goto('find.html')" src="Icon/search.svg" />
+        <input type="image" onclick="js:goto('post.html')" src="Icon/create.svg" />
+        <input type="image" onclick="js:goto('chat.html')" src="Icon/chat.svg" />
+        <input type="image" onclick="js:goto('menu.html')" src="Icon/account.svg" />
     </footer>
 </body>
 

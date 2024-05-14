@@ -1,38 +1,8 @@
-function find(name = "All") {
-    const docs = document.body;
-    var children = Array.from(docs.children);
-    if (name == "All") {
-        children.forEach((child) => {
-            if (child.tagName.toUpperCase() == "DIV") {
-                child.style.display = "block";
-            }
-        });
-        return;
-    }
-    children.forEach((child) => {
-        if (child.tagName.toUpperCase() == "DIV") {
-            if (child.classList.contains(name)) {
-                child.style.display = "block";
-            } else {
-                child.style.display = "none";
-            }
-        }
-    });
-}
-function goto(location = "error.html") {
+function goto(location = "home.html") {
     window.scrollTo(0, 0);
     window.location.href = location;
     return;
 }
-
-
-
-
-
-
-
-
-
 function filter(name) {
     const docs = document.body;
     var children = Array.from(docs.children);
