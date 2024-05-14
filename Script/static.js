@@ -75,7 +75,3 @@ function search(type) {
         return;
     }
 }
-
-window.onload += function() {
-    const lower = document.getElementById("lower");
-}

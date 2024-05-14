@@ -2,32 +2,25 @@
 <html>
 
 <head>
-    <title>Welcome 2 Combina</title>
+    <title>Combina : Search</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- StyleSheet Link -->
     <link rel="stylesheet" type="text/css" href="Style/Header.css" />
     <link rel="stylesheet" type="text/css" href="Style/Footer.css" />
-    <link rel="stylesheet" type="text/css" href="Style/Body.css" />
-
-    <style>
-        body {
-            padding: 0px;
-            margin: 0px;
-            background-color: #262656;
-        }
-    </style>
-
+    <link rel="stylesheet" type="text/css" href="Style/body.css" />
+    <link rel="stylesheet" type="text/css" href="Style/content.css" />
     <!-- Script Link -->
     <script src="Script/static.js"></script>
+    <script src="Script/Find.js"></script>
 </head>
 
 <body>
     <header id="Header">
-        <form class="upper">
+        <form id="form">
             <img src="Icon/search.svg"/>
-            <input type="text"/>
+            <input class="search" id="Search" type="text"/>
             <input type="submit"/>
         </form>
         <div id="Platform" class="lower">
@@ -36,6 +29,48 @@
             </template>
         </div>
     </header>
+    <div class="content Facebook">
+        <div class="header">
+            <img class="icon" src="Icon/account.svg" />
+            <span class="info">
+                <p>(ACCOUNT)</p>
+                <p>(WHERE), (WHEN)</p>
+            </span>
+        </div>
+        <div class="body">
+            <img src="Temp/Image.avif" />
+        </div>
+        <div class="footer">
+            <div class="button">
+                <input type="image" onclick="" src="Icon/account.svg" />
+                <input type="image" onclick="" src="Icon/account.svg" />
+                <input type="image" onclick="" src="Icon/account.svg" />
+                <input disabled type="image" onclick="" src="Icon/account.svg" />
+                <input disabled type="image" onclick="" src="Icon/account.svg" />
+            </div>
+            <input class="menu" type="image" onclick="" src="Icon/home.svg" />
+        </div>
+    </div>
+    <div class="content Facebook">
+        <div class="header">
+            <img class="icon" src="Icon/account.svg" />
+            <span class="info">
+                <p>(ACCOUNT)</p>
+                <p>(WHERE), (WHEN)</p>
+            </span>
+        </div>
+        <div class="body">
+            <img src="Temp/Image.avif" />
+        </div>
+        <div class="footer">
+            <div class="button">
+                <input type="image" onclick="" src="Icon/account.svg" />
+                <input type="image" onclick="" src="Icon/account.svg" />
+                <input type="image" onclick="" src="Icon/account.svg" />
+            </div>
+            <input class="menu" type="image" onclick="" src="Icon/home.svg" />
+        </div>
+    </div>
     <footer id="Footer">
         <input type="image" onclick="js:goto('home.html')" src="Icon/home.svg"/>
         <input type="image" onclick="js:goto('find.html')" src="Icon/search.svg"/>

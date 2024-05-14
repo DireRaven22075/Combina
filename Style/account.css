@@ -1,0 +1,37 @@
+@media (prefers-color-scheme: light) {
+    .account {
+        background-color: #FFFFFF;
+        color: #000000;
+    }
+}
+@media (prefers-color-scheme: dark) {
+    .account {
+        background-color: #000000;
+        color: #FFFFFF;
+        img {
+            filter: invert(100%);
+        }
+        span {
+            p {
+                color: #FFFFFF;
+            }
+        }
+    }
+}
+.account {
+    width: 80%;
+    height: auto;
+    img {
+        width: 3em;
+        height: 3em;
+        float: left;
+    }
+    span {
+        width: 5em;
+        height: 100%;
+        p {
+            margin:0px;
+            padding:0px;
+        }
+    }
+}

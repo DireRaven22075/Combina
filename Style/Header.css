@@ -1,32 +1,47 @@
 @media (prefers-color-scheme: dark) {
     #Header {
-        .upper {
-            background-color: #000000;
+        form {
+            background-color: #202020;
             color: #FFFFFF;
         }
+
+        .upper {
+            background-color: #202020;
+            color: #FFFFFF;
+        }
+
         .lower {
             background-color: #39835f;
+
             input {
                 color: #FFFFFF;
             }
         }
     }
 }
+
 @media (prefers-color-scheme: light) {
     #Header {
-        background-color: #75FBBA;
+        form {
+            background-color: #FFFFFF;
+            color: #000000;
+        }
+
         .upper {
             background-color: #FFFFFF;
             color: #000000;
         }
+
         .lower {
             background-color: #75FBBA;
+
             input {
                 color: #000000;
             }
         }
     }
 }
+
 #Header {
     top: 0px;
     margin: 0px;
@@ -34,16 +49,38 @@
     position: fixed;
     width: 100%;
     height: auto;
+
     /*box-shadow: 5px 5px 5px 1px gray; */
+    form {
+        width: 100%;
+        height: 3em;
+
+        img {
+            margin: 0.3em;
+            padding: 0px;
+            width: 2em;
+            height: 2em;
+        }
+
+        .search {
+            width: 80%;
+            border: none;
+            border-bottom: 1px solid black;
+        }
+
+        input {}
+    }
+
     .upper {
         top: 0px;
         margin: 0px;
         padding: 0px;
         width: 100%;
-        height:5em;
+        height: 3em;
+
         h1 {
             margin: 0px;
-            margin-top: 1em;
+            margin-top: 0.3em;
             margin-left: 0.3em;
             padding: 0px;
             font-size: 2em;
@@ -51,13 +88,15 @@
             float: left;
         }
     }
+
     .lower {
         bottom: 0px;
         margin: 0px;
         padding: 0px;
         padding-left: 1em;
         width: 100%;
-        height:2em;
+        height: 2em;
+
         input {
             width: auto;
             height: 2em;
