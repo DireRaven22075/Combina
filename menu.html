@@ -1,24 +1,33 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 
 <head>
-    <title>Welcome 2 Combina</title>
+    <title>Combina : Menu</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- StyleSheet Link -->
-    <link rel="styleshtt" type="text/css" href="Style/All_Header.css" />
-    <link rel="stylesheet" type="text/css" href="Style/All_Footer.css" />
-    <link rel="stylesheet" type="text/css" href="Style/container.css" />
+    <link rel="stylesheet" type="text/css" href="Style/Header.css" />
+    <link rel="stylesheet" type="text/css" href="Style/Footer.css" />
+    <link rel="stylesheet" type="text/css" href="Style/Body.css" />
 
+    <style>
+        body {
+            padding: 0px;
+            margin: 0px;
+            background-color: white;
+        }
+    </style>
     <!-- Script Link -->
     <script src="Script/static.js"></script>
 </head>
 
 <body>
-    <p id="greeting">환영합니다</p>
-    <p id="username">(USERNAME)</p>
-    <div class="footer"><p>홈으로 들어가기</p></div>
+    <header id="Header">
+        <div class = "upper">
+            <h1>설정</h1>
+        </div>
+    </header>
     <footer id="Footer">
         <input type="image" onclick="js:goto('home.html')" src="Icon/home.svg"/>
         <input type="image" onclick="js:goto('find.html')" src="Icon/search.svg"/>

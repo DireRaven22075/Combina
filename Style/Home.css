@@ -83,6 +83,17 @@ body {
             align-items: center;
             justify-content: space-between;
             padding: 1em;
+            input {
+                margin: 0px;
+                padding: 0px;
+                margin-right: 7%;
+                width: 4em;
+                height: 4em;
+                float: left;
+            }
+            input:disabled{
+                display: none;
+            }
         }
     }
 }
