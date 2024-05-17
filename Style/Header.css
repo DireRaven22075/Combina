@@ -67,6 +67,9 @@
             border: none;
             border-bottom: 1px solid black;
         }
+        .search:focus {
+            border: 0px;
+        }
 
         input {}
     }

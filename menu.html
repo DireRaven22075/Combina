@@ -21,13 +21,17 @@
             <h1>설정</h1>
         </div>
     </header>
-    <div class = "account">
-        <img src="Icon/account.svg" />
+    <div class = "account Facebook">
+        <p class="text">페이스북 계정 연동하기</p>
+        <img class="add" src="Icon/create.svg" />
+    </div>
+    <div disabled class = "account">
+        <img class="platform" src="Icon/account.svg" />
         <span>
             <p>(ACCOUNT)</p>
             <p>(WHERE)</p>
         </span>
-        <input type="image" onclick="js:exit()" src="Icon/chat.svg"/>
+        <input type="image" onclick="js:exit()" src="Icon/no.svg"/>
     </div>
     <footer id="Footer">
         <input type="image" onclick="js:goto('home.html')" src="Icon/home.svg"/>
