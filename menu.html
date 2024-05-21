@@ -13,6 +13,7 @@
     <link rel="stylesheet" type="text/css" href="Style/account.css" />
     <!-- Script Link -->
     <script src="Script/static.js"></script>
+    <script src="Script/Menu.js"></script>
 </head>
 
 <body>
@@ -21,18 +22,22 @@
             <h1>Account</h1>
         </div>
     </header>
-    <div class = "account Facebook">
-        <p class="text">페이스북 계정 연동하기</p>
-        <img class="add" src="Icon/create.svg" />
-    </div>
-    <div disabled class = "account">
-        <img class="platform" src="Icon/account.svg" />
+    {% for account in accounts %}
+    {% if account.connected == 1 %}
+    <div class = "account {{account.platform}}" onclick="js:disconnect('{{account.json}}')">
+        <img class="platform" src="Icon/Platform/{{account.platform}}.svg" />
         <span>
-            <p>(ACCOUNT)</p>
-            <p>(WHERE)</p>
+            <p>{{account.id}}</p>
+            <p>{{account.where}}</p>
         </span>
-        <input type="image" onclick="js:exit()" src="Icon/no.svg"/>
     </div>
+    {% else %}
+    <div class = "account {{account.platform}}" onclick="js:connect('{{account.platform}}')">
+        <img class="platform" src="Icon/Platform/{{account.platform}}.svg" />
+        <p>Add Account</p>
+    </div>
+    {% endif %}
+    {% endfor %}
     <footer id="Footer">
         <input type="image" onclick="js:goto('home.html')" src="Icon/home.svg"/>
         <input type="image" onclick="js:goto('find.html')" src="Icon/search.svg"/>
@@ -40,5 +45,18 @@
         <input type="image" onclick="js:goto('chat.html')" src="Icon/chat.svg"/>
         <input type="image" onclick="js:goto('menu.html')" src="Icon/account.svg"/>
     </footer>
+    <div id = "PopUp" disabled>
+        <div>
+            <div>
+                <input type="image" onclick="js:closePopUp();" src="Icon/close.svg"/>
+            </div>
+            <img src="Temp/icon.svg">
+            <p id="">(NAME) - (PLATFORM)</p>
+            <p>(TAG)</p>
+            <form action="" method="post">
+                <input type="submit" value = "Remove Account"/>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

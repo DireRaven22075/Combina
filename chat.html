@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 
 <head>
     <title>Combina : Chat</title>
@@ -21,9 +21,9 @@
             <h1>Message</h1>
         </div>
         <div id="Platform" class="lower">
-            <template id="Platform_Element">
-                <input type="button" onclick="js:find('')" value=""/>
-            </template>
+            {% for account in accounts %}
+            <input type="button" value="{{acount.platform}}" onclick="js:find('{{account.platform}}')"/>
+            {% endfor %}
         </div>
     </header>
     <footer id="Footer">

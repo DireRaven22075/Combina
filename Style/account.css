@@ -29,6 +29,15 @@
         }
     }
 }
+#PopUp {
+    display: flex;
+    width: 10em;
+    height: 10em;
+    background-color: #202020;
+}
+#Popup:disabled {
+    display: none;
+}
 .account {
     width: 80%;
     height: auto;

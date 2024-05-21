@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 
 <head>
     <title>Combina : Home</title>
@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="Style/Footer.css" />
     <link rel="stylesheet" type="text/css" href="Style/body.css" />
     <link rel="stylesheet" type="text/css" href="Style/content.css" />
-    <!-- Script Link -->
+
     <script src="Script/static.js"></script>
 </head>
 
@@ -21,22 +21,22 @@
             <h1>Home</h1>
         </div>
         <div id="Platform" class="lower">
-            <input type="button" onclick="js:find('')" value="" />
-            <template id="Platform_Element">
-                <input type="button" onclick="js:find('')" value="테스트" />
-            </template>
+            {% for name in platform %}
+            <input type="button" onclick="js:find('{{name}}')" value="{{name}}"/>
+            {% endfor %}
         </div>
     </header>
-    <div class="content Facebook">
+    {% for content in contents %}
+    <div class="content {{content.platform}}">
         <div class="header">
-            <img class="icon" src="Icon/account.svg" />
+            <img class="icon" src="{{content.icon}}" />
             <span class="info">
-                <p>(ACCOUNT)</p>
-                <p>(WHERE), (WHEN)</p>
+                <p>{{content.account}}</p>
+                <p>{{content.where}}, {{content.when}}</p>
             </span>
         </div>
         <div class="body">
-            <img src="Temp/Image.avif" />
+            <img src="{{content.image}}" />
         </div>
         <div class="footer">
             <div class="button">
@@ -49,248 +49,7 @@
             <input class="menu" type="image" onclick="" src="Icon/home.svg" />
         </div>
     </div>
-    <div class="content Facebook">
-        <div class="header">
-            <img class="icon" src="Icon/account.svg" />
-            <span class="info">
-                <p>(ACCOUNT)</p>
-                <p>(WHERE), (WHEN)</p>
-            </span>
-        </div>
-        <div class="body">
-            <img src="Temp/Image.avif" />
-        </div>
-        <div class="footer">
-            <div class="button">
-                <input type="image" onclick="" src="Icon/account.svg" />
-                <input type="image" onclick="" src="Icon/account.svg" />
-                <input type="image" onclick="" src="Icon/account.svg" />
-                <input disabled type="image" onclick="" src="Icon/account.svg" />
-                <input disabled type="image" onclick="" src="Icon/account.svg" />
-            </div>
-            <input class="menu" type="image" onclick="" src="Icon/home.svg" />
-        </div>
-    </div>
-    <div class="content Facebook">
-        <div class="header">
-            <img class="icon" src="Icon/account.svg" />
-            <span class="info">
-                <p>(ACCOUNT)</p>
-                <p>(WHERE), (WHEN)</p>
-            </span>
-        </div>
-        <div class="body">
-            <img src="Temp/Image.avif" />
-        </div>
-        <div class="footer">
-            <div class="button">
-                <input type="image" onclick="" src="Icon/account.svg" />
-                <input type="image" onclick="" src="Icon/account.svg" />
-                <input type="image" onclick="" src="Icon/account.svg" />
-                <input disabled type="image" onclick="" src="Icon/account.svg" />
-                <input disabled type="image" onclick="" src="Icon/account.svg" />
-            </div>
-            <input class="menu" type="image" onclick="" src="Icon/home.svg" />
-        </div>
-    </div>
-    <div class="content Facebook">
-        <div class="header">
-            <img class="icon" src="Icon/account.svg" />
-            <span class="info">
-                <p>(ACCOUNT)</p>
-                <p>(WHERE), (WHEN)</p>
-            </span>
-        </div>
-        <div class="body">
-            <img src="Temp/Image.avif" />
-        </div>
-        <div class="footer">
-            <div class="button">
-                <input type="image" onclick="" src="Icon/account.svg" />
-                <input type="image" onclick="" src="Icon/account.svg" />
-                <input type="image" onclick="" src="Icon/account.svg" />
-                <input disabled type="image" onclick="" src="Icon/account.svg" />
-                <input disabled type="image" onclick="" src="Icon/account.svg" />
-            </div>
-            <input class="menu" type="image" onclick="" src="Icon/home.svg" />
-        </div>
-    </div>
-    <div class="content Facebook">
-        <div class="header">
-            <img class="icon" src="Icon/account.svg" />
-            <span class="info">
-                <p>(ACCOUNT)</p>
-                <p>(WHERE), (WHEN)</p>
-            </span>
-        </div>
-        <div class="body">
-            <img src="Temp/Image.avif" />
-        </div>
-        <div class="footer">
-            <div class="button">
-                <input type="image" onclick="" src="Icon/account.svg" />
-                <input type="image" onclick="" src="Icon/account.svg" />
-                <input type="image" onclick="" src="Icon/account.svg" />
-                <input disabled type="image" onclick="" src="Icon/account.svg" />
-                <input disabled type="image" onclick="" src="Icon/account.svg" />
-            </div>
-            <input class="menu" type="image" onclick="" src="Icon/home.svg" />
-        </div>
-    </div>
-    <div class="content Facebook">
-        <div class="header">
-            <img class="icon" src="Icon/account.svg" />
-            <span class="info">
-                <p>(ACCOUNT)</p>
-                <p>(WHERE), (WHEN)</p>
-            </span>
-        </div>
-        <div class="body">
-            <img src="Temp/Image.avif" />
-        </div>
-        <div class="footer">
-            <div class="button">
-                <input type="image" onclick="" src="Icon/account.svg" />
-                <input type="image" onclick="" src="Icon/account.svg" />
-                <input type="image" onclick="" src="Icon/account.svg" />
-                <input disabled type="image" onclick="" src="Icon/account.svg" />
-                <input disabled type="image" onclick="" src="Icon/account.svg" />
-            </div>
-            <input class="menu" type="image" onclick="" src="Icon/home.svg" />
-        </div>
-    </div>
-    <div class="content Facebook">
-        <div class="header">
-            <img class="icon" src="Icon/account.svg" />
-            <span class="info">
-                <p>(ACCOUNT)</p>
-                <p>(WHERE), (WHEN)</p>
-            </span>
-        </div>
-        <div class="body">
-            <img src="Temp/Image.avif" />
-        </div>
-        <div class="footer">
-            <div class="button">
-                <input type="image" onclick="" src="Icon/account.svg" />
-                <input type="image" onclick="" src="Icon/account.svg" />
-                <input type="image" onclick="" src="Icon/account.svg" />
-                <input disabled type="image" onclick="" src="Icon/account.svg" />
-                <input disabled type="image" onclick="" src="Icon/account.svg" />
-            </div>
-            <input class="menu" type="image" onclick="" src="Icon/home.svg" />
-        </div>
-    </div>
-    <div class="content Facebook">
-        <div class="header">
-            <img class="icon" src="Icon/account.svg" />
-            <span class="info">
-                <p>(ACCOUNT)</p>
-                <p>(WHERE), (WHEN)</p>
-            </span>
-        </div>
-        <div class="body">
-            <img src="Temp/Image.avif" />
-        </div>
-        <div class="footer">
-            <div class="button">
-                <input type="image" onclick="" src="Icon/account.svg" />
-                <input type="image" onclick="" src="Icon/account.svg" />
-                <input type="image" onclick="" src="Icon/account.svg" />
-                <input disabled type="image" onclick="" src="Icon/account.svg" />
-                <input disabled type="image" onclick="" src="Icon/account.svg" />
-            </div>
-            <input class="menu" type="image" onclick="" src="Icon/home.svg" />
-        </div>
-    </div>
-    <div class="content Facebook">
-        <div class="header">
-            <img class="icon" src="Icon/account.svg" />
-            <span class="info">
-                <p>(ACCOUNT)</p>
-                <p>(WHERE), (WHEN)</p>
-            </span>
-        </div>
-        <div class="body">
-            <img src="Temp/Image.avif" />
-        </div>
-        <div class="footer">
-            <div class="button">
-                <input type="image" onclick="" src="Icon/account.svg" />
-                <input type="image" onclick="" src="Icon/account.svg" />
-                <input type="image" onclick="" src="Icon/account.svg" />
-                <input disabled type="image" onclick="" src="Icon/account.svg" />
-                <input disabled type="image" onclick="" src="Icon/account.svg" />
-            </div>
-            <input class="menu" type="image" onclick="" src="Icon/home.svg" />
-        </div>
-    </div>
-    <div class="content Facebook">
-        <div class="header">
-            <img class="icon" src="Icon/account.svg" />
-            <span class="info">
-                <p>(ACCOUNT)</p>
-                <p>(WHERE), (WHEN)</p>
-            </span>
-        </div>
-        <div class="body">
-            <img src="Temp/Image.avif" />
-        </div>
-        <div class="footer">
-            <div class="button">
-                <input type="image" onclick="" src="Icon/account.svg" />
-                <input type="image" onclick="" src="Icon/account.svg" />
-                <input type="image" onclick="" src="Icon/account.svg" />
-                <input disabled type="image" onclick="" src="Icon/account.svg" />
-                <input disabled type="image" onclick="" src="Icon/account.svg" />
-            </div>
-            <input class="menu" type="image" onclick="" src="Icon/home.svg" />
-        </div>
-    </div>
-    <div class="content Facebook">
-        <div class="header">
-            <img class="icon" src="Icon/account.svg" />
-            <span class="info">
-                <p>(ACCOUNT)</p>
-                <p>(WHERE), (WHEN)</p>
-            </span>
-        </div>
-        <div class="body">
-            <img src="Temp/Image.avif" />
-        </div>
-        <div class="footer">
-            <div class="button">
-                <input type="image" onclick="" src="Icon/account.svg" />
-                <input type="image" onclick="" src="Icon/account.svg" />
-                <input type="image" onclick="" src="Icon/account.svg" />
-                <input disabled type="image" onclick="" src="Icon/account.svg" />
-                <input disabled type="image" onclick="" src="Icon/account.svg" />
-            </div>
-            <input class="menu" type="image" onclick="" src="Icon/home.svg" />
-        </div>
-    </div>
-    <div class="content Facebook">
-        <div class="header">
-            <img class="icon" src="Icon/account.svg" />
-            <span class="info">
-                <p>(ACCOUNT)</p>
-                <p>(WHERE), (WHEN)</p>
-            </span>
-        </div>
-        <div class="body">
-            <img src="Temp/Image.avif" />
-        </div>
-        <div class="footer">
-            <div class="button">
-                <input type="image" onclick="" src="Icon/account.svg" />
-                <input type="image" onclick="" src="Icon/account.svg" />
-                <input type="image" onclick="" src="Icon/account.svg" />
-                <input disabled type="image" onclick="" src="Icon/account.svg" />
-                <input disabled type="image" onclick="" src="Icon/account.svg" />
-            </div>
-            <input class="menu" type="image" onclick="" src="Icon/home.svg" />
-        </div>
-    </div>
+    {% endfor %}
     <footer id="Footer">
         <input type="image" onclick="js:goto('home.html')" src="Icon/home.svg" />
         <input type="image" onclick="js:goto('find.html')" src="Icon/search.svg" />
