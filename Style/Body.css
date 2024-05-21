@@ -15,6 +15,8 @@ body {
     padding-top: 6em;
     padding-bottom: 8em;
     display: flex;
+    font-family: 'Noto Sans';
+    font-family: 'SUITE-Regular';
     flex-direction: column;
     align-items: center;
     justify-content: center;
