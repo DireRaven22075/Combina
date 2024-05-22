@@ -1,3 +1,4 @@
+![Logo](https://www.github.com/DireRaven22075/202401_Project/blob/main/readme/title.png?raw=true)
 
 # Combina : Combine + @
 
@@ -16,3 +17,9 @@
 
 ![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
 
+
+## Roadmap
+
+- Additional browser support
+
+- Add more integrations
