@@ -21,9 +21,10 @@
             <h1>Message</h1>
         </div>
         <div id="Platform" class="lower">
+            <input type="button" value="All" onclick="js:find('All')" />
             {% for account in accounts %}
             {% if account.connected == 1 %}
-            <input type="button" value="{{acount.platform}}" onclick="js:find('{{account.platform}}')"/>
+            <input type="button" value="{{account.platform}}" onclick="js:find('{{account.platform}}')" />
             {% endif %}
             {% endfor %}
         </div>

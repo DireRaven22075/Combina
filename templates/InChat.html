@@ -4,14 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <title>InChat</title>
-    <link rel="stylesheet" type="text/css" href="Style/static.css"/>
-    <link rel="stylesheet" href="InChat.css">
-    <script src="InChat.js"></script>
+    <!-- StyleSheet Link -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/Header.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/Footer.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/body.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/account.css'}" />
+
+    <!-- Script Link -->
+    <script src="{% static 'js/static.js' %}"></script>
 </head>
 
 <body>
-    
-    {% for chat in chats %}
+    <header id = "Header">
+        <div class = "upper">
+            <h1>{{name}} : {{platform}}</h1>
+        </div>
+    </header>
+    {% for chat in chats.db %}
     <div class="chat">
         <div class="upper">
             <h1>{{chat.platform}}</h1>

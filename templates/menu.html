@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html lang="ko">
-
+{% load static %}
 <head>
     <title>Combina : Menu</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- StyleSheet Link -->
-    <link rel="stylesheet" type="text/css" href="Style/Header.css" />
-    <link rel="stylesheet" type="text/css" href="Style/Footer.css" />
-    <link rel="stylesheet" type="text/css" href="Style/body.css" />
-    <link rel="stylesheet" type="text/css" href="Style/account.css" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/Header.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/Footer.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/body.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/account.css'}" />
+
     <!-- Script Link -->
-    <script src="Script/static.js"></script>
-    <script src="Script/Menu.js"></script>
+    <script src="{% static 'js/static.js' %}"></script>
+    <script src="{% static 'js/Menu.js' %}"></script>
 </head>
 
 <body>
