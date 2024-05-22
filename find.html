@@ -14,11 +14,6 @@
     <!-- Script Link -->
     <script src="Script/static.js"></script>
     <script src="Script/Find.js"></script>
-    <script>
-        window.onload += function() {
-            
-        }
-    </script>
 </head>
 
 <body>
@@ -28,8 +23,8 @@
             <input name="searchName" class="search" id="Search" type="text"/>
         </form>
         <div id="Platform" class="lower">
-            {% for name in platform %}
-            <input type="button" onclick="js:find('{{name}}')" value="{{name}}"/>
+            {% for platform in platforms %}
+            <input type="button" onclick="js:find('{{platform}}')" value="{{platform}}" />
             {% endfor %}
         </div>
     </header>
