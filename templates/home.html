@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <title>Combina : Home</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- StyleSheet Link -->
+    <link rel="stylesheet" type="text/css" href="Style/Header.css" />
+    <link rel="stylesheet" type="text/css" href="Style/Footer.css" />
+    <link rel="stylesheet" type="text/css" href="Style/body.css" />
+    <link rel="stylesheet" type="text/css" href="Style/content.css" />
+
+    <script src="Script/static.js"></script>
+</head>
+
+<body>
+    <header id="Header">
+        <div class="upper">
+            <h1>Home</h1>
+        </div>
+        <div id="Platform" class="lower">
+            {% for name in platform %}
+            <input type="button" onclick="js:find('{{name}}')" value="{{name}}"/>
+            {% endfor %}
+        </div>
+    </header>
+    {% for content in contents %}
+    <div class="content {{content.platform}}">
+        <div class="header">
+            <img class="icon" src="{{content.icon}}" />
+            <span class="info">
+                <p>{{content.account}}</p>
+                <p>{{content.where}}, {{content.when}}</p>
+            </span>
+        </div>
+        <div class="body">
+            <img src="{{content.image}}" />
+        </div>
+        <div class="footer">
+            <div class="button">
+                <input type="image" onclick="" src="Icon/account.svg" />
+                <input type="image" onclick="" src="Icon/account.svg" />
+                <input type="image" onclick="" src="Icon/account.svg" />
+                <input disabled type="image" onclick="" src="Icon/account.svg" />
+                <input disabled type="image" onclick="" src="Icon/account.svg" />
+            </div>
+            <input class="menu" type="image" onclick="" src="Icon/home.svg" />
+        </div>
+    </div>
+    {% endfor %}
+    <footer id="Footer">
+        <input type="image" onclick="js:goto('home.html')" src="Icon/home.svg" />
+        <input type="image" onclick="js:goto('find.html')" src="Icon/search.svg" />
+        <input type="image" onclick="js:goto('post.html')" src="Icon/create.svg" />
+        <input type="image" onclick="js:goto('chat.html')" src="Icon/chat.svg" />
+        <input type="image" onclick="js:goto('menu.html')" src="Icon/account.svg" />
+    </footer>
+</body>
+
+</html>
