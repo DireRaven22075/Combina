@@ -7,12 +7,24 @@
 ## Authors
 
 - [@direraven22075](https://www.github.com/DireRaven22075) - 한윤수 - 2023041004
+1. git repository 관리
+2. front-end 메인 프로그래밍
+3. django 시스템 구축
+
 - [@skala](https://www.github.com/scalar0114) - 오현승 - 2023041001
+1. chatting 시스템 구축
+2. django 시스템 서브 구축
+
 - [@hcy0157](https://github.com/hcy0157) - 한철연 - 2023041033
+1. API 시스템 프로그래밍
+2. Data Conversion
+3. Web Crawling 프로그래밍
+
 - [@AEROKnight0210](https://github.com/AEROKnight0210) - 임진형 - 2023041006
-
-
-
+1. front-end 디자인 & 서브 프로그래밍
+2. API 시스템 프로그래밍
+3. Web Crawling 서브 프로그래밍
+4. React Native를 통한 앱 포팅
 
 ## Screenshots
 
