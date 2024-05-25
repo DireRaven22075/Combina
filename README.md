@@ -42,6 +42,8 @@ Combina: Combine + @
 - Discord
 - Kakao(Talk)
 - Reddit
+- Everytime(Work In Progress)
+- Instagram(Work In Progress)
 
 
 ## Roadmap
