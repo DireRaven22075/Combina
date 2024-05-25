@@ -1,6 +1,9 @@
 ![Logo](https://www.github.com/DireRaven22075/202401_Project/blob/main/readme/title.png?raw=true)
 
-# Combina : Combine + @
+# Combina
+
+Combine + @
+여러 소셜 플랫폼으로 업로드 된 모두의 일상, 소식, 게시물, 동영상과 문자들을 한번에 볼 수 있는 SNS 통합 뷰 애플리케이션 
 
 2024년도 "오픈소스 기초프로젝트 5118012-01"를 위한 저장소입니다.
 
