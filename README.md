@@ -35,7 +35,7 @@ Combina: Combine + @
 
 ![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
 
-##Supported social accounts/platforms
+## Supported social accounts/platforms
 
 - Youtube
 - X(Twitter)
