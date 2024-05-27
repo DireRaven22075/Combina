@@ -19,7 +19,7 @@ function find(name = "All") {
         }
     });
 }
-function goto(location = "/") {
+function goto(location = "error.html") {
     window.scrollTo(0, 0);
     window.location.href = location;
     return;

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 {% load static %}
+
 <head>
     <title>Combina : Menu</title>
     <meta charset="UTF-8" />
@@ -19,45 +20,48 @@
 
 <body>
     <header id="Header">
-        <div class = "upper">
+        <div class="upper">
             <h1>Account</h1>
         </div>
     </header>
     {% for account in accounts %}
     {% if account.connected == 1 %}
-    <div class = "account {{account.platform}}" onclick="js:disconnect('{{account.json}}')">
-        <img class="platform" src="Icon/Platform/{{account.platform}}.svg" />
+    <div class="account" onclick="js:disconnect('{{account.}}')">
+        <img class="platform" src="{% static 'img/platform/{{account.platform}}.svg' %}" />
         <span>
             <p>{{account.id}}</p>
             <p>{{account.where}}</p>
         </span>
     </div>
     {% else %}
-    <div class = "account {{account.platform}}" onclick="js:connect('{{account.platform}}')">
-        <img class="platform" src="Icon/Platform/{{account.platform}}.svg" />
+    <div class="account" onclick="js:connect('{{account.platform}}')">
+        <img class="platform" src="{% static 'img/icon/Platform/{{account.platform}}.svg' %}" />
         <p>Add Account</p>
     </div>
     {% endif %}
     {% endfor %}
     <footer id="Footer">
-        <input type="image" onclick="js:goto('home.html')" src="Icon/home.svg"/>
-        <input type="image" onclick="js:goto('find.html')" src="Icon/search.svg"/>
-        <input type="image" onclick="js:goto('post.html')" src="Icon/create.svg"/>
-        <input type="image" onclick="js:goto('chat.html')" src="Icon/chat.svg"/>
-        <input type="image" onclick="js:goto('menu.html')" src="Icon/account.svg"/>
+        <input type="image" onclick="js:goto('/home')" src="{% static 'img/icon/home.svg' %}" />
+        <input type="image" onclick="js:goto('/find')" src="{% static 'img/icon/search.svg' %}" />
+        <input type="image" onclick="js:goto('/post')" src="{% static 'img/icon/create.svg' %}" />
+        <input type="image" onclick="js:goto('/chat')" src="{% static 'img/icon/chat.svg' %}" />
+        <input type="image" onclick="js:goto('/menu')" src="{% static 'img/icon/account.svg' %}" />
     </footer>
-    <div id = "PopUp" disabled>
+    <!--
+    <div id="PopUp" disabled>
         <div>
             <div>
-                <input type="image" onclick="js:closePopUp();" src="Icon/close.svg"/>
+                <input type="image" onclick="js:closePopUp();" src="{% static 'img/icon/close.svg' %}" />
             </div>
             <img src="Temp/icon.svg">
             <p id="">(NAME) - (PLATFORM)</p>
             <p>(TAG)</p>
             <form action="" method="post">
-                <input type="submit" value = "Remove Account"/>
+                <input type="submit" value="Remove Account" />
             </form>
         </div>
     </div>
+    -->
 </body>
+
 </html>

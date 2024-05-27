@@ -1,0 +1,84 @@
+@media (prefers-color-scheme: light) {
+    .account {
+        background-color: #FFFFFF;
+        color: #000000;
+        img {
+            filter: invert(0%);
+        }
+        span {
+            p {
+                color: #000000;
+            }
+        }
+    }
+}
+@media (prefers-color-scheme: dark) {
+    .account {
+        background-color: #202020;
+        color: #FFFFFF;
+        img {
+            filter: invert(100%);
+        }
+        input {
+            filter: invert(100%);
+        }
+        span {
+            p {
+                color: #FFFFFF;
+            }
+        }
+    }
+}
+#PopUp {
+    display: flex;
+    width: 10em;
+    height: 10em;
+    background-color: #202020;
+}
+#Popup:disabled {
+    display: none;
+}
+.account {
+    width: 80%;
+    height: auto;
+    margin-top: 1em;
+    float: left;
+    border-radius: 1em;
+    .text {
+        position: absolute;
+        margin: 0px;
+        margin-top: -25px;
+        margin-left: 3em;
+        padding: 0px;
+        float: left;
+    }
+    .platform {
+        width: 3em;
+        height: 3em;
+        float: left;
+    }
+    .add {
+        width: 3em;
+        height: 3em;
+        float: right;
+    }
+    img {
+        width: 3em;
+        height: 3em;
+        float: left;
+    }
+    span {
+        width: 5em;
+        height: 100%;
+        background-color: #202020;
+        p {
+            margin:0px;
+            padding:0px;
+        }
+    }
+    input {
+        width: 3em;
+        height: 3em;
+        float: right;
+    }
+}
