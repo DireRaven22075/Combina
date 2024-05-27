@@ -7,7 +7,7 @@ Combina: Combine + @
 
 2024년도 "오픈소스 기초프로젝트 5118012-01"를 위한 저장소입니다.
 
-## 
+## Authors
 
 - [@AEROKnight0210](https://github.com/AEROKnight0210) - 임진형 - 2023041006
 1. front-end 디자인 & 서브 프로그래밍
