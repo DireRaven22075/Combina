@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/Header.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/Footer.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/body.css' %}" />
-
+    <link rel="stylesheet" type="text/css" href="{% static 'css/chat.css' %}" />
     <!-- Script Link -->
     <script src="{% static 'js/static.js' %}"></script>
 </head>
@@ -19,19 +19,18 @@
 <body>
     <header id="Header">
         <div class="upper">
-            <h1>Message</h1>
-        </div>
-        <div id="Platform" class="lower">
-            <input type="button" value="All" onclick="js:find('All')" />
-            {% for account in accounts %}
-            {% if account.connected == 1 %}
-            <input type="button" value="{{account.platform}}" onclick="js:find('{{account.platform}}')" />
-            {% endif %}
-            {% endfor %}
+            <h1>Chat</h1>
         </div>
     </header>
     {% for chat in chats %}
-    
+    <div class="chat">
+        <img src="{% static 'img/icon/create.svg' %}" />
+        <p>{{chat.target}}<br />{{chat.topMessage}}</p>
+        {% if chat.unread > 0 %}
+        <img src = "{% static 'img/icon/unread.svg' %}" />
+        {% endif %}
+        <p>{{chat.time}}</p>
+    </div>
     {% endfor %}
     <footer id="Footer">
         <input type="image" onclick="js:goto('/home')" src="{% static 'img/icon/home.svg' %} " />

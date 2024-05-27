@@ -2,6 +2,39 @@ from django.shortcuts import render
 
 DEBUG = True
 parameters = {
+    "chats": [
+        {
+            "icon": "https://www.facebook.com/images/fb_icon_325x325.png",
+            "target": "한철연",
+            "topMessage": "뭐함",
+            "time": "2020-01-01 12:00:00",
+            "unread": 3
+        },
+        {
+            "target": "한철연",
+            "topMessage": "뭐함",
+            "time": "2020-01-01 12:00:00",
+            "unread": 3
+        },
+        {
+            "target": "한철연",
+            "topMessage": "뭐함",
+            "time": "2020-01-01 12:00:00",
+            "unread": 3
+        },
+        {
+            "target": "한철연",
+            "topMessage": "뭐함",
+            "time": "2020-01-01 12:00:00",
+            "unread": 3
+        },
+        {
+            "target": "한철연",
+            "topMessage": "뭐함",
+            "time": "2020-01-01 12:00:00",
+            "unread": 3
+        },
+    ],
     "contents" : [
         {
             "platform": "Facebook",
