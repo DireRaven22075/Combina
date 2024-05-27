@@ -26,11 +26,11 @@
     </header>
     {% for account in accounts %}
     {% if account.connected == 1 %}
-    <div class="account" onclick="js:disconnect('{{account.}}')">
+    <div class="account" onclick="js:disconnect('{{account}}')">
         <img class="platform" src="{% static 'img/platform/{{account.platform}}.svg' %}" />
         <span>
-            <p>{{account.id}}</p>
-            <p>{{account.where}}</p>
+            <p>{{account.platform}}</p>
+            <p>{{account.name}} @ {{account.tag}}</p>
         </span>
     </div>
     {% else %}

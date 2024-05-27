@@ -99,7 +99,8 @@ parameters = {
             "connected": 1,
             "platform": "Instagram",
             "id": 2,
-            "name": "Jane Doe",
+            "name": "DireRaven22075",
+            "tag": "hanyoonsoo"
         }
     ]
 }

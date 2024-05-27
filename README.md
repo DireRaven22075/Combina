@@ -1,7 +1,5 @@
-
-![app-logo](https://github.com/DireRaven22075/202401_Project/assets/19562627/cda47f99-0136-4200-9a23-bef7a699111b)
-
 # Combina
+![app-logo](https://github.com/DireRaven22075/202401_Project/assets/19562627/cda47f99-0136-4200-9a23-bef7a699111b)
 
 Combina: Combine + @
 
@@ -9,7 +7,7 @@ Combina: Combine + @
 
 2024년도 "오픈소스 기초프로젝트 5118012-01"를 위한 저장소입니다.
 
-## Authors
+## 
 
 - [@AEROKnight0210](https://github.com/AEROKnight0210) - 임진형 - 2023041006
 1. front-end 디자인 & 서브 프로그래밍
