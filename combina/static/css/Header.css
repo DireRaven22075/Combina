@@ -65,11 +65,14 @@
             width: 70%;
             margin:0px;
             padding:0px;
-            margin-left: 1em;
+            left: 15%;
+            bottom: 50%;
+            position: absolute;
             height: 2em;
             border: none;
-            background-color: transparent;
-            border-bottom: 1px solid black;
+            background-color: #E9E9E9;
+            border: 1px solid #E9E9E9;
+            border-radius: 1em;
         }
         .search:focus {
             border: 0px;

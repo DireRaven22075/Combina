@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- StyleSheet Link -->
+    <link href='https://fonts.googleapis.com/css?family=Noto Sans' rel='stylesheet'>
     <link rel="stylesheet" type="text/css" href="{% static 'css/Header.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/Footer.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/body.css' %}" />
@@ -18,11 +19,9 @@
 
 <body>
     <header id="Header">
-        {{text}}
         <form id="form" action="/find/" method="post">
             {% csrf_token %}
-            <img src="Icon/search.svg"/>
-            <input name="search" class="search" id="Search" type="text"/>
+            <input name="search" placeholder="Search" class="search" id="Search" type="text"/>
         </form>
         <div id="Platform" class="lower">
             <input type="button" value="All" onclick="js:find('All')" />

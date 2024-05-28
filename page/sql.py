@@ -10,7 +10,7 @@ class Account:
     def deleteData(platform):
         AccountDB.objects.filter(platform=platform).delete()
     def deleteDataAll():
-        AccountDB.objects.all().delete()
+        AccountDB.objects.all().update('connected', False)
     def addData(platform, account):
         AccountDB.objects.create(platform=platform, account=account)
     def getConnectedAccount():

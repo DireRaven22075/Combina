@@ -40,7 +40,8 @@ parameters = {
             "platform": "Facebook",
             "account": "AEK",
             "time": "2020-01-01 12:00:00",
-            "text": "TTTT"
+            "text": "TTTT",
+            "image": "https://cdn.mos.cms.futurecdn.net/2aeE963L5B7jnfCAWFoFYW-1920-80.jpg.webp"
         },
         {
             "platform": "Facebook",
@@ -112,7 +113,7 @@ parameters = {
             "platform": "Facebook",
             "account": "AEK",
             "time": "2020-01-01 12:00:00",
-            "text": "TTTT"
+            "text": "TTTT",
         },
         
         {
@@ -159,6 +160,10 @@ def InChat(request, platform, id):
 def Menu(request):
     return render(request, 'menu.html', parameters)
 
+def DBINIT(request):
+    sql.Account.deleteDataAll()
+    sql.Account.addData('Facebook', 'gskids053')
+    return render(request, 'menu.html', parameters)
 def DBTest(request):
     result = sql.get_account()
     sql.Account.test()

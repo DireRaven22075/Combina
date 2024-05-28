@@ -16,8 +16,7 @@ function disconnect(json) {
     const id = document.getElementById("PopUp");
     id.style.display = "block";
     const text = document.getElementById("PopUp_Text");
-    text.innerHTML = json["name"] + "-" + json["platform"];
-    text.innerHTML += "<br/>" + json["tag"];
+    text.innerHTML = json["name"] + "  [" + json["platform"] + "]";
     const data = document.getElementById("PopUp_Data");
     data.value = JSON.stringify(json);
 }

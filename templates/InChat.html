@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>InChat</title>
     <!-- StyleSheet Link -->
+    <link href='https://fonts.googleapis.com/css?family=Noto Sans' rel='stylesheet'>
     <link rel="stylesheet" type="text/css" href="{% static 'css/Header.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/Footer.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/body.css' %}" />
@@ -17,7 +18,7 @@
 <body>
     <header id = "Header">
         <div class = "upper">
-            <h1>{{name}} : {{platform}}</h1>
+            <h1>{{id}} : {{platform}}</h1>
         </div>
     </header>
     {% for chat in chats.db %}
