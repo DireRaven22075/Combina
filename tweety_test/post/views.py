@@ -1,12 +1,18 @@
 from django.shortcuts import render, redirect  
 from tweety import Twitter
 from page.models import Account, Content
+from django.views import View
 # Create your views here.
 
-email = 'ricecracke77108'
-password = 'hayeon1806x'
+import os
+current_directory = os.path.dirname(os.path.abspath(__file__))
+path = os.path.abspath(os.path.join(current_directory, '../password.txt'))
+f = open(path)
+email = f.readline()
+password = f.readline()
 app = Twitter("session")
 app.sign_in(email, password)
+
 
 
 def post(request):

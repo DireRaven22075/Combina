@@ -1,12 +1,21 @@
+from typing import Any
 from django.shortcuts import render, redirect
 from tweety import Twitter
 from .models import Account, Content
 from django.contrib import messages
+from django.views import View
 
-# email = 'ricecracke77108'
-# password = 'hayeon1806x'
+
+
+import os
+current_directory = os.path.dirname(os.path.abspath(__file__))
+path = os.path.abspath(os.path.join(current_directory, '../password.txt'))
+f = open(path)
+email = f.readline()
+password = f.readline()
 app = Twitter("session")
-# app.sign_in(email, password)
+print(app.sign_in(email, password))
+
 
 
 def home(request):
@@ -28,8 +37,10 @@ def login(request):
             messages.error(request, '로그인 실패')
     return render(request, 'template/page/login.html')
 
+
 def search_tweet(request):
     if request.method == 'POST':
+        print(request.POST)
         search = request.POST.get('search')
         search_tweet = app.search(keyword=search, pages=1)[:5]
         tweets = []
@@ -42,9 +53,10 @@ def search_tweet(request):
                     'tweet_text': tweet_detail.text.split('https')[0],
                     'tweet_date': tweet_detail.date
                 })
+                print(tweet)
         context = {
             'tweets': tweets
         }
-        return redirect('/', context)
+        return render(request, 'template/page/home.html', context)
     return redirect('/')
 
