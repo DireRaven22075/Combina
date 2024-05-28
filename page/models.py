@@ -1,8 +1,12 @@
 from django.db import models
 # Create your models here.
 class AccountDB(models.Model):
+    uid = models.AutoField(primary_key=True)
+    connected = models.BooleanField(default=False, null=False)
     platform = models.CharField(max_length=30)
-    account = models.CharField(max_length=100)
+    id = models.CharField(max_length=100)
+    name = models.TextField()
+    tag = models.TextField()
 
 class ContentDB(models.Model):
     platform = models.CharField(max_length=30)
@@ -21,9 +25,9 @@ class ChatTableDB(models.Model):
     chatdb = models.ForeignKey('ChatDB', on_delete=models.CASCADE)
     def __str__(self):
         return self.text
+
 class ChatDB(models.Model):
-    platform = models.CharField(max_length=30)
-    account = models.CharField(max_length=100)
+    target = models.CharField(max_length=30)
     time = models.DateTimeField()
     text = models.TextField()
     def __str__(self):

@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from . import sql
-DEBUG = True
+from . import sql, func
 parameters = {
     "chats": [
         {
@@ -138,12 +137,12 @@ parameters = {
         }
     ]
 }
-
 def Home(request):
-    parameters = {}
-    data = sql.Account.getData()
-
-    return render(request, 'home.html', parameters)
+    data = {}
+    accounts = sql.Account.getData()
+    data['accounts'] = accounts
+    return render(request, 'home.html', data)
+    return HttpResponse(data)
 
 def Post(request):
     return render(request, 'post.html', parameters)
@@ -162,33 +161,11 @@ def Menu(request):
 
 def DBTest(request):
     result = sql.get_account()
+    sql.Account.test()
     return HttpResponse(result)
 
+
 def Disconnect(request):
-    return HttpResponse(request.POST.get('id'))
-    if request.method == 'POST':
-            # Access the POST data
-        post_data = request.POST
-
-            # Process the POST data
-            # ...
-
-        return HttpResponse('POST request processed successfully')
-    else:
-        return HttpResponse('Only POST requests are allowed')
-    return HttpResponse(request.POST.get('id'))
-    def MyView(request):
-        if request.method == 'POST':
-            # Access the POST data
-            post_data = request.POST
-
-            # Access specific POST parameters
-            param1 = post_data.get('param1')
-            param2 = post_data.get('param2')
-
-            # Process the POST data
-            # ...
-
-            return HttpResponse('POST request processed successfully')
-        else:
-            return HttpResponse('Only POST requests are allowed')
+    platform = request.POST.get('platform')
+    sql.Account.deleteData(platform)
+    return render(request, 'menu.html', parameters)
