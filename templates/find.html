@@ -18,9 +18,10 @@
 
 <body>
     <header id="Header">
-        <form id="form">
+        <form id="form" action="/find/" method="post">
+            {% csrf_token %}
             <img src="Icon/search.svg"/>
-            <input name="searchName" class="search" id="Search" type="text"/>
+            <input name="search" class="search" id="Search" type="text"/>
         </form>
         <div id="Platform" class="lower">
             <input type="button" value="All" onclick="js:find('All')" />
@@ -31,6 +32,7 @@
             {% endfor %}
         </div>
     </header>
+    {{text}}
     {% for content in contents %}
     <div class="content {{content.platform}}">
         <div class="header">
@@ -48,7 +50,7 @@
         </div>
     </div>
     {% endfor %}
-    <footer id="Footer">
+    <footer id="Footer" class="noselect">
         <input type="image" onclick="js:goto('/home')" src="{% static 'img/icon/home.svg' %}"/>
         <input type="image" onclick="js:goto('/find')" src="{% static 'img/icon/search.svg' %}"/>
         <input type="image" onclick="js:goto('/post')" src="{% static 'img/icon/create.svg' %}"/>

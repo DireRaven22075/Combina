@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from django.http import HttpResponse
 DEBUG = True
 parameters = {
     "chats": [
@@ -124,9 +124,9 @@ parameters = {
         {
             "connected": 1,
             "platform": "Facebook",
-            "id": 1,
-            "name": "John Doe",
-
+            "id": "gskids053",
+            "name": "DireRaven22075",
+            "tag": "hanyoonsoo"
         },
         {
             "connected": 1,
@@ -155,3 +155,32 @@ def InChat(request, platform, id):
 
 def Menu(request):
     return render(request, 'menu.html', parameters)
+
+def Disconnect(request):
+    return HttpResponse(request.POST.get('id'))
+    if request.method == 'POST':
+            # Access the POST data
+        post_data = request.POST
+
+            # Process the POST data
+            # ...
+
+        return HttpResponse('POST request processed successfully')
+    else:
+        return HttpResponse('Only POST requests are allowed')
+    return HttpResponse(request.POST.get('id'))
+    def MyView(request):
+        if request.method == 'POST':
+            # Access the POST data
+            post_data = request.POST
+
+            # Access specific POST parameters
+            param1 = post_data.get('param1')
+            param2 = post_data.get('param2')
+
+            # Process the POST data
+            # ...
+
+            return HttpResponse('POST request processed successfully')
+        else:
+            return HttpResponse('Only POST requests are allowed')

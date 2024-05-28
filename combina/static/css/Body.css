@@ -3,14 +3,16 @@
         background-color: #000000;
     }
 }
+
 @media (prefers-color-scheme: light) {
     body {
         background-color: #EBEBEB;
     }
 }
+
 body {
-    padding:0px;
-    margin:0px;
+    padding: 0px;
+    margin: 0px;
     width: 100%;
     padding-top: 6em;
     padding-bottom: 8em;
@@ -21,4 +23,13 @@ body {
     align-items: center;
     justify-content: center;
     scrollbar-width: none;
+}
+
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
