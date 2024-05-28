@@ -18,6 +18,7 @@
 
 <body>
     <header id="Header">
+        {{text}}
         <form id="form" action="/find/" method="post">
             {% csrf_token %}
             <img src="Icon/search.svg"/>
@@ -32,7 +33,6 @@
             {% endfor %}
         </div>
     </header>
-    {{text}}
     {% for content in contents %}
     <div class="content {{content.platform}}">
         <div class="header">

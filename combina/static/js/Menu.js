@@ -18,6 +18,8 @@ function disconnect(json) {
     const text = document.getElementById("PopUp_Text");
     text.innerHTML = json["name"] + "-" + json["platform"];
     text.innerHTML += "<br/>" + json["tag"];
+    const data = document.getElementById("PopUp_Data");
+    data.value = JSON.stringify(json);
 }
 function connect(json) {
 

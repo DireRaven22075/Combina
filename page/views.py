@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from . import sql
 DEBUG = True
 parameters = {
     "chats": [
@@ -139,6 +140,9 @@ parameters = {
 }
 
 def Home(request):
+    parameters = {}
+    data = sql.Account.getData()
+
     return render(request, 'home.html', parameters)
 
 def Post(request):
@@ -155,6 +159,10 @@ def InChat(request, platform, id):
 
 def Menu(request):
     return render(request, 'menu.html', parameters)
+
+def DBTest(request):
+    result = sql.get_account()
+    return HttpResponse(result)
 
 def Disconnect(request):
     return HttpResponse(request.POST.get('id'))
