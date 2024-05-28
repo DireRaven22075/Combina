@@ -1,9 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Homepage</title>
+    <title>Login page</title>
 </head>
 <body>
-    <h1>Twitter login page</h1>
+    <h1>Twitter login</h1>
+    <form method="POST" action="info/">
+        {% csrf_token %}
+        <input type="text" name="email" placeholder="Enter your email">
+        <input type="text" name="password" placeholder="Enter your password">
+        <button type="submit">Search</button>
+    </form>
 </body>
 </html>

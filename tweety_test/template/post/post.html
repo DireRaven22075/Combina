@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Posts</title>
+</head>
+<body>
+    <h1>Create Posts</h1>
+    <form method="POST" action="info/">
+        {% csrf_token %}
+        <input type="text" name="post" placeholder="Enter your contents">
+        <button type="submit">submit</button>
+    </form>
+    <h1>Tweets</h1>
+    {% if post %}
+        <li>{{ post }}</li>
+        <p>{{ post_text }}</p>
+    {% endif %}
+</body>
+</html>

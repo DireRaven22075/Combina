@@ -1,9 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Chat</title>
+    <title>Message</title>
 </head>
 <body>
-    <h1>Welcome to the Chat App</h1>
+    <h1>Message</h1>
+    <form method="POST" action="info/">
+        {% csrf_token %}
+        <input type="text" name="username" placeholder="Who?">
+        <input type="text" name="message" placeholder="Enter your message">
+        <button type="submit">submit</button>
+    </form>
+    <h1>Tweets</h1>
+    {% if chat %}
+        <li>To. {{ username }}</li>
+        <p>{{ message }}</p>
+    {% endif %}
 </body>
 </html>
