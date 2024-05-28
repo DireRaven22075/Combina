@@ -40,5 +40,6 @@ Combina: Combine + @
 - Discord
 - Kakao(Talk)
 - Reddit
-- Everytime(Work In Progress)
-- Instagram(Work In Progress)
+- Everytime (Work In Progress)
+- Facebook (Crawling)
+- Instagram (Crawling)
