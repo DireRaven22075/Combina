@@ -35,11 +35,11 @@ Combina: Combine + @
 
 ## Supported social accounts/platforms
 
+- Facebook (Crawling)
+- Instagram (Crawling)
 - Youtube
 - X(Twitter)
 - Discord
 - Kakao(Talk)
 - Reddit
-- Everytime (Work In Progress)
-- Facebook (Crawling)
-- Instagram (Crawling)
+
