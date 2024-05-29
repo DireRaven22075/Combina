@@ -1,9 +1,9 @@
 from django.urls import path
-from . import views
+from .views import DiscordView
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('fetch-discord-messages/', views.fetch_discord_messages, name='fetch_discord_messages'),
-    path('send-discord-message/', views.send_discord_message, name='send_discord_message'),
-    path('set-channel-id/', views.set_channel_id, name='set_channel_id'),
+    path('', DiscordView.index, name='index'),
+    path('fetch-discord-messages/', DiscordView.fetch_discord_messages, name='fetch_discord_messages'),
+    path('send-discord-message/', DiscordView.send_discord_message, name='send_discord_message'),
+    path('set-channel-id/', DiscordView.set_channel_id, name='set_channel_id'),
 ]
