@@ -138,41 +138,13 @@ parameters = {
         }
     ]
 }
-class Server:
-    def Post(request):
-        return HttpResponse(request.POST.get('content'))
+def Welcome(request):
+    return render(request, 'home.html', parameters)
 def Home(request):
-    data = {}
-    accounts = sql.Account.getData()
-    data['accounts'] = accounts
-    return render(request, 'home.html', data)
-
+    return render(request, 'home.html', parameters)
 def Post(request):
     return render(request, 'post.html', parameters)
-
 def Find(request):
     return render(request, 'find.html', parameters)
-
-def Chat(request):
-    return render(request, 'chat.html', parameters)
-
-def InChat(request, platform, id):
-    return render(request, 'inChat.html', parameters)
-
 def Menu(request):
-    return render(request, 'menu.html', parameters)
-
-def DBINIT(request):
-    sql.Account.deleteDataAll()
-    sql.Account.addData('Facebook', 'gskids053')
-    return render(request, 'menu.html', parameters)
-def DBTest(request):
-    result = sql.get_account()
-    sql.Account.test()
-    return HttpResponse(result)
-
-
-def Disconnect(request):
-    platform = request.POST.get('platform')
-    sql.Account.deleteData(platform)
     return render(request, 'menu.html', parameters)

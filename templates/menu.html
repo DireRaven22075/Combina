@@ -29,16 +29,11 @@
     {% for account in accounts %}
     {% if account.connected == 1 %}
     <div class="account" onclick="js:disconnect({{account}})">
-        <img class="platform" src="{% static 'img/platform/{{account.platform}}.svg' %}" />
-        <span>
-            <p>{{account.platform}}</p>
-            <p>{{account.name}} @ {{account.tag}}</p>
-        </span>
+        <p>{{account.platform}} - {{account.name}}</p>
     </div>
     {% else %}
     <div class="account" onclick="js:connect('{{account.platform}}')">
-        <img class="platform" src="{% static 'img/icon/Platform/{{account.platform}}.svg' %}" />
-        <p>Add Account</p>
+        <p>Add Account - {{account.platform}}</p>
     </div>
     {% endif %}
     {% endfor %}
