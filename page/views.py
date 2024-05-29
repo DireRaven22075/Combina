@@ -138,12 +138,14 @@ parameters = {
         }
     ]
 }
+class Server:
+    def Post(request):
+        return HttpResponse(request.POST.get('title'))
 def Home(request):
     data = {}
     accounts = sql.Account.getData()
     data['accounts'] = accounts
     return render(request, 'home.html', data)
-    return HttpResponse(data)
 
 def Post(request):
     return render(request, 'post.html', parameters)
