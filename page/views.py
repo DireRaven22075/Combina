@@ -140,7 +140,7 @@ parameters = {
 }
 class Server:
     def Post(request):
-        return HttpResponse(request.POST.get('title'))
+        return HttpResponse(request.POST.get('content'))
 def Home(request):
     data = {}
     accounts = sql.Account.getData()

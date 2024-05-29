@@ -27,7 +27,7 @@
     </header>
     <form action="/server/post" method="post" class="area">
         <input class="text_input" type="text" onclick placeholder="Title" name="title" />
-        <input class="text_input" type="text" placeholder="Content" name="content" />
+        <textarea class="text_input" placeholder="Content" name="content"></textarea>
         {% csrf_token %}
 
         <input type="file" name="image" accept="image/*" />
