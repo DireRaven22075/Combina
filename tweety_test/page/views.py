@@ -7,14 +7,22 @@ from django.views import View
 
 
 
-import os
-current_directory = os.path.dirname(os.path.abspath(__file__))
-path = os.path.abspath(os.path.join(current_directory, '../password.txt'))
-f = open(path)
-email = f.readline()
-password = f.readline()
-app = Twitter("session")
-print(app.sign_in(email, password))
+class author:
+    def __init__(self, email="", password=""):
+        self.email = email
+        self.password = password
+
+    def set(self,email, password):
+        self.email = email
+        self.password = password
+        self.app = Twitter("session")
+        self.app.sign_in(self.email, self.password)
+
+    def __any__(self):
+        return self.app
+        
+user = author()
+
 
 
 
@@ -23,15 +31,12 @@ def home(request):
 
 def login(request):
     if request.method == 'POST':
-        print(request.POST)
         email = request.POST.get('email')
         password = request.POST.get('password')
-        app = Twitter("session")
-        is_user = app.sign_in(email, password)
-        if is_user != None:
+        user.set(email=email, password=password)
+        if user != None:
             messages.success(request, '로그인 성공')
-            user = Account.objects.create(email=email, password=password, connect=1)
-            user.save()
+            
             return redirect('/')
         else:
             messages.error(request, '로그인 실패')
@@ -39,21 +44,33 @@ def login(request):
 
 
 def search_tweet(request):
+    app = user.__any__()
+    if user is None:
+        return redirect('/login')
     if request.method == 'POST':
-        print(request.POST)
+        
         search = request.POST.get('search')
         search_tweet = app.search(keyword=search, pages=1)[:5]
         tweets = []
         for tweet in search_tweet:
             tweet_detail = app.tweet_detail(tweet['id'])
             if tweet_detail is not None:
+                image_list = [] 
+                if 'media' in tweet_detail._tweet['legacy']['entities']:
+                    for media_item in tweet_detail._tweet['legacy']['entities']['media']:
+                        image_list.append(media_item['media_url_https'])
+                        
+                else:
+                    print("no media")
+                
                 tweets.append({
                     'tweet_name': tweet_detail.author.name,
                     'tweet_username': tweet_detail.author.username,
                     'tweet_text': tweet_detail.text.split('https')[0],
-                    'tweet_date': tweet_detail.date
+                    'tweet_date': tweet_detail.date,
+                    'tweet_media_url': image_list
                 })
-                print(tweet)
+                print(tweets)
         context = {
             'tweets': tweets
         }

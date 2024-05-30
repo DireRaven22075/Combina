@@ -2,16 +2,9 @@ from django.shortcuts import render, redirect
 from tweety import Twitter
 from page.models import Account, Content
 from django.views import View
+from page.views import author
+from page.views import user
 # Create your views here.
-
-import os
-current_directory = os.path.dirname(os.path.abspath(__file__))
-path = os.path.abspath(os.path.join(current_directory, '../password.txt'))
-f = open(path)
-email = f.readline()
-password = f.readline()
-app = Twitter("session")
-app.sign_in(email, password)
 
 
 
@@ -19,6 +12,9 @@ def post(request):
     return render(request, 'template/post/post.html')
 
 def create_post(request):
+    app = user.__any__()
+    if user == None:
+        return redirect('../login')
     if request.method == 'POST':
         post = request.POST.get('post')
         print(post)
