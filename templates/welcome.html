@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+
+<head>
+    <title>Welcome 2 Combina!</title>
+    <meta charset="UTF-8" />
+    <!-- StyleSheet Link -->
+    <link href='https://fonts.googleapis.com/css?family=Noto Sans' rel='stylesheet'>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #000000;
+                color: #FFFFFF;
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            body {
+                background-color: #00FFA8;
+                color: #000000;
+            }
+        }
+
+        body {
+            margin: 0px;
+            padding: 0px;
+            text-align: center;
+            font-family: 'Noto Sans';
+
+            p {
+                font-size: 1.5em;
+            }
+        }
+        p {
+            position: fixed;
+            width: 80%;
+            text-align: center;
+            left: 10%;
+            bottom: 2em;
+        }
+        #progress {
+            margin: 0px;
+            padding: 0px;
+            width: 80%;
+            left: 10%;
+            position: fixed;
+            bottom: 8em;
+            appearance: none;
+        }
+
+        #progress::-webkit-progress-bar {
+            background: #00FFA8;
+            border-radius: 12px;
+            border: 1px solid #eeeeee;
+            height: 28px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        #progress::-webkit-progress-value {
+            background: #FFFFFF;
+            border-radius: 0px;
+            height: 28px;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Welcome to Combina!</h1>
+    <progress value="80" max="100" id="progress"></progress>
+    <p id="progressText">(TEXT_TEST)</p>
+</body>
+
+</html>

@@ -139,7 +139,7 @@ parameters = {
     ]
 }
 def Welcome(request):
-    return render(request, 'home.html', parameters)
+    return render(request, 'welcome.html', parameters)
 def Home(request):
     return render(request, 'home.html', parameters)
 def Post(request):
