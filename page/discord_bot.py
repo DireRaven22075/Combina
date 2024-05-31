@@ -15,7 +15,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'myproject.settings')
 # Django 설정 초기화
 django.setup()
 
-from myapp.models import DiscordMessage, DiscordChannel
+from page.models import DiscordMessage, DiscordChannel
 
 botToken = ''  # 봇 토큰
 
