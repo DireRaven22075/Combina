@@ -23,23 +23,3 @@ class ChatDB(models.Model):
     owner = models.IntegerField()
     text = models.TextField()
     time = models.DateTimeField()
-
-
-
-class ContentDB(models.Model):
-    platform = models.CharField(max_length=30)
-    account = models.CharField(max_length=100)
-    time = models.DateTimeField()
-    text = models.TextField()
-    def __str__(self):
-        return self.text
-
-class ChatTableDB(models.Model):
-    platform = models.CharField(max_length=30)
-    account = models.CharField(max_length=100)
-    time = models.DateTimeField()
-    topMessage = models.TextField()
-    topMessageTime = models.DateTimeField()
-    chatdb = models.ForeignKey('ChatDB', on_delete=models.CASCADE)
-    def __str__(self):
-        return self.text
