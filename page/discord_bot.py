@@ -5,7 +5,6 @@ import discord
 import warnings
 import aiohttp
 from asgiref.sync import sync_to_async
-from base64 import b64decode
 
 # 프로젝트의 절대 경로를 추가
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

@@ -3,6 +3,7 @@
 <head>
     <title>Combina</title>
     <style>
+        /* 기존 스타일 */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(to bottom, #48c9b0, #ffffff);
@@ -107,6 +108,44 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+        }
+        /* 커스텀 파일 입력 스타일 */
+        .file-input-container {
+            position: relative;
+            width: fit-content;
+            cursor: pointer;
+            color: white;
+        }
+
+        .file-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .custom-file-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background-color: #48c9b0;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            display: inline-block;
+        }
+
+        .custom-file-button:hover {
+            background-color: #3cc2a3;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .file-name {
+            margin-left: 10px;
+            font-style: italic;
         }
     </style>
     <script>
@@ -258,6 +297,16 @@
             }
             return cookieValue;
         }
+
+        function handleFileInputChange(event) {
+            const fileNameDisplay = document.getElementById('file-name-display');
+            const fileInput = event.target;
+            if (fileInput.files.length > 0) {
+                fileNameDisplay.textContent = fileInput.files[0].name;
+            } else {
+                fileNameDisplay.textContent = 'No file chosen';
+            }
+        }
     </script>
 </head>
 <body>
@@ -273,7 +322,11 @@
         <h2>봇 프로필 수정</h2>
         <div class="message-input-container">
             <input type="text" id="bot-name-input" placeholder="Enter bot name" />
-            <input type="file" id="bot-avatar-input" accept="image/*" />
+            <div class="file-input-container">
+                <label class="custom-file-button" for="bot-avatar-input">이미지 선택</label>
+                <input type="file" id="bot-avatar-input" class="file-input" accept="image/*" onchange="handleFileInputChange(event)" />
+                <span id="file-name-display" class="file-name">No file chosen</span>
+            </div>
             <button id="update-bot-profile-button" onclick="updateBotProfile()">수정</button>
         </div>
     </div>
