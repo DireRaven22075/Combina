@@ -5,7 +5,8 @@ from .models import Account, Content
 from django.contrib import messages
 from django.views import View
 
-
+#auth : author 클래스의 인스턴스.
+#user : model 에 저장된 유저 정보.
 
 class author:
     def __init__(self, email="", password=""):
@@ -15,13 +16,25 @@ class author:
     def set(self,email, password):
         self.email = email
         self.password = password
-        self.app = Twitter("session")
+        self.app = Twitter("new_user_session")
         self.app.sign_in(self.email, self.password)
+        if Account.objects.filter(email=self.email).exists():
+            print("existing_user_session")
+            
+        else:
+            print("new_user_session")
+            user = Account.objects.get(
+                connect=True,
+                name=self.app._username,
+                email=self.email, 
+                password=self.password,
+                platform="twitter")
+            user.save()
 
     def __any__(self):
         return self.app
         
-user = author()
+auth = author()
 
 
 
@@ -33,8 +46,8 @@ def login(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
-        user.set(email=email, password=password)
-        if user != None:
+        auth.set(email=email, password=password)
+        if auth != None:
             messages.success(request, '로그인 성공')
             
             return redirect('/')
@@ -44,8 +57,8 @@ def login(request):
 
 
 def search_tweet(request):
-    app = user.__any__()
-    if user is None:
+    app = auth.__any__()
+    if auth is None:
         return redirect('/login')
     if request.method == 'POST':
         
