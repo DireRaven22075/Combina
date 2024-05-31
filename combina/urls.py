@@ -23,4 +23,5 @@ urlpatterns = [
     path('', include('page.urls')),
     path('server/', include('server.urls')),
     path('admin/', admin.site.urls),
+    path('discord/', include('platformDiscord.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

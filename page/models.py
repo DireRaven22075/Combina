@@ -43,26 +43,3 @@ class ChatTableDB(models.Model):
     chatdb = models.ForeignKey('ChatDB', on_delete=models.CASCADE)
     def __str__(self):
         return self.text
-    
-#discord
-
-class DiscordMessage(models.Model):
-    content = models.TextField()
-    author = models.CharField(max_length=255, default='Unknown')
-    timestamp = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        app_label = 'page'
-
-    def __str__(self):
-        return f"{self.author}: {self.content} at {self.timestamp}"
-
-class DiscordChannel(models.Model):
-    channel_id = models.BigIntegerField()
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        app_label = 'page'
-
-    def __str__(self):
-        return str(self.channel_id)
