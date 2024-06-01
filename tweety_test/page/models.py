@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.postgres.fields import JSONField
 # Create your models here.
 
 class Account(models.Model):
@@ -16,14 +16,17 @@ class Account(models.Model):
         return self.accounts
 
 class Content(models.Model):
-    Account = models.ForeignKey('Account', on_delete=models.CASCADE)
-    name = models.CharField(max_length=20, default="None")
-    platform = models.CharField(max_length=20)
-    text = models.TextField()
-    date = models.DateTimeField(auto_now_add=True)
-    icon = models.ImageField(upload_to='images/', default='None')
-    image = models.ImageField(upload_to='images/', default='None')
-    tag = models.CharField(max_length=20, default='None')
-    def __list__(self):
-        self.contents = [self.name, self.platform, self.text, self.date, self.icon, self.image, self.tag]
-        return self.contents
+    Account = models.ForeignKey('Account',null=True, on_delete=models.CASCADE)
+    # name = models.CharField(max_length=20, default="None")
+    # platform = models.CharField(max_length=20)
+    # text = models.TextField()
+    # date = models.DateTimeField(auto_now_add=True)
+    # icon = models.ImageField(upload_to='images/', default='None')
+    # images = models.ManyToManyField('Image', blank=True)
+    # tag = models.CharField(max_length=20, default='None')
+    # def __list__(self):
+    #     self.contents = [self.name, self.platform, self.text, self.date, self.icon, self.image, self.tag]
+    #     return self.contents
+    content = models.JSONField(default=dict)
+    def __json__(self):
+        return self.content
