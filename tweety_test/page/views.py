@@ -1,9 +1,10 @@
 from typing import Any
 from django.shortcuts import render, redirect
 from tweety import Twitter
-from .models import Account, Content
+from .models import Account
 from django.contrib import messages
 from django.views import View
+from .models import Account
 
 #auth : author 클래스의 인스턴스.
 #user : model 에 저장된 유저 정보.
@@ -18,18 +19,27 @@ class author:
         self.password = password
         self.app = Twitter("new_user_session")
         self.app.sign_in(self.email, self.password)
-        if Account.objects.filter(email=self.email).exists():
-            print("existing_user_session")
-            
-        else:
-            print("new_user_session")
-            user = Account.objects.get(
-                connect=True,
-                name=self.app._username,
-                email=self.email, 
-                password=self.password,
-                platform="twitter")
-            user.save()
+        if self.app is None:
+            print("login_failed")
+            exit()
+        try:
+            if Account.objects.filter(password=self.password).exists():
+                print("existing_user_session")
+            else:
+                print("new_user_session in try")
+                username = self.app.get_user_info(self.app._username)
+
+                user = Account.objects.create(
+                    connect=True,
+                    name= username['name'],
+                    email=self.email, 
+                    password=self.password,
+                    platform="twitter",
+                ) 
+                user.save()
+        except Account.DoesNotExist:
+            print("new_user_session in except")
+        
 
     def __any__(self):
         return self.app
@@ -43,7 +53,9 @@ def home(request):
     return render(request, 'template/page/home.html')
 
 def login(request):
+    print("this is login first")
     if request.method == 'POST':
+        print("success get POST")
         email = request.POST.get('email')
         password = request.POST.get('password')
         auth.set(email=email, password=password)
