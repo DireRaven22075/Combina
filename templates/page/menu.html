@@ -26,8 +26,8 @@
         </div>
     </header>
     {% for account in accounts %}
-    {% if account.connected == 1 %}
-    <div class="account" onclick="js:disconnect({{account}})">
+    {% if account.connected == True %}
+    <div class="account" onclick="js:disconnect('{{account.platform}}', '{{account.name}}')">
         <p>{{account.platform}} - {{account.name}}</p>
     </div>
     {% else %}

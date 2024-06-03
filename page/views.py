@@ -5,18 +5,14 @@ def parameters():
     data = {}
     data['contents'] = ContentDB.objects.all()
     data['accounts'] = AccountDB.objects.all()
+    print(data)
+    return data
 class PageView:
-    def Welcome1(request):
-        request.session['visited'] = True
-        return render(request, 'welcome/welcome1.html')
     def Welcome(request):
-        if ('visited' not in request.session):
-            return render(request, 'welcome/welcome1.html')
-        else:
-            return render(request, 'home.html', parameters())
+        return render(request, 'welcome.html', parameters())
     def Home(request):
         return render(request, 'home.html', parameters())
-    def Post(request):
-        return render(request, 'post.html', parameters())
     def Menu(request):
-        return render(request, 'menu.html', parameters())
+        return render(request, 'page/menu.html', parameters())
+    def Post(request):
+        return render(request, 'page/post.html', parameters())

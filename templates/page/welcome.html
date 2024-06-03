@@ -6,27 +6,12 @@
     <title>Welcome 2 Combina!</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <style>
-        img {
-            position: relative;
-            margin: 0px;
-            width: 100%;
-        }
 
-        input[type=button] {
-            position: relative;
-            margin: 0px;
-            padding: 0px;
-            width: 80%;
-            height: 1.5rem;
-            border: none;
-            border-radius: none;
-        }
+    <!-- StyleSheet Link -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/welcome/body.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/welcome/input.css' %}" />
 
-        input[type=button]:hover {
-            background-color: aqua;
-        }
-    </style>
+    <!-- Script Link -->
     <script>
         function next() {
             const arr = [
@@ -68,29 +53,35 @@
 <body>
     <div id="First" style="display: block">
         <img src="{% static 'img/other/logo.png' %}" />
-        {% if registered %}
-
-        {% else %}
         <input type="button" onclick="js:next()" value="시작하기" />
-        {% endif %}
     </div>
     <div id="Second" style="display: none">
         <div class="header">
-            <input type="button" onclick="js:previous()" value="<" />
+            <input type="button" onclick="js:previous()" value="◀" />
+            <p>계정 연동하기</p>
         </div>
         {% for account in accounts %}
+        {% if account.connected == True %}
         <div>
-            
+            <p>{{account.platform}}</p>
+            <p>{{account.name}}</p>
         </div>
+        {% endif %}
         {% endfor %}
+        <input type="button" onclick="js:next()" value="Add Account" />
+
+        <input type="button" onclick="js:goto('/home')" value="계속하기" />
     </div>
     <div id="Third" style="display: none">
         <div class = "header">
-            <input type="button" onclick="js:previous()" value="<" />
+            <input type="button" onclick="js:previous()" value="◀" />
+            <p>계정 연동하기</p>
         </div>
-        <div class="container">
-
+        {% for account in accounts %}
+        <div>
+            <p>{{account.platform}}</p>
         </div>
+        {% endfor %}
     </div>
 </body>
 

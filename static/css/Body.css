@@ -11,11 +11,10 @@
 }
 
 body {
+    overscroll-behavior: none;
     padding: 0px;
     margin: 0px;
     width: 100%;
-    padding-top: 6em;
-    padding-bottom: 8em;
     display: flex;
     font-family: 'Noto Sans';
     flex-direction: column;
