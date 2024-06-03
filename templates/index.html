@@ -3,7 +3,6 @@
 <head>
     <title>Combina</title>
     <style>
-        /* 기존 스타일 */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(to bottom, #48c9b0, #ffffff);
@@ -74,6 +73,12 @@
         .message-content {
             color: #555;
         }
+        .message-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
         .message-input-container {
             display: flex;
             align-items: center;
@@ -109,14 +114,12 @@
             justify-content: space-between;
             align-items: center;
         }
-        /* 커스텀 파일 입력 스타일 */
         .file-input-container {
             position: relative;
             width: fit-content;
             cursor: pointer;
             color: white;
         }
-
         .file-input {
             position: absolute;
             top: 0;
@@ -126,7 +129,6 @@
             opacity: 0;
             cursor: pointer;
         }
-
         .custom-file-button {
             padding: 10px 20px;
             border: none;
@@ -137,12 +139,10 @@
             transition: background-color 0.3s, box-shadow 0.3s;
             display: inline-block;
         }
-
         .custom-file-button:hover {
             background-color: #3cc2a3;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-
         .file-name {
             margin-left: 10px;
             font-style: italic;
@@ -170,6 +170,11 @@
                     const messageElement = document.createElement('div');
                     messageElement.className = 'message-card';
                     messageElement.innerHTML = `<div class="message-author">${msg.author}</div><div class="message-content">${msg.content}</div>`;
+                    if (msg.image_url) {
+                        const imgElement = document.createElement('img');
+                        imgElement.src = msg.image_url;
+                        messageElement.appendChild(imgElement);
+                    }
                     messageContainer.appendChild(messageElement);
                 });
             } catch (error) {
@@ -182,104 +187,46 @@
 
         async function sendMessage() {
             const input = document.getElementById('message-input');
+            const imageInput = document.getElementById('image-input');
             const message = input.value;
             const button = document.getElementById('send-button');
             const originalText = button.innerText;
             button.innerText = 'Sending...';
             button.disabled = true;
 
-            try {
-                const response = await fetch('/discord/send-discord-message/', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': getCookie('csrftoken'),
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ message: message })
-                });
-                const data = await response.json();
-            } catch (error) {
-                console.error('Error sending message:', error);
-            } finally {
-                input.value = '';
-                button.innerText = originalText;
-                button.disabled = false;
-                fetchMessages();  // 메시지 전송 후 새로고침
+            let imageData = null;
+            if (imageInput.files.length > 0) {
+                const file = imageInput.files[0];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imageData = e.target.result.split(',')[1];
+                    sendToServer(message, imageData);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                sendToServer(message, imageData);
             }
-        }
 
-        async function setChannelID() {
-            const input = document.getElementById('channel-id-input');
-            const channelID = input.value;
-            const button = document.getElementById('set-channel-button');
-            const originalText = button.innerText;
-            button.innerText = 'Setting...';
-            button.disabled = true;
-
-            try {
-                const response = await fetch('/discord/set-channel-id/', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': getCookie('csrftoken'),
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ channel_id: channelID })
-                });
-                const data = await response.json();
-                if (data.success) {
-                    alert('Channel ID updated successfully.');
-                } else {
-                    alert('Failed to update Channel ID.');
-                }
-            } catch (error) {
-                console.error('Error setting channel ID:', error);
-            } finally {
-                button.innerText = originalText;
-                button.disabled = false;
-            }
-        }
-
-        async function updateBotProfile() {
-            const nameInput = document.getElementById('bot-name-input');
-            const avatarInput = document.getElementById('bot-avatar-input');
-            const botName = nameInput.value;
-            const botAvatar = avatarInput.files[0];
-            const button = document.getElementById('update-bot-profile-button');
-            const originalText = button.innerText;
-            button.innerText = 'Updating...';
-            button.disabled = true;
-
-            const reader = new FileReader();
-            reader.onloadend = async function() {
+            async function sendToServer(message, imageData) {
                 try {
-                    const response = await fetch('/discord/update-bot-profile/', {
+                    const response = await fetch('/discord/send-discord-message/', {
                         method: 'POST',
                         headers: {
                             'X-CSRFToken': getCookie('csrftoken'),
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({
-                            bot_name: botName,
-                            bot_avatar: reader.result.split(',')[1]  // base64 인코딩된 이미지 데이터
-                        })
+                        body: JSON.stringify({ message: message, image: imageData })
                     });
                     const data = await response.json();
-                    if (data.success) {
-                        alert('Bot profile updated successfully.');
-                    } else {
-                        alert('Failed to update bot profile.');
-                    }
                 } catch (error) {
-                    console.error('Error updating bot profile:', error);
+                    console.error('Error sending message:', error);
                 } finally {
+                    input.value = '';
+                    imageInput.value = '';
                     button.innerText = originalText;
                     button.disabled = false;
+                    fetchMessages();  // 메시지 전송 후 새로고침
                 }
-            };
-            if (botAvatar) {
-                reader.readAsDataURL(botAvatar);
-            } else {
-                reader.onloadend();
             }
         }
 
@@ -315,6 +262,11 @@
         <h2>메시지 보내기</h2>
         <div class="message-input-container">
             <input type="text" id="message-input" placeholder="Enter your message" />
+            <div class="file-input-container">
+                <label class="custom-file-button" for="image-input">이미지 선택</label>
+                <input type="file" id="image-input" class="file-input" accept="image/*" onchange="handleFileInputChange(event)" />
+                <span id="file-name-display" class="file-name">No file chosen</span>
+            </div>
             <button id="send-button" onclick="sendMessage()">보내기</button>
         </div>
     </div>
@@ -328,6 +280,9 @@
                 <div class="message-card">
                     <div class="message-author">{{ message.author }}</div>
                     <div class="message-content">{{ message.content }}</div>
+                    {% if message.image_url %}
+                        <img src="{{ message.image_url }}" alt="Image">
+                    {% endif %}
                 </div>
             {% endfor %}
         </div>

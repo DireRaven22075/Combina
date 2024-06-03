@@ -4,16 +4,14 @@ import sys
 import discord
 import warnings
 import aiohttp
+import base64  # base64 모듈 추가
 from asgiref.sync import sync_to_async
 from dotenv import load_dotenv
+from io import BytesIO
 
-# 프로젝트의 절대 경로를 추가
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'combina.settings')
 
-# Django 설정 모듈 지정
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'combina.settings')  # 프로젝트 이름에 맞게 수정
-
-# Django 설정 초기화
 django.setup()
 
 from platformDiscord.models import DiscordMessage, DiscordChannel
@@ -51,9 +49,13 @@ class DiscordBotService:
             await sync_to_async(DiscordMessage.objects.all().delete)()
             messages = [message async for message in channel.history(limit=20)]
             for message in messages:
+                image_url = None
+                if message.attachments:
+                    image_url = message.attachments[0].url  # 첫 번째 첨부 파일의 URL 가져오기
                 await sync_to_async(DiscordMessage.objects.create)(
                     content=message.content,
-                    author=message.author.name
+                    author=message.author.name,
+                    image_url=image_url  # 이미지 URL 저장
                 )
             await self.close()
 
@@ -66,7 +68,7 @@ class DiscordBotService:
         finally:
             await client.close()
 
-    async def send_message_to_discord(self, message):
+    async def send_message_to_discord(self, message, image_data=None):
         client = self.MyClient(self.token, intents=self.intents)
         try:
             await client.login(self.token)
@@ -81,7 +83,11 @@ class DiscordBotService:
 
             channel = client.get_channel(channelID)
             if channel and isinstance(channel, discord.TextChannel):
-                await channel.send(message)
+                if image_data:
+                    image = BytesIO(base64.b64decode(image_data))
+                    await channel.send(message, file=discord.File(image, filename="image.png"))
+                else:
+                    await channel.send(message)
                 return True
             return False
         except Exception as e:

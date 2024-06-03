@@ -4,6 +4,7 @@ class DiscordMessage(models.Model):
     content = models.TextField()
     author = models.CharField(max_length=255, default='Unknown')
     timestamp = models.DateTimeField(auto_now_add=True)
+    image_url = models.URLField(blank=True, null=True)  # 이미지 URL 필드 추가
 
     def __str__(self):
         return f"{self.author}: {self.content} at {self.timestamp}"

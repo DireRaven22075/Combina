@@ -5,6 +5,9 @@ from .models import DiscordMessage, DiscordChannel
 from .forms import TokenForm
 from .discord_bot import DiscordBotService
 import json
+import base64
+from io import BytesIO
+from PIL import Image  # Pillow 라이브러리
 
 class DiscordBotView:
     @staticmethod
@@ -13,7 +16,7 @@ class DiscordBotView:
             bot_token = await sync_to_async(request.session.get)('bot_token')
             bot_service = DiscordBotService(bot_token)
             await bot_service.run_bot()
-            messages = await sync_to_async(list)(DiscordMessage.objects.all().order_by('-id').values('author', 'content'))
+            messages = await sync_to_async(list)(DiscordMessage.objects.all().order_by('-id').values('author', 'content', 'image_url'))
             return JsonResponse({'messages': messages})
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
@@ -31,12 +34,13 @@ class DiscordBotView:
         if request.method == 'POST':
             data = json.loads(request.body)
             message = data.get('message')
+            image_data = data.get('image')  # 이미지 데이터
             bot_token = await sync_to_async(request.session.get)('bot_token')
             bot_service = DiscordBotService(bot_token)
-            if message:
-                success = await bot_service.send_message_to_discord(message)
+            if message or image_data:
+                success = await bot_service.send_message_to_discord(message, image_data)
                 return JsonResponse({'success': success})
-            return JsonResponse({'error': 'No message provided'}, status=400)
+            return JsonResponse({'error': 'No message or image provided'}, status=400)
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
     @staticmethod
