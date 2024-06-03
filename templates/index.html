@@ -231,6 +231,11 @@
         }
 
         async function setChannelID() {
+            const button = document.getElementById('set-channel-button');
+            const originalText = button.innerText;
+            button.innerText = 'Setting...';
+            button.disabled = true;
+
             const channelIdInput = document.getElementById('channel-id-input');
             const channelId = channelIdInput.value;
 
@@ -252,6 +257,58 @@
             } catch (error) {
                 console.error('Error updating Channel ID:', error);
                 alert('Error updating Channel ID.');
+            } finally {
+                button.innerText = originalText;
+                button.disabled = false;
+            }
+        }
+
+        async function updateBotProfile() {
+            const button = document.getElementById('update-bot-profile-button');
+            const originalText = button.innerText;
+            button.innerText = 'Updating...';
+            button.disabled = true;
+
+            const botNameInput = document.getElementById('bot-name-input');
+            const botAvatarInput = document.getElementById('bot-avatar-input');
+            const botName = botNameInput.value;
+
+            let botAvatar = null;
+            if (botAvatarInput.files.length > 0) {
+                const file = botAvatarInput.files[0];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    botAvatar = e.target.result.split(',')[1];
+                    sendProfileUpdate(botName, botAvatar);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                sendProfileUpdate(botName, botAvatar);
+            }
+
+            async function sendProfileUpdate(botName, botAvatar) {
+                try {
+                    const response = await fetch('/discord/update-bot-profile/', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': getCookie('csrftoken'),
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ bot_name: botName, bot_avatar: botAvatar })
+                    });
+                    const data = await response.json();
+                    if (data.success) {
+                        alert('Bot profile updated successfully!');
+                    } else {
+                        alert('Failed to update bot profile.');
+                    }
+                } catch (error) {
+                    console.error('Error updating bot profile:', error);
+                    alert('Error updating bot profile.');
+                } finally {
+                    button.innerText = originalText;
+                    button.disabled = false;
+                }
             }
         }
 
