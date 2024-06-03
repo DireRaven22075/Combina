@@ -80,7 +80,7 @@
             width: 100%;
             gap: 10px;
         }
-        input[type="text"] {
+        input[type="text"], textarea {
             flex: 1;
             padding: 10px;
             border: 1px solid #ddd;
@@ -312,10 +312,24 @@
 <body>
     <h1>Combina</h1>
     <div class="container">
-        <h2>채널 ID 설정</h2>
+        <h2>메시지 보내기</h2>
         <div class="message-input-container">
-            <input type="text" id="channel-id-input" placeholder="Enter channel ID" value="{{ current_channel }}" />
-            <button id="set-channel-button" onclick="setChannelID()">설정</button>
+            <input type="text" id="message-input" placeholder="Enter your message" />
+            <button id="send-button" onclick="sendMessage()">보내기</button>
+        </div>
+    </div>
+    <div class="container">
+        <div class="button-group">
+            <h2>메시지 목록 (최근 20개)</h2>
+            <button id="fetch-button" onclick="fetchMessages()">새로고침</button>
+        </div>
+        <div id="message-container">
+            {% for message in messages %}
+                <div class="message-card">
+                    <div class="message-author">{{ message.author }}</div>
+                    <div class="message-content">{{ message.content }}</div>
+                </div>
+            {% endfor %}
         </div>
     </div>
     <div class="container">
@@ -330,23 +344,11 @@
             <button id="update-bot-profile-button" onclick="updateBotProfile()">수정</button>
         </div>
     </div>
-    <div class="container message-input-container">
-        <h2>메시지 보내기</h2>
-        <input type="text" id="message-input" placeholder="Enter your message" />
-        <button id="send-button" onclick="sendMessage()">보내기</button>
-    </div>
     <div class="container">
-        <div class="button-group">
-            <h2>메시지 목록 (최근 20개)</h2>
-            <button id="fetch-button" onclick="fetchMessages()">새로고침</button>
-        </div>
-        <div id="message-container">
-            {% for message in messages %}
-                <div class="message-card">
-                    <div class="message-author">{{ message.author }}</div>
-                    <div class="message-content">{{ message.content }}</div>
-                </div>
-            {% endfor %}
+        <h2>채널 ID 설정</h2>
+        <div class="message-input-container">
+            <input type="text" id="channel-id-input" placeholder="Enter channel ID" value="{{ current_channel }}" />
+            <button id="set-channel-button" onclick="setChannelID()">설정</button>
         </div>
     </div>
 </body>
