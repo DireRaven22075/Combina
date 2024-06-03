@@ -5,15 +5,18 @@
 </head>
 <body>
     <h1>Create Posts</h1>
-    <form method="POST" action="info/">
+    <form method="POST" action="info/" enctype="multipart/form-data">
         {% csrf_token %}
+        {{form.as_p}}
         <input type="text" name="post" placeholder="Enter your contents">
+        <input type="file" name="image" accept="image/*">
         <button type="submit">submit</button>
     </form>
     <h1>Tweets</h1>
     {% if post %}
         <li>{{ post }}</li>
         <p>{{ post_text }}</p>
+        <img src="{{ post_image.url }}" alt="image">
     {% endif %}
 </body>
 </html>

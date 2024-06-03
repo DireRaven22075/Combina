@@ -71,6 +71,7 @@ def login(request):
 #트위터 상한 5개로 제한
 MAX_POSTS_LIMIT = 5
 
+import json
 def search_tweet(request):
     app = auth.__any__()
     if auth is None:
@@ -92,11 +93,12 @@ def search_tweet(request):
                         
                 else:
                     print("no media")
+                #딕셔너리 저장
                 tweets.append({
                     'tweet_name': tweet_detail.author.name,
                     'tweet_username': tweet_detail.author.username,
                     'tweet_text': tweet_detail.text.split('https')[0],
-                    'tweet_date': tweet_detail.date.strftime('%Y-%m-%d'),
+                    'tweet_date': tweet_detail.date,
                     'tweet_media_url': image_list,
                 })
                 # save_tweet = Content.objects.create(
@@ -110,10 +112,22 @@ def search_tweet(request):
                     print("tweets is empty")
                 else:
                     print(tweets[-1])
+                    tweet_data = tweets[-1]
                     save_tweet = Content.objects.create(
-                        content=tweets[-1],
+                        name=tweet_data['tweet_username'],
+                        platform="twitter",
+                        text=tweet_data['tweet_text'],
+                        date=tweet_data['tweet_date'],
+                        images=json.dumps(image_list),
+                        tag="tweet",
                     )
+                    # for image in image_list:
+                        # save_image = Image.objects.create(
+                        #     image = image,
+                        # )
+                        # save_image.save()
                     save_tweet.save()
+                    print(save_tweet.to_json())
                    
         context = {
             'tweets': tweets

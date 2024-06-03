@@ -9,6 +9,7 @@ class AccountAdmin(admin.ModelAdmin):
     search_fields = ('name', 'email')
 
 @admin.register(Content)
-class ContentAdmin(admin.StackedInline):
-    list_display = ('Account', 'content')
-    search_fields = ('Account', 'content')
+class ContentAdmin(admin.ModelAdmin):
+    list_display = ('Account', 'name', 'platform', 'text', 'date', 'icon')
+
+    search_fields = ('Account', 'name', 'platform', 'text', 'date', 'icon')
