@@ -1,6 +1,6 @@
 from django.db import models
 import json
-from django.contrib.postgres.fields import ArrayField
+#from django.contrib.postgres.fields import ArrayField #인식 못함 
 #from django.db.models import JSONField#이것도 인식 못함
 
 #from django.contrib.postgres.fields import JSONField #sqlite 가 인식 못한다 ㅠㅠ
@@ -24,7 +24,7 @@ class Content(models.Model):
     name = models.CharField(max_length=20, default="None")
     platform = models.CharField(max_length=20, null=True)
     text = models.TextField()
-    images = models.JSONField()
+    images = models.JSONField(null=True, blank=True)
     date = models.DateTimeField(auto_now_add=True, null=True)
     icon = models.ImageField(upload_to='images/', null=True, blank=True)
     tag = models.CharField(max_length=20, default='None')
@@ -40,17 +40,7 @@ class Content(models.Model):
             'text': self.text,
             'date': self.date.isoformat(),
             'icon': self.icon.url if self.icon else None,
-            #'images': Image.objects.filter(content=self).values_list('image', flat=True),
+            'images': json.loads(self.images),
             'tag': self.tag,
         })
     
-# class Image(models.Model):
-#     content = models.ForeignKey('Content', related_name='images', on_delete=models.CASCADE)
-#     image = models.ImageField(upload_to='images/', null=True, blank=True)
-
-# class ContentImage(models.Model):
-#     content = models.ForeignKey('Content', related_name='images', on_delete=models.CASCADE)
-#     image = models.ImageField(upload_to='images/')
-
-#     def __str__(self):
-#         return f"Image for {self.content.name}"

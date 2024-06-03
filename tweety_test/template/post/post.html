@@ -8,7 +8,7 @@
     <form method="POST" action="info/" enctype="multipart/form-data">
         {% csrf_token %}
         {{form.as_p}}
-        <input type="text" name="post" placeholder="Enter your contents">
+        <input type="text" name="text" placeholder="Enter your contents">
         <input type="file" name="image" accept="image/*">
         <button type="submit">submit</button>
     </form>
@@ -16,7 +16,7 @@
     {% if post %}
         <li>{{ post }}</li>
         <p>{{ post_text }}</p>
-        <img src="{{ post_image.url }}" alt="image">
+        <img src="{{ post_image.url }}" alt="{{post_image}}">
     {% endif %}
 </body>
 </html>

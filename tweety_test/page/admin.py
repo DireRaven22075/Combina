@@ -11,5 +11,6 @@ class AccountAdmin(admin.ModelAdmin):
 @admin.register(Content)
 class ContentAdmin(admin.ModelAdmin):
     list_display = ('Account', 'name', 'platform', 'text', 'date', 'icon')
-
-    search_fields = ('Account', 'name', 'platform', 'text', 'date', 'icon')
+    list_display_links = ('name',)
+    list_display_image = ('text',)
+    search_fields = ('Account', 'name', 'platform', 'text','date', 'icon')

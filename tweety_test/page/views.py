@@ -25,7 +25,7 @@ class author:
             exit()
         try:
             if Account.objects.filter(password=self.password).exists():
-                print("existing_user_session")
+                print("Exist user")
             else:
                 print("new_user_session in try")
                 username = self.app.get_user_info(self.app._username)
@@ -39,7 +39,7 @@ class author:
                 ) 
                 user.save()
         except Account.DoesNotExist:
-            print("new_user_session in except")
+            print("new_user_session in except\nIt's maybe error")
         
 
     def __any__(self):
@@ -61,6 +61,9 @@ def login(request):
         password = request.POST.get('password')
         auth.set(email=email, password=password)
         if auth != None:
+            #세션 작업 중
+            # request.session['app'] = auth.__any__()
+            # app = request.session['app']
             messages.success(request, '로그인 성공')
             
             return redirect('/')
@@ -101,17 +104,10 @@ def search_tweet(request):
                     'tweet_date': tweet_detail.date,
                     'tweet_media_url': image_list,
                 })
-                # save_tweet = Content.objects.create(
-                #     name=tweet_detail.author.name,
-                #     platform="twitter",
-                #     text=tweet_detail.text.split('https')[0],
-                #     image=image_list,
-                #     tag="tweet",
-                # )
                 if not tweets:
                     print("tweets is empty")
                 else:
-                    print(tweets[-1])
+                    #print(tweets[-1])
                     tweet_data = tweets[-1]
                     save_tweet = Content.objects.create(
                         name=tweet_data['tweet_username'],
@@ -121,11 +117,6 @@ def search_tweet(request):
                         images=json.dumps(image_list),
                         tag="tweet",
                     )
-                    # for image in image_list:
-                        # save_image = Image.objects.create(
-                        #     image = image,
-                        # )
-                        # save_image.save()
                     save_tweet.save()
                     print(save_tweet.to_json())
                    
