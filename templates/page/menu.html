@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+{% load static %}
+<head>
+    <title>Combina : Menu</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- StyleSheet Link -->
+    <link href='https://fonts.googleapis.com/css?family=Noto Sans' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/Header.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/Footer.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/body.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/account.css'%}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/popup.css' %}" />
+
+    <!-- Script Link -->
+    <script src="{% static 'js/static.js' %}"></script>
+    <script src="{% static 'js/Menu.js' %}"></script>
+</head>
+
+<body>
+    <header id="Header">
+        <div class="upper">
+            <h1>Account</h1>
+        </div>
+    </header>
+    {% for account in accounts %}
+    {% if account.connected == 1 %}
+    <div class="account" onclick="js:disconnect({{account}})">
+        <p>{{account.platform}} - {{account.name}}</p>
+    </div>
+    {% else %}
+    <div class="account" onclick="js:connect('{{account.platform}}')">
+        <p>Add Account - {{account.platform}}</p>
+    </div>
+    {% endif %}
+    {% endfor %}
+    <footer id="Footer" class="noselect">
+        <input type="image" onclick="js:goto('/home')" src="{% static 'img/icon/home.svg' %}" />
+        <input type="image" onclick="js:goto('/post')" src="{% static 'img/icon/create.svg' %}" />
+        <input type="image" onclick="js:goto('/menu')" src="{% static 'img/icon/account.svg' %}" />
+    </footer>
+    <div id="PopUp" class="noselect" style="display: none">
+        <div class="square">
+            <div class="inner">
+                <div class="top"></div>
+                <div class="center">
+                    <img class="icon" src="{% static 'img/icon/account.svg' %}">
+                    <p class="noselect" id="PopUp_Text">(NAME) - (PLATFORM)</p>
+                </div>
+                <form class="bottom" action="/server/disconnect" method="post" onclick="js:post(event)">
+                    {% csrf_token %}
+                    <p class="noselect">Remove account</p>
+                    <input type="text" value="n" id="PopUp_Data" name="id" style="display: none">
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

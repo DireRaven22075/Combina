@@ -1,10 +1,97 @@
 <!DOCTYPE html>
+{% load static %}
 <html>
+
 <head>
     <title>Welcome 2 Combina!</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        img {
+            position: relative;
+            margin: 0px;
+            width: 100%;
+        }
+
+        input[type=button] {
+            position: relative;
+            margin: 0px;
+            padding: 0px;
+            width: 80%;
+            height: 1.5rem;
+            border: none;
+            border-radius: none;
+        }
+
+        input[type=button]:hover {
+            background-color: aqua;
+        }
+    </style>
+    <script>
+        function next() {
+            const arr = [
+                document.getElementById("First"),
+                document.getElementById("Second"),
+                document.getElementById("Third")
+            ];
+            var target = 0;
+            for (var i = 0; i < 3; i++) {
+                if (arr[i].style.display == "block") {
+                    target = i;
+                    break;
+                }
+            }
+            for (var i = 0; i < 3; i++) {
+                arr[i].style.display = (i - 1 == target) ? "block" : "none";
+            }
+        }
+        function previous() {
+            const arr = [
+                document.getElementById("First"),
+                document.getElementById("Second"),
+                document.getElementById("Third")
+            ];
+            var target = 0;
+            for (var i = 0; i < 3; i++) {
+                if (arr[i].style.display == "block") {
+                    target = i;
+                    break;
+                }
+            }
+            for (var i = 0; i < 3; i++) {
+                arr[i].style.display = (i + 1 == target) ? "block" : "none";
+            }
+        }
+    </script>
 </head>
+
 <body>
-    <h1>콤비나에 오신것을 환영합니다!</h1>
-    <p>행복한 수업 ^^</p>
+    <div id="First" style="display: block">
+        <img src="{% static 'img/other/logo.png' %}" />
+        {% if registered %}
+
+        {% else %}
+        <input type="button" onclick="js:next()" value="시작하기" />
+        {% endif %}
+    </div>
+    <div id="Second" style="display: none">
+        <div class="header">
+            <input type="button" onclick="js:previous()" value="<" />
+        </div>
+        {% for account in accounts %}
+        <div>
+            
+        </div>
+        {% endfor %}
+    </div>
+    <div id="Third" style="display: none">
+        <div class = "header">
+            <input type="button" onclick="js:previous()" value="<" />
+        </div>
+        <div class="container">
+
+        </div>
+    </div>
 </body>
+
 </html>
