@@ -6,7 +6,6 @@ import warnings
 import aiohttp
 import base64  # base64 모듈 추가
 from asgiref.sync import sync_to_async
-from dotenv import load_dotenv
 from io import BytesIO
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

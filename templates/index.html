@@ -230,6 +230,31 @@
             }
         }
 
+        async function setChannelID() {
+            const channelIdInput = document.getElementById('channel-id-input');
+            const channelId = channelIdInput.value;
+
+            try {
+                const response = await fetch('/discord/set-channel-id/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ channel_id: channelId })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    alert('Channel ID updated successfully!');
+                } else {
+                    alert('Failed to update Channel ID.');
+                }
+            } catch (error) {
+                console.error('Error updating Channel ID:', error);
+                alert('Error updating Channel ID.');
+            }
+        }
+
         function getCookie(name) {
             let cookieValue = null;
             if (document.cookie && document.cookie !== '') {

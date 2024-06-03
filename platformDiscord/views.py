@@ -5,9 +5,6 @@ from .models import DiscordMessage, DiscordChannel
 from .forms import TokenForm
 from .discord_bot import DiscordBotService
 import json
-import base64
-from io import BytesIO
-from PIL import Image  # Pillow 라이브러리
 
 class DiscordBotView:
     @staticmethod
