@@ -38,7 +38,7 @@ async def set_channel_id(request):
         return JsonResponse({'error': 'No channel ID provided'}, status=400)
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
-async def update_bot_profile(request):
+async def update_bot_profile_view(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         bot_name = data.get('bot_name')

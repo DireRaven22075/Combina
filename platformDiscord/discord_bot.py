@@ -10,7 +10,7 @@ from asgiref.sync import sync_to_async
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Django 설정 모듈 지정
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'myproject.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'combina.settings')  # 프로젝트 이름에 맞게 수정
 
 # Django 설정 초기화
 django.setup()
@@ -49,7 +49,7 @@ class MyClient(discord.Client):
         await self.close()
 
 intents = discord.Intents.default()
-intents.messages = True
+intents.message_content = True
 
 async def run_bot():
     client = MyClient(intents=intents)
