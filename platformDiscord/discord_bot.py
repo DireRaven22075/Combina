@@ -1,11 +1,10 @@
-# discord_bot.py
 import os
 import django
 import sys
 import discord
 import warnings
 import aiohttp
-import base64  # base64 모듈 추가
+import base64
 from asgiref.sync import sync_to_async
 from io import BytesIO
 

@@ -1,4 +1,3 @@
-# views.py
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from asgiref.sync import sync_to_async
@@ -8,6 +7,8 @@ from .discord_bot import DiscordBotService
 import json
 
 class DiscordBotView:
+    DEFAULT_PROFILE_IMAGE_URL = '/static/discord_logo.png'
+    
     @staticmethod
     async def fetch_discord_messages(request):
         if request.method == 'POST':
@@ -19,6 +20,8 @@ class DiscordBotView:
             )
             for message in messages:
                 message['timestamp'] = message['timestamp'].isoformat()
+                if not message['profile_image_url']:
+                    message['profile_image_url'] = DiscordBotView.DEFAULT_PROFILE_IMAGE_URL
             return JsonResponse({'messages': messages})
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
