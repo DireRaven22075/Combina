@@ -34,18 +34,7 @@
         </div>
     </footer>
     <header id="Header" class="header" style="background: #FFFFFF;">
-        <form class="left search noselect" method="post" action="/home/">
-            <img id="Logo_White" class="noselect" src="{% static 'img/logo-white.svg' %}" style="display: none" />
-            <img id="Logo_Black" class="noselect" src="{% static 'img/logo-black.svg' %}" style="display:block;"/>
-            {% csrf_token %}
-            <input type="text" id="Search" placeholder="Search..." />
-        </form>
-        <div class="right filter noselect">
-            <input disabled type="button" onclick="js:filter(this, 'All')" value="All" />
-            {% for platform in platforms %}
-            <input type="button" onclick="js:filter(this, '{{platform}}')" value="{{platform}}" />
-            {% endfor %}
-        </div>
+        <img id="Logo_White" class="left noselect" src="{% static 'img/logo-black.svg' %}" />
     </header>
 </body>
 
