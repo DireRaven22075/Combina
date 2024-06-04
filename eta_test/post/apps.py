@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class CombinaPostConfig(AppConfig):
+class PostConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'combina_post'
+    name = 'post'

@@ -1,5 +1,5 @@
 """
-ASGI config for combina_site project.
+ASGI config for eta_test project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'combina_site.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'eta_test.settings')
 
 application = get_asgi_application()

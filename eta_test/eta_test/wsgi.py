@@ -1,5 +1,5 @@
 """
-WSGI config for combina_site project.
+WSGI config for eta_test project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'combina_site.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'eta_test.settings')
 
 application = get_wsgi_application()
