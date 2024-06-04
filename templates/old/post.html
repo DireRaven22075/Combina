@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+{% load static %}
+
+<head>
+    <title>Combina : Post</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- StyleSheet Link -->
+    <link href='https://fonts.googleapis.com/css?family=Noto Sans' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/Header.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/Footer.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/body.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/post.css' %}" />
+
+    <!-- Script Link -->
+    <script src="{% static 'js/static.js' %}"></script>
+    <script src="{% static 'js/Post.js' %}"></script>
+</head>
+
+<body>
+    <header id="Header">
+        <div class="upper">
+            <h1>Create</h1>
+        </div>
+    </header>
+    <form action="/server/post" method="post" class="area">
+        <input class="text_input" type="text" onclick placeholder="Title" name="title" />
+        <textarea class="text_input" placeholder="Content" name="content"></textarea>
+        {% csrf_token %}
+
+        <input type="file" name="image" accept="image/*" />
+
+        <div>
+            {% for account in accounts %}
+            {% if account.connected == 1 %}
+            <input type="checkbox" checked name="platform" value="{{account.platform}}">{{account.platform}}<br />
+            {% endif %}
+            {% endfor %}
+        </div>
+        <input type="submit" value="Post" />
+    </form>
+    <footer id="Footer" class="noselect">
+        <input type="image" onclick="js:goto('/home')" src="{% static 'img/icon/home.svg' %}" />
+        <input type="image" onclick="js:goto('/post')" src="{% static 'img/icon/create.svg' %}" />
+        <input type="image" onclick="js:goto('/menu')" src="{% static 'img/icon/account.svg' %}" />
+    </footer>
+</body>
+
+</html>

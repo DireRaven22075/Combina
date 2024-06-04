@@ -17,9 +17,9 @@ def parameters():
     return data
 class PageView:
     def Welcome(request):
-        return render(request, 'welcome.html', parameters())
+        return render(request, 'page/welcome.html', parameters())
     def Home(request):
-        return render(request, 'home.html', parameters())
+        return render(request, 'page/home.html', parameters())
     def Menu(request):
         return render(request, 'page/menu.html', parameters())
     def Post(request):
