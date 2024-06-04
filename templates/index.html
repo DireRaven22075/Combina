@@ -182,7 +182,9 @@
                     messageElement.className = 'message-card';
                     messageElement.innerHTML = `
                         <div class="message-author">
-                            <img src="${profileImageUrl}" alt="Profile Image">
+                            <a href="https://discord.com/users/${msg.author_id}" target="_blank">
+                                <img src="${profileImageUrl}" alt="Profile Image">
+                            </a>
                             ${msg.author}
                         </div>
                         <div class="message-content">${msg.content}</div>
@@ -200,6 +202,21 @@
                 button.innerText = originalText;
                 button.disabled = false;
             }
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
         }
 
         async function sendMessage() {

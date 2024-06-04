@@ -16,7 +16,7 @@ class DiscordBotView:
             bot_service = DiscordBotService(bot_token)
             await bot_service.run_bot()
             messages = await sync_to_async(list)(
-                DiscordMessage.objects.all().order_by('-id').values('author', 'content', 'image_url', 'profile_image_url', 'timestamp')
+                DiscordMessage.objects.all().order_by('-id').values('author', 'author_id', 'content', 'image_url', 'profile_image_url', 'timestamp')
             )
             for message in messages:
                 message['timestamp'] = message['timestamp'].isoformat()
