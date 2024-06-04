@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+{% load static %}
+<head>
+    <title>Combina : Search</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- StyleSheet Link -->
+    <link href='https://fonts.googleapis.com/css?family=Noto Sans' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/Header.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/Footer.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/body.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/content.css' %}" />
+    <!-- Script Link -->
+    <script src="{% static 'js/static.js' %}"></script>
+    <script src="{% static 'js/Find.js' %}"></script>
+</head>
+
+<body>
+    <header id="Header">
+        <form id="form" action="/find/" method="post">
+            {% csrf_token %}
+            <input name="search" placeholder="Search" class="search" id="Search" type="text"/>
+        </form>
+        <div id="Platform" class="lower">
+            <input type="button" value="All" onclick="js:find('All')" />
+            {% for account in accounts %}
+            {% if account.connected == 1 %}
+            <input type="button" value="{{account.platform}}" onclick="js:find('{{account.platform}}')" />
+            {% endif %}
+            {% endfor %}
+        </div>
+    </header>
+    {% for content in contents %}
+    <div class="content {{content.platform}}">
+        <div class="header">
+            <img class="icon" src="{{content.icon}}" />
+            <span class="info">
+                <p>{{content.account}}</p>
+                <p>{{content.platform}}, {{content.time}}</p>
+            </span>
+        </div>
+        <div class="body">
+            <p>{{content.text}}</p>
+            <img src="{{content.image}}" />
+        </div>
+        <div class="footer">
+        </div>
+    </div>
+    {% endfor %}
+    <footer id="Footer" class="noselect">
+        <input type="image" onclick="js:goto('/home')" src="{% static 'img/icon/home.svg' %}"/>
+        <input type="image" onclick="js:goto('/find')" src="{% static 'img/icon/search.svg' %}"/>
+        <input type="image" onclick="js:goto('/post')" src="{% static 'img/icon/create.svg' %}"/>
+        <input type="image" onclick="js:goto('/menu')" src="{% static 'img/icon/account.svg' %}"/>
+    </footer>
+</body>
+</html>
