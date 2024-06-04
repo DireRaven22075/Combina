@@ -20,21 +20,24 @@
 
 <body>
     <footer id = "Menubar">
-        <div class="noselect" onclick="js:goto('/home/')">
+        <div class="button noselect" onclick="js:goto('/home/')">
             <img src="{% static 'img/icon/home.svg' %}" />
             <h3>Home</h3>
         </div>
-        <div class="noselect" onclick="js:goto('/post/')">
+        <div class="button noselect" onclick="js:goto('/post/')">
             <img src="{% static 'img/icon/create.svg' %}" />
             <h3>Create</h3>
         </div>
-        <div disabled class="noselect" onclick="js:goto('/menu/')" style="background-color: #C0C0C0">
+        <div class="button noselect" style="background-color: #C0C0C0">
             <img src="{% static 'img/icon/account.svg' %}" />
             <h3>Account</h3>
         </div>
     </footer>
     <header id="Header" class="header" style="background: #FFFFFF;">
-        <img id="Logo_White" class="left noselect" src="{% static 'img/logo-black.svg' %}" />
+        <div class="left">
+            <img id="Logo_White" class="noselect" src="{% static 'img/logo-black.svg' %}" style="vertical-align: middle;" />
+            <span class="noselect">Account</span>
+        </div>
     </header>
 </body>
 
