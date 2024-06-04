@@ -1,3 +1,4 @@
+# views.py
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from asgiref.sync import sync_to_async
@@ -13,7 +14,11 @@ class DiscordBotView:
             bot_token = await sync_to_async(request.session.get)('bot_token')
             bot_service = DiscordBotService(bot_token)
             await bot_service.run_bot()
-            messages = await sync_to_async(list)(DiscordMessage.objects.all().order_by('-id').values('author', 'content', 'image_url'))
+            messages = await sync_to_async(list)(
+                DiscordMessage.objects.all().order_by('-id').values('author', 'content', 'image_url', 'profile_image_url', 'timestamp')
+            )
+            for message in messages:
+                message['timestamp'] = message['timestamp'].isoformat()
             return JsonResponse({'messages': messages})
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 

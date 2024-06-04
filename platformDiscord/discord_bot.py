@@ -1,3 +1,4 @@
+# discord_bot.py
 import os
 import django
 import sys
@@ -51,10 +52,12 @@ class DiscordBotService:
                 image_url = None
                 if message.attachments:
                     image_url = message.attachments[0].url  # 첫 번째 첨부 파일의 URL 가져오기
+                profile_image_url = str(message.author.avatar.url) if message.author.avatar else None  # 프로필 이미지 URL 가져오기
                 await sync_to_async(DiscordMessage.objects.create)(
                     content=message.content,
                     author=message.author.name,
-                    image_url=image_url  # 이미지 URL 저장
+                    image_url=image_url,
+                    profile_image_url=profile_image_url  # 프로필 이미지 URL 저장
                 )
             await self.close()
 
@@ -109,7 +112,7 @@ class DiscordBotService:
                 'avatar': bot_avatar
             }
             async with session.patch('https://discord.com/api/v9/users/@me', headers=headers, json=json_data) as response:
-                if response.status == 200:
+                if (await response.json()).get('avatar'):
                     print("Bot profile updated successfully.")
                     return True
                 else:

@@ -66,9 +66,17 @@
             flex-direction: column;
         }
         .message-author {
+            display: flex;
+            align-items: center;
             font-weight: bold;
             color: #333;
             margin-bottom: 5px;
+        }
+        .message-author img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-right: 10px;
         }
         .message-content {
             color: #555;
@@ -169,7 +177,13 @@
                 data.messages.forEach(msg => {
                     const messageElement = document.createElement('div');
                     messageElement.className = 'message-card';
-                    messageElement.innerHTML = `<div class="message-author">${msg.author}</div><div class="message-content">${msg.content}</div>`;
+                    messageElement.innerHTML = `
+                        <div class="message-author">
+                            <img src="${msg.profile_image_url}" alt="Profile Image">
+                            ${msg.author}
+                        </div>
+                        <div class="message-content">${msg.content}</div>
+                    `;
                     if (msg.image_url) {
                         const imgElement = document.createElement('img');
                         imgElement.src = msg.image_url;
@@ -360,7 +374,10 @@
         <div id="message-container">
             {% for message in messages %}
                 <div class="message-card">
-                    <div class="message-author">{{ message.author }}</div>
+                    <div class="message-author">
+                        <img src="{{ message.profile_image_url }}" alt="Profile Image">
+                        {{ message.author }}
+                    </div>
                     <div class="message-content">{{ message.content }}</div>
                     {% if message.image_url %}
                         <img src="{{ message.image_url }}" alt="Image">

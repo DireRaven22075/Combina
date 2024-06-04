@@ -20,7 +20,7 @@ Combina: Combine + @
 2. front-end 메인 프로그래밍
 3. django 시스템 구축
 
-- [@skala](https://www.github.com/scalar0114) - 오현승 - 2023041001
+- [@scalar0114](https://www.github.com/scalar0114) - 오현승 - 2023041001
 1. chatting 시스템 구축
 2. django 시스템 서브 구축
 
@@ -40,6 +40,5 @@ Combina: Combine + @
 - Youtube
 - X(Twitter)
 - Discord
-- Kakao(Talk)
 - Reddit
 
