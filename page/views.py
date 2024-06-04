@@ -3,9 +3,17 @@ from django.http import HttpResponse
 from .models import *
 def parameters():
     data = {}
+    data['platforms'] = [
+        "Facebook",
+        "Instagram",
+        "X",
+        "Discord",
+        "Reddit",
+        "Everytime",
+        "Youtube"
+    ]
     data['contents'] = ContentDB.objects.all()
     data['accounts'] = AccountDB.objects.all()
-    print(data)
     return data
 class PageView:
     def Welcome(request):

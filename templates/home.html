@@ -11,31 +11,63 @@
     <link href='https://fonts.googleapis.com/css?family=Noto Sans' rel='stylesheet'>
     <link rel="stylesheet" type="text/css" href="{% static 'css/Header.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/Body.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/Menubar.css' %}"
+    <link rel="stylesheet" type="text/css" href="{% static 'css/content.css' %}" />
     <!-- Script Link -->
+
     <script src="{% static 'js/Header.js' %}"></script>
+    <script src="{% static 'js/Menubar.js' %}"></script>
 </head>
 
 <body>
+    <footer>
+        <div class="noselect" onclick="js:goto('/home/')" style="background-color: #C0C0C0">
+            <img src="{% static 'img/icon/home.svg' %}" />
+            <h3>Home</h3>
+        </div>
+        <div class="noselect" onclick="js:goto('/post/')">
+            <img src="{% static 'img/icon/create.svg' %}" />
+            <h3>Create</h3>
+        </div>
+        <div class="noselect" onclick="js:goto('/menu/')">
+            <img src="{% static 'img/icon/account.svg' %}" />
+            <h3>Account</h3>
+        </div>
+    </footer>
     <header id="Header" class="header" style="background: #FFFFFF;">
-        <form class="search noselect" method="post" action="/search">
+        <form class="left search noselect" method="post" action="/home/">
+            <img id="Logo_White" class="noselect" src="{% static 'img/logo-white.svg' %}" style="display: none" />
+            <img id="Logo_Black" class="noselect" src="{% static 'img/logo-black.svg' %}" style="display:block;"/>
             {% csrf_token %}
-            <img class="noselect" src="{% static 'img/logo.svg' %}" />
             <input type="text" id="Search" placeholder="Search..." />
         </form>
-        <div class="filter noselect">
+        <div class="right filter noselect">
             <input disabled type="button" onclick="js:filter(this, 'All')" value="All" />
-            {% for account in accounts %}
-            <input type="button" onclick="js:filter(this, '{{account.platform}}')" value="{{account.platform}}" />
+            {% for platform in platforms %}
+            <input type="button" onclick="js:filter(this, '{{platform}}')" value="{{platform}}" />
             {% endfor %}
         </div>
     </header>
     <div>
-    </div>
-    <div>
         {% for content in contents %}
-
+        <div class="content {{content.platform}}">
+            <div class="header">
+                <img class="icon" src="{{content.icon}}" />
+                <span class="info">
+                    <p>{{content.name}}</p>
+                    <p>{{content.platform}}, {{content.time}}</p>
+                </span>
+            </div>
+            <div class="body">
+                <p>{{content.text}}</p>
+                <img src="{{content.image}}" />
+            </div>
+            <div class="footer">
+            </div>
+        </div>
         {% endfor %}
     </div>
+    
 </body>
 
 </html>

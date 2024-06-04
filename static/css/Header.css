@@ -1,35 +1,70 @@
-.header {
+#Header {
     position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    justify-content: space-between;
     width: 100%;
     height: 4rem;
     top: 0px;
     margin: 0px;
     padding: 0px;
-    padding-left: 1rem;
+    box-shadow: 0px 6px 20px 1px #555555;
+    .left {
+        margin: 0px;
+        margin-left: 1rem;
+    }
+    .right {
+        float: right;
+    }
+
+    img {
+        margin: 0px;
+        margin-top: 0.5rem;
+        width: 3rem;
+        height: 3rem;
+        float: left;
+    }
+
     .search {
-        width: 30%;
+        width: auto;
         height: 4rem;
         float: left;
+
         img {
             width: 3rem;
             height: 3rem;
         }
+        input[type=text] {
+            border: none;
+            position: relative;
+            width: 10rem;
+            margin-top: 1.25em;
+            padding-left: 1rem;
+            height: 2rem;
+            border-radius: 1em;
+            background-color: #A0A0A0;
+            color: black;
+        }
+        input[type=text]::placeholder {
+            color: white;
+            font-weight: bold;
+        }
     }
+
     .filter {
-        height: 4rem;
         width: auto;
-        margin: 0px;
-        margin-top: 2rem;
-        align-content: space-between;
+
         input[type=button] {
+            width: 5rem;
             border: none;
             background: none;
+            font-weight: normal;
         }
-        input[type=button]:hover {
-            font-size: 1.2em;
-        }
+
         input[type=button]:disabled {
-            font-size: 1.4em;
+            font-weight: bold;
             color: black;
         }
     }
