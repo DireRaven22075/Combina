@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home Page</title>
+</head>
+<body>
+    <h1>Welcome Everytime!</h1>
+    <a href="/login">Login</a> 
+    <form>
+        {% csrf_token %}
+        <label for="search">Search:</label>
+        <input type="text" id="search" name="search" placeholder="Enter your search term">
+        <button type="submit" formmethod="post" formaction="/search/">Search</button>
+        
+    </form>
+</body>
+</html>
