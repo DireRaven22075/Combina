@@ -33,7 +33,8 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "page",
-    "platformDiscord",
+    "platformEverytime",
+    #"platformDiscord",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
