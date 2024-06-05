@@ -178,9 +178,14 @@
                 const data = await response.json();
                 const messageContainer = document.getElementById('message-container');
                 messageContainer.innerHTML = '';
-                const defaultProfileImageUrl = "/static/img/icon/discord-mark-blue.svg";
+                const defaultProfileImageUrl = "/static/img/old/discord-mark-blue.svg";
                 data.messages.forEach(msg => {
-                    const profileImageUrl = msg.profile_image_url || defaultProfileImageUrl;
+                    var profileImageUrl;
+                    if (msg.profile_image_url != null) {
+                        profileImageUrl = msg.profile_image_url;
+                    } else {
+                        profileImageUrl = defaultProfileImageUrl;
+                    }
                     const messageElement = document.createElement('div');
                     messageElement.className = 'message-card';
                     messageElement.innerHTML = `
@@ -211,7 +216,7 @@
             let cookieValue = null;
             if (document.cookie && document.cookie !== '') {
                 const cookies = document.cookie.split(';');
-                for (let i = 0; cookies.length; i++) {
+                for (let i = 0; i < cookies.length; i++) {
                     const cookie = cookies[i].trim();
                     if (cookie.substring(0, name.length + 1) === (name + '=')) {
                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
@@ -390,7 +395,7 @@
                 <div class="message-card">
                     <div class="message-author">
                         <a href="https://discord.com/users/{{ message.author_id }}" target="_blank">
-                            <img src="{{ message.profile_image_url }}" alt="Profile Image">
+                            <img src="{{ message.profile_image_url|default:profile_image_url }}" alt="Profile Image">
                         </a>
                         {{ message.author }}
                     </div>

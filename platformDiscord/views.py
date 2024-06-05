@@ -4,10 +4,11 @@ from asgiref.sync import sync_to_async
 from page.models import ContentDB, AccountDB  # 모델 참조 업데이트
 from .forms import TokenForm
 from .discord_bot import DiscordBotService
+from django.templatetags.static import static
 import json
 
 class DiscordBotView:
-    DEFAULT_PROFILE_IMAGE_URL = '/static/img/icon/discord-mark-blue.svg'
+    DEFAULT_PROFILE_IMAGE_URL = 'img/icon/logo/discord-mark-blue.svg'
 
     @staticmethod
     async def fetch_discord_messages(request):
@@ -37,13 +38,13 @@ class DiscordBotView:
 
     @staticmethod
     def index(request):
-        if 'bot_token' not in request.session:
-            return redirect('set_token')
-
-        messages = ContentDB.objects.filter(platform='discord').order_by('-id')
-        current_account = AccountDB.objects.filter(platform='discord').first()
-        current_channel = (current_account.tag if current_account else '')
-        return render(request, 'discord_template/index.html', {'messages': messages, 'current_channel': current_channel})
+        messages = ContentDB.objects.all().order_by('-time')[:20]
+        profile_image_url = static('img/icon/logo/discord-mark-blue.svg')
+        return render(request, 'discord_template/index.html', {
+            'messages': messages,
+            'profile_image_url': profile_image_url,
+            'current_channel': request.GET.get('channel_id', '')
+        })
 
     @staticmethod
     async def send_discord_message(request):
