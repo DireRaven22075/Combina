@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(to bottom, #48c9b0, #ffffff);
+            background: linear-gradient(to bottom, #5865F2, #ffffff);
             margin: 0;
             padding: 0;
             display: flex;
@@ -36,7 +36,7 @@
             font-size: 24px;
             margin-bottom: 20px;
             color: #333;
-            border-bottom: 2px solid #48c9b0;
+            border-bottom: 2px solid #5865F2;
             padding-bottom: 10px;
         }
         #message-container {
@@ -52,7 +52,7 @@
             width: 8px;
         }
         #message-container::-webkit-scrollbar-thumb {
-            background-color: #48c9b0;
+            background-color: #5865F2;
             border-radius: 4px;
         }
         #message-container::-webkit-scrollbar-track {
@@ -106,7 +106,7 @@
             padding: 10px 20px;
             border: none;
             border-radius: 4px;
-            background-color: #48c9b0;
+            background-color: #5865F2;
             color: white;
             cursor: pointer;
             transition: background-color 0.3s, box-shadow 0.3s;
@@ -116,7 +116,7 @@
             cursor: not-allowed;
         }
         button:hover:enabled {
-            background-color: #3cc2a3;
+            background-color: #4e5bd0;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         .button-group {
@@ -143,14 +143,14 @@
             padding: 10px 20px;
             border: none;
             border-radius: 4px;
-            background-color: #48c9b0;
+            background-color: #5865F2;
             color: white;
             cursor: pointer;
             transition: background-color 0.3s, box-shadow 0.3s;
             display: inline-block;
         }
         .custom-file-button:hover {
-            background-color: #3cc2a3;
+            background-color: #4e5bd0;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         .file-name {
@@ -178,9 +178,14 @@
                 const data = await response.json();
                 const messageContainer = document.getElementById('message-container');
                 messageContainer.innerHTML = '';
-                const defaultProfileImageUrl = "{% static 'discord_logo.png' %}";
+                const defaultProfileImageUrl = "/static/img/old/discord-mark-blue.svg";
                 data.messages.forEach(msg => {
-                    const profileImageUrl = msg.profile_image_url || defaultProfileImageUrl;
+                    var profileImageUrl;
+                    if (msg.profile_image_url != null) {
+                        profileImageUrl = msg.profile_image_url;
+                    } else {
+                        profileImageUrl = defaultProfileImageUrl;
+                    }
                     const messageElement = document.createElement('div');
                     messageElement.className = 'message-card';
                     messageElement.innerHTML = `
@@ -390,7 +395,7 @@
                 <div class="message-card">
                     <div class="message-author">
                         <a href="https://discord.com/users/{{ message.author_id }}" target="_blank">
-                            <img src="{{ message.profile_image_url }}" alt="Profile Image">
+                            <img src="{{ message.profile_image_url|default:profile_image_url }}" alt="Profile Image">
                         </a>
                         {{ message.author }}
                     </div>
