@@ -1,0 +1,16 @@
+#Title {
+    width: 35%;
+    position: fixed;
+    display: block;
+    margin: 0px;
+    padding: 0px;
+    height: calc(100% - 2rem);
+    top: 1rem;
+    left: calc(20% + 1rem);
+    height: 4rem;
+    position: fixed;
+    background-color: white;
+    border-bottom: 1em solid #EBEBEB;
+    border-top-left-radius: 0.5em;
+    border-top-right-radius: 0.5em;
+}

@@ -1,0 +1,15 @@
+body {
+    overscroll-behavior: none;
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+    padding-top: 6rem;
+    display: flex;
+    font-family: 'Noto Sans';
+    background: #E9E9E9;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    scrollbar-width: none;
+}
+

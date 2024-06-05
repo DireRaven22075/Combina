@@ -1,38 +1,50 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from asgiref.sync import sync_to_async
-from .models import DiscordMessage, DiscordChannel
+from page.models import ContentDB, AccountDB  # 모델 참조 업데이트
 from .forms import TokenForm
 from .discord_bot import DiscordBotService
+from django.templatetags.static import static
 import json
 
 class DiscordBotView:
-    DEFAULT_PROFILE_IMAGE_URL = '/static/discord_logo.png'
-    
+    DEFAULT_PROFILE_IMAGE_URL = 'img/icon/logo/discord-mark-blue.svg'
+
     @staticmethod
     async def fetch_discord_messages(request):
         if request.method == 'POST':
             bot_token = await sync_to_async(request.session.get)('bot_token')
+            data = json.loads(request.body)
+            num_messages = int(data.get('num_messages', 20))
             bot_service = DiscordBotService(bot_token)
-            await bot_service.run_bot()
+            await bot_service.run_bot(num_messages)
             messages = await sync_to_async(list)(
-                DiscordMessage.objects.all().order_by('-id').values('author', 'author_id', 'content', 'image_url', 'profile_image_url', 'timestamp')
+                ContentDB.objects.filter(platform='discord').order_by('-id')[:num_messages].values('name', 'author_id', 'text', 'image_url', 'profile_image_url', 'time')
             )
             for message in messages:
-                message['timestamp'] = message['timestamp'].isoformat()
+                message['time'] = message['time'].isoformat()
                 if not message['profile_image_url']:
                     message['profile_image_url'] = DiscordBotView.DEFAULT_PROFILE_IMAGE_URL
+
+                # 필드 이름 변경
+                message['author'] = message.pop('name')
+                message['content'] = message.pop('text')
+
+            # print(messages)  # 디버깅 하려고 만든 거
             return JsonResponse({'messages': messages})
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
+
+
     @staticmethod
     def index(request):
-        if 'bot_token' not in request.session:
-            return redirect('set_token')
-
-        messages = DiscordMessage.objects.all().order_by('-id')
-        current_channel = DiscordChannel.objects.first()
-        return render(request, 'index.html', {'messages': messages, 'current_channel': current_channel.channel_id if current_channel else ''})
+        messages = ContentDB.objects.all().order_by('-time')[:20]
+        profile_image_url = static('img/icon/logo/discord-mark-blue.svg')
+        return render(request, 'discord_template/index.html', {
+            'messages': messages,
+            'profile_image_url': profile_image_url,
+            'current_channel': request.GET.get('channel_id', '')
+        })
 
     @staticmethod
     async def send_discord_message(request):
@@ -54,8 +66,15 @@ class DiscordBotView:
             data = json.loads(request.body)
             channel_id = data.get('channel_id')
             if channel_id:
-                await sync_to_async(DiscordChannel.objects.all().delete)()
-                await sync_to_async(DiscordChannel.objects.create)(channel_id=channel_id)
+                account = await sync_to_async(AccountDB.objects.filter(platform='discord').first)()
+                if account:
+                    account.tag = channel_id
+                    await sync_to_async(account.save)()
+                else:
+                    await sync_to_async(AccountDB.objects.create)(
+                        platform='discord',
+                        tag=channel_id
+                    )
                 return JsonResponse({'success': True, 'channel_id': channel_id})
             return JsonResponse({'error': 'No channel ID provided'}, status=400)
         return JsonResponse({'error': 'Invalid request method'}, status=400)
@@ -84,4 +103,4 @@ class DiscordBotView:
                 return redirect('index')
         else:
             form = TokenForm()
-        return render(request, 'set_token.html', {'form': form})
+        return render(request, 'discord_template/set_token.html', {'form': form})
