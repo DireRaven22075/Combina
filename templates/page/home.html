@@ -9,9 +9,13 @@
 
     <!-- StyleSheet Link -->
     <link href='https://fonts.googleapis.com/css?family=Noto Sans' rel='stylesheet'>
+    <!--
     <link rel="stylesheet" type="text/css" href="{% static 'css/Header.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/Body.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/Menubar.css' %}" />
+    -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/home/Platform.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/all/Header.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/Body.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/content.css' %}" />
     <!-- Script Link -->
 
@@ -20,6 +24,27 @@
 </head>
 
 <body>
+    <header id="Header" class="header">
+        <form class="left search noselect" method="POST" action="/home/">
+            <img id="Logo_Black" class="noselect" src="{% static 'img/logo-black.svg' %}" />
+            {% csrf_token %}
+            <input type="text" id="Search" placeholder="Search..." />
+        </form>
+        <div id="Menu">
+            <input disabled type="image" src="{% static 'img/icon/home.svg' %}" onclick="js:goto('/home/')" />
+            <input disabled type="image" src="{% static 'img/icon/home.svg' %}" onclick="js:goto('/home/')" />
+            <input disabled type="image" src="{% static 'img/icon/home.svg' %}" onclick="js:goto('/home/')" />
+            <input disabled type="image" src="{% static 'img/icon/home.svg' %}" onclick="js:goto('/home/')" />
+        </div>
+        <div id="Platform" class="noselect">
+            <div class="target"></div>
+            <input disabled type="button" onclick="js:filter(this, 'All')" value="All" />
+            {% for platform in platforms %}
+            <input type="button" onclick="js:filter(this, '{{platform}}')" value="{{platform}}" />
+            {% endfor %}
+        </div>
+    </header>
+    <!--
     <footer id = "Menubar">
         <div class="button noselect" style="background-color: #C0C0C0">
             <img src="{% static 'img/icon/home.svg' %}" />
@@ -36,18 +61,13 @@
     </footer>
     <header id="Header" class="header" style="background: #FFFFFF;">
         <form class="left search noselect" method="post" action="/home/">
-            <img id="Logo_White" class="noselect" src="{% static 'img/logo-white.svg' %}" style="display: none" />
-            <img id="Logo_Black" class="noselect" src="{% static 'img/logo-black.svg' %}" style="display:block;"/>
-            {% csrf_token %}
-            <input type="text" id="Search" placeholder="Search..." />
+            
         </form>
         <div class="right filter noselect">
-            <input disabled type="button" onclick="js:filter(this, 'All')" value="All" />
-            {% for platform in platforms %}
-            <input type="button" onclick="js:filter(this, '{{platform}}')" value="{{platform}}" />
-            {% endfor %}
+            
         </div>
     </header>
+    -->
     <div id="Content">
         {% for content in contents %}
         <div class="content {{content.platform}}">

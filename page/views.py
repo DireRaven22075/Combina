@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import *
-def parameters():
+def parameters(name):
     data = {}
     data['platforms'] = [
         "Facebook",
@@ -14,13 +14,18 @@ def parameters():
     ]
     data['contents'] = ContentDB.objects.all()
     data['accounts'] = AccountDB.objects.all()
+    data['page'] = name
     return data
 class PageView:
-    def Welcome(request):
-        return render(request, 'page/init.html', parameters())
+    def Init(request):
+        return render(request, 'new_page/init.html', parameters('Start'))
     def Home(request):
-        return render(request, 'page/home.html', parameters())
-    def Menu(request):
-        return render(request, 'page/menu.html', parameters())
-    def Post(request):
-        return render(request, 'page/post.html', parameters())
+        return render(request, 'new_page/home.html', parameters('Home'))
+    def Search(request):
+        return render(request, 'new_page/search.html', parameters('Search'))
+    def Video(request):
+        return render(request, 'new_page/video.html', parameters('Video'))
+    def Create(request):
+        return render(request, 'new_page/create.html', parameters('Create'))
+    def Contacts(request):
+        return render(request, 'new_page/contacts.html', parameters('Contacts'))
