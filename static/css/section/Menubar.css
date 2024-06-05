@@ -16,13 +16,18 @@
         }
     }
     .element {
-        width: 100%;
+        width: 90%;
         height: 3rem;
+        margin-left: 10%;
+        margin-bottom: 2rem;
         vertical-align: middle;
-        margin-bottom: 1rem;
+        label {
+            vertical-align: middle;
+        }
         img {
             width: 3rem;
             height: 3rem;
         }
+        
     }
 }

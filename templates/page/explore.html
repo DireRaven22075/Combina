@@ -6,17 +6,29 @@
     <title>Combina : {{page}}</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <!-- StyleSheet Link -->
     <link href='https://fonts.googleapis.com/css?family=Noto Sans' rel='stylesheet'>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/Menubar.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/Main.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/Body.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/content.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/Platform.css' %}" />
 
-    <!-- Javascript Link -->
+    <!-- StyleSheet Link (Section) -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Body.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Main.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Title.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Sub.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Subtitle.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Navigation.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Menubar.css' %}" />
+
+    <!-- StyleSheet Link (additional Style) -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style/Platform.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style/Noselect.css' %}" />
+
+    <!-- StyleSheet Link (Element) -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/element/content.css' %}" />
+
+    <!-- Javascript Link (Interaction) -->
     <script src="{% static 'js/Menubar.js' %}"></script>
+
+    <!-- Javascript Link (ui-updates) -->
+    <script src="{% static 'js/ui-updates/navigation.js' %}"></script>
 </head>
 
 <body>
@@ -37,7 +49,26 @@
 
     </div>
     <div id="Title">
-        
+        <input type="text" placeholder="Search..." />
+        <img src="{% static 'img/icon/menu.svg' %}" />
+    </div>
+    <div id="Navigation" style="background: rgb(255, 255, 255)">
+        <input type="button" onclick="js:navigation('All')" value="All" />
+        {% for platform in platforms %}
+        <input type="button" onclick="js:navigation('{{platform}}')" value="{{platform}}" />
+        {% endfor %}
+    </div>
+    <div id="Sub">
+
+    </div>
+    <div id="Subtitle">
+
+    </div>
+    <div id="Sub">
+
+    </div>
+    <div id="Subtitle">
+
     </div>
 </body>
 
