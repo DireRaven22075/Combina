@@ -6,7 +6,6 @@ def parameters(name):
     data['platforms'] = [
         "Facebook",
         "Instagram",
-        "X",
         "Discord",
         "Reddit",
         "Everytime",
