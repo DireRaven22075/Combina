@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+{% load static %}
+
+<head>
+    <title>Combina : {{page}}</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- StyleSheet Link -->
+    <link href='https://fonts.googleapis.com/css?family=Noto Sans' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/Menubar.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/Main.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/Body.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/content.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/Platform.css' %}" />
+
+    <!-- Javascript Link -->
+    <script src="{% static 'js/Menubar.js' %}"></script>
+</head>
+
+<body>
+    <header id="Menubar">
+        <div class="title"><label><img src="{% static 'img/logo/black.svg' %}" />Combina</label></div>
+        <div onclick="js:goto('/home')" class="element button"><label><img
+                    src="{% static 'img/icon/menu/home.svg'%}" />Home</label></div>
+        <div onclick="js:goto('/explore')" class="element button"><label><img
+                    src="{% static 'img/icon/menu/explore.svg'%}" />Explore</label></div>
+        <div onclick="js:goto('/contacts')" class="element button"><label><img
+                    src="{% static 'img/icon/menu/contacts.svg'%}" />Contacts</label></div>
+        <div onclick="js:goto('/watch')" class="element button"><label><img
+                    src="{% static 'img/icon/menu/watch.svg'%}" />Watch</label></div>
+        <div onclick="js:goto('/create')" class="element button"><label><img
+                    src="{% static 'img/icon/menu/create.svg'%}" />Create</label></div>
+    </header>
+    <div id="Main">
+
+    </div>
+    <div id="Title">
+        
+    </div>
+</body>
+
+</html>

@@ -17,14 +17,14 @@ def parameters(name):
     return data
 class PageView:
     def Init(request):
-        return render(request, 'new_page/init.html', parameters('Start'))
+        return render(request, 'page/init.html', parameters('Start'))
     def Home(request):
-        return render(request, 'new_page/home.html', parameters('Home'))
-    def Search(request):
-        return render(request, 'new_page/search.html', parameters('Search'))
-    def Video(request):
-        return render(request, 'new_page/video.html', parameters('Video'))
-    def Create(request):
-        return render(request, 'new_page/create.html', parameters('Create'))
+        return render(request, 'page/home.html', parameters('Home'))
+    def Explore(request):
+        return render(request, 'page/explore.html', parameters('Explore'))
+    def Watch(request):
+        return render(request, 'page/watch.html', parameters('Watch'))
     def Contacts(request):
-        return render(request, 'new_page/contacts.html', parameters('Contacts'))
+        return render(request, 'page/contacts.html', parameters('Contacts'))
+    def Create(request):
+        return render(request, 'page/create.html', parameters('Create'))

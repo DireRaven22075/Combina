@@ -1,27 +1,22 @@
-#Content {
-    margin: 0px;
-    width: 40%;
-    height: 100vh;
-}
 .content {
     margin: 0px;
     /*box-shadow: 5px 5px 5px 1px gray;*/
     margin-top: 1em;
     width: 90%;
+    margin-left: 5%;
     padding: 0px;
     border-radius: 1em;
     justify-self: center;
-    background-color: #FFFFFF;
-    border: 1px solid #FFFFFF;
     color: #000000;
-
+    border-radius: 1em;
     .header {
         padding: 0px;
         padding-left: 0.3em;
         display: flex;
         justify-content: start;
         width: 100%;
-
+        border-top-left-radius: 1em;
+        border-top-right-radius: 1em;
         .icon {
             width: 4em;
             height: 4em;
@@ -55,13 +50,16 @@
         img {
             width: 100%;
         }
+        background-color: white;
     }
 
     .footer {
         display: flex;
         align-items: center;
         padding: 1em;
-
+        border-bottom-left-radius: 1em;
+        border-bottom-right-radius: 1em;
+        background-color: #EBEBEB;
         .button {
             width: 95%;
 
