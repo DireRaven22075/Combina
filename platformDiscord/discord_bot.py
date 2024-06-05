@@ -24,9 +24,10 @@ class DiscordBotService:
         self.intents.message_content = True
 
     class MyClient(discord.Client):
-        def __init__(self, token, *args, **kwargs):
+        def __init__(self, token, num_messages, *args, **kwargs):
             super().__init__(*args, **kwargs)
             self.token = token
+            self.num_messages = int(num_messages)
 
         async def setup_hook(self):
             self.loop.create_task(self.fetch_messages())
@@ -46,7 +47,7 @@ class DiscordBotService:
                 return
 
             await sync_to_async(DiscordMessage.objects.all().delete)()
-            messages = [message async for message in channel.history(limit=20)]
+            messages = [message async for message in channel.history(limit=self.num_messages)]
             for message in messages:
                 image_url = None
                 if message.attachments:
@@ -55,13 +56,14 @@ class DiscordBotService:
                 await sync_to_async(DiscordMessage.objects.create)(
                     content=message.content,
                     author=message.author.name,
+                    author_id=message.author.id,  # 사용자 ID 저장
                     image_url=image_url,
                     profile_image_url=profile_image_url  # 프로필 이미지 URL 저장
                 )
             await self.close()
 
-    async def run_bot(self):
-        client = self.MyClient(self.token, intents=self.intents)
+    async def run_bot(self, num_messages):
+        client = self.MyClient(self.token, num_messages, intents=self.intents)
         try:
             await client.start(self.token)
         except Exception as e:
@@ -70,7 +72,7 @@ class DiscordBotService:
             await client.close()
 
     async def send_message_to_discord(self, message, image_data=None):
-        client = self.MyClient(self.token, intents=self.intents)
+        client = self.MyClient(self.token, 20, intents=self.intents)  # 기본 메시지 수 20개로 설정
         try:
             await client.login(self.token)
             await client.connect()

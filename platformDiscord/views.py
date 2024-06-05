@@ -13,10 +13,12 @@ class DiscordBotView:
     async def fetch_discord_messages(request):
         if request.method == 'POST':
             bot_token = await sync_to_async(request.session.get)('bot_token')
+            data = json.loads(request.body)
+            num_messages = int(data.get('num_messages', 20))
             bot_service = DiscordBotService(bot_token)
-            await bot_service.run_bot()
+            await bot_service.run_bot(num_messages)
             messages = await sync_to_async(list)(
-                DiscordMessage.objects.all().order_by('-id').values('author', 'author_id', 'content', 'image_url', 'profile_image_url', 'timestamp')
+                DiscordMessage.objects.all().order_by('-id')[:num_messages].values('author', 'author_id', 'content', 'image_url', 'profile_image_url', 'timestamp')
             )
             for message in messages:
                 message['timestamp'] = message['timestamp'].isoformat()

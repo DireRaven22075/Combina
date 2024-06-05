@@ -160,6 +160,7 @@
     <script>
         async function fetchMessages() {
             const button = document.getElementById('fetch-button');
+            const numMessages = parseInt(document.getElementById('num-messages').value);  // 정수로 변환
             const originalText = button.innerText;
             button.innerText = 'Loading...';
             button.disabled = true;
@@ -170,7 +171,8 @@
                     headers: {
                         'X-CSRFToken': getCookie('csrftoken'),
                         'Content-Type': 'application/json'
-                    }
+                    },
+                    body: JSON.stringify({ num_messages: numMessages })
                 });
                 const data = await response.json();
                 const messageContainer = document.getElementById('message-container');
@@ -346,21 +348,6 @@
             }
         }
 
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-
         function handleFileInputChange(event) {
             const fileNameDisplay = document.getElementById('file-name-display');
             const fileInput = event.target;
@@ -388,14 +375,22 @@
     </div>
     <div class="container">
         <div class="button-group">
-            <h2>메시지 목록 (최근 20개)</h2>
+            <h2>메시지 목록</h2>
+            <label for="num-messages">불러올 메시지 개수:</label>
+            <select id="num-messages">
+                <option value="10">10개</option>
+                <option value="20" selected>20개</option>
+                <option value="40">40개</option>
+            </select>
             <button id="fetch-button" onclick="fetchMessages()">새로고침</button>
         </div>
         <div id="message-container">
             {% for message in messages %}
                 <div class="message-card">
                     <div class="message-author">
-                        <img src="{{ message.profile_image_url }}" alt="Profile Image">
+                        <a href="https://discord.com/users/{{ message.author_id }}" target="_blank">
+                            <img src="{{ message.profile_image_url }}" alt="Profile Image">
+                        </a>
                         {{ message.author }}
                     </div>
                     <div class="message-content">{{ message.content }}</div>
