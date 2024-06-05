@@ -12,13 +12,13 @@ window.onload += () => {
     const id = document.getElementById("PopUp");
     id.style.display = "none";
 };
-function disconnect(json) {
+function disconnect(platform, name) {
     const id = document.getElementById("PopUp");
     id.style.display = "block";
     const text = document.getElementById("PopUp_Text");
-    text.innerHTML = json["name"] + "  [" + json["platform"] + "]";
+    text.innerHTML = name + "  [" + platform + "]";
     const data = document.getElementById("PopUp_Data");
-    data.value = JSON.stringify(json);
+    data.value = platform;
 }
 function connect(json) {
 

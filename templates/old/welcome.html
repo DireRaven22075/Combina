@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+
+<head>
+    <title>Welcome 2 Combina!</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- StyleSheet Link -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/welcome/body.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/welcome/input.css' %}" />
+
+    <!-- Script Link -->
+    <script>
+        function next() {
+            const arr = [
+                document.getElementById("First"),
+                document.getElementById("Second"),
+                document.getElementById("Third")
+            ];
+            var target = 0;
+            for (var i = 0; i < 3; i++) {
+                if (arr[i].style.display == "block") {
+                    target = i;
+                    break;
+                }
+            }
+            for (var i = 0; i < 3; i++) {
+                arr[i].style.display = (i - 1 == target) ? "block" : "none";
+            }
+        }
+        function previous() {
+            const arr = [
+                document.getElementById("First"),
+                document.getElementById("Second"),
+                document.getElementById("Third")
+            ];
+            var target = 0;
+            for (var i = 0; i < 3; i++) {
+                if (arr[i].style.display == "block") {
+                    target = i;
+                    break;
+                }
+            }
+            for (var i = 0; i < 3; i++) {
+                arr[i].style.display = (i + 1 == target) ? "block" : "none";
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div id="First" style="display: block">
+        <img src="{% static 'img/other/logo.png' %}" />
+        <input type="button" onclick="js:next()" value="시작하기" />
+    </div>
+    <div id="Second" style="display: none">
+        <div class="header">
+            <input type="button" onclick="js:previous()" value="◀" />
+            <p>계정 연동하기</p>
+        </div>
+        {% for account in accounts %}
+        {% if account.connected == True %}
+        <div>
+            <p>{{account.platform}}</p>
+            <p>{{account.name}}</p>
+        </div>
+        {% endif %}
+        {% endfor %}
+        <input type="button" onclick="js:next()" value="Add Account" />
+
+        <input type="button" onclick="js:goto('/home')" value="계속하기" />
+    </div>
+    <div id="Third" style="display: none">
+        <div class = "header">
+            <input type="button" onclick="js:previous()" value="◀" />
+            <p>계정 연동하기</p>
+        </div>
+        {% for account in accounts %}
+        <div>
+            <p>{{account.platform}}</p>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+
+</html>

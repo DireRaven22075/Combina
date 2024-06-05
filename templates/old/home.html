@@ -2,7 +2,7 @@
 <html lang="ko">
 {% load static %}
 <head>
-    <title>Combina : Home</title>
+    <title>Combina : Search</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -12,16 +12,17 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/Footer.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/body.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/content.css' %}" />
-
-    <script src="{%static 'js/static.js' %}"></script>
-    <script src="{%static 'js/Home.js' %}"></script>
+    <!-- Script Link -->
+    <script src="{% static 'js/static.js' %}"></script>
+    <script src="{% static 'js/Find.js' %}"></script>
 </head>
 
 <body>
     <header id="Header">
-        <div class="upper">
-            <h1>Home</h1>
-        </div>
+        <form id="form" action="/home/" method="post">
+            {% csrf_token %}
+            <input name="search" placeholder="Search" class="search" id="Search" type="text"/>
+        </form>
         <div id="Platform" class="lower">
             <input type="button" value="All" onclick="js:find('All')" />
             {% for account in accounts %}
@@ -49,11 +50,9 @@
     </div>
     {% endfor %}
     <footer id="Footer" class="noselect">
-        <input type="image" onclick="js:goto('/home')" src="{% static 'img/icon/home.svg' %}" />
-        <input type="image" onclick="js:goto('/find')" src="{% static 'img/icon/search.svg' %}" />
-        <input type="image" onclick="js:goto('/post')" src="{% static 'img/icon/create.svg' %}" />
-        <input type="image" onclick="js:goto('/menu')" src="{% static 'img/icon/account.svg' %}" />
+        <input type="image" onclick="js:goto('/home')" src="{% static 'img/icon/home.svg' %}"/>
+        <input type="image" onclick="js:goto('/post')" src="{% static 'img/icon/create.svg' %}"/>
+        <input type="image" onclick="js:goto('/menu')" src="{% static 'img/icon/account.svg' %}"/>
     </footer>
 </body>
-
 </html>

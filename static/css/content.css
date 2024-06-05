@@ -1,19 +1,8 @@
-@media (prefers-color-scheme: light) {
-    .content {
-        background-color: #FFFFFF;
-        border: 1px solid #FFFFFF;
-        color: #000000;
-    }
+#Content {
+    margin: 0px;
+    width: 40%;
+    height: 100vh;
 }
-
-@media (prefers-color-scheme: dark) {
-    .content {
-        background-color: #202020;
-        border: 1px solid #202020;
-        color: #FFFFFF;
-    }
-}
-
 .content {
     margin: 0px;
     /*box-shadow: 5px 5px 5px 1px gray;*/
@@ -22,6 +11,10 @@
     padding: 0px;
     border-radius: 1em;
     justify-self: center;
+    background-color: #FFFFFF;
+    border: 1px solid #FFFFFF;
+    color: #000000;
+
     .header {
         padding: 0px;
         padding-left: 0.3em;
@@ -68,8 +61,10 @@
         display: flex;
         align-items: center;
         padding: 1em;
+
         .button {
             width: 95%;
+
             input {
                 margin: 0px;
                 padding: 0px;
@@ -79,6 +74,7 @@
                 float: left;
             }
         }
+
         .menu {
             margin: 0px;
             padding: 0px;
