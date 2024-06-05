@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+{% load static %}
+
+<head>
+    <title>Combina : Search</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- StyleSheet Link -->
+    <link href='https://fonts.googleapis.com/css?family=Noto Sans' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/Header.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/Body.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/Menubar.css' %}" />
+    <!-- Script Link -->
+
+    <script src="{% static 'js/Header.js' %}"></script>
+    <script src="{% static 'js/Menubar.js' %}"></script>
+</head>
+
+<body>
+    <footer id = "Menubar">
+        <div class="button noselect" onclick="js:goto('/home/')">
+            <img src="{% static 'img/icon/home.svg' %}" />
+            <h3>Home</h3>
+        </div>
+        <div class="button noselect" onclick="js:goto('/post/')">
+            <img src="{% static 'img/icon/create.svg' %}" />
+            <h3>Create</h3>
+        </div>
+        <div class="button noselect" style="background-color: #C0C0C0">
+            <img src="{% static 'img/icon/account.svg' %}" />
+            <h3>Account</h3>
+        </div>
+    </footer>
+    <header id="Header" class="header" style="background: #FFFFFF;">
+        <div class="left">
+            <img id="Logo_White" class="noselect" src="{% static 'img/logo-black.svg' %}" style="vertical-align: middle;" />
+            <span class="noselect">Account</span>
+        </div>
+    </header>
+</body>
+
+</html>
