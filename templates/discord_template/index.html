@@ -177,7 +177,7 @@
                 const data = await response.json();
                 const messageContainer = document.getElementById('message-container');
                 messageContainer.innerHTML = '';
-                const defaultProfileImageUrl = "{% static 'discord_logo.png' %}";
+                const defaultProfileImageUrl = "/static/img/icon/discord-mark-blue.svg";
                 data.messages.forEach(msg => {
                     const profileImageUrl = msg.profile_image_url || defaultProfileImageUrl;
                     const messageElement = document.createElement('div');

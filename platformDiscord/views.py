@@ -7,8 +7,8 @@ from .discord_bot import DiscordBotService
 import json
 
 class DiscordBotView:
-    DEFAULT_PROFILE_IMAGE_URL = '/static/discord_logo.png'
-    
+    DEFAULT_PROFILE_IMAGE_URL = '/static/img/icon/discord-mark-blue.svg'
+
     @staticmethod
     async def fetch_discord_messages(request):
         if request.method == 'POST':
@@ -34,7 +34,7 @@ class DiscordBotView:
 
         messages = DiscordMessage.objects.all().order_by('-id')
         current_channel = DiscordChannel.objects.first()
-        return render(request, 'index.html', {'messages': messages, 'current_channel': current_channel.channel_id if current_channel else ''})
+        return render(request, 'discord_template/index.html', {'messages': messages, 'current_channel': current_channel.channel_id if current_channel else ''})
 
     @staticmethod
     async def send_discord_message(request):
@@ -86,4 +86,4 @@ class DiscordBotView:
                 return redirect('index')
         else:
             form = TokenForm()
-        return render(request, 'set_token.html', {'form': form})
+        return render(request, 'discord_template/set_token.html', {'form': form})

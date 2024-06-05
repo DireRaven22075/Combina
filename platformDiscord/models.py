@@ -1,3 +1,4 @@
+#platformDiscord/models.py
 from django.db import models
 
 class DiscordMessage(models.Model):
