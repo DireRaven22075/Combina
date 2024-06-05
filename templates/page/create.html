@@ -20,12 +20,13 @@
     <!-- StyleSheet Link (additional Style) -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/style/Platform.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/style/Noselect.css' %}" />
-
     <!-- StyleSheet Link (Element) -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/element/content.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/element/post.css' %}" />
 
     <!-- Javascript Link (Interaction) -->
     <script src="{% static 'js/Menubar.js' %}"></script>
+    <script src="{% static 'js/interacts/previewImage.js %'}"></script>
 
     <!-- Javascript Link (ui-updates) -->
     <script src="{% static 'js/ui-updates/navigation.js' %}"></script>
@@ -45,17 +46,75 @@
         <div onclick="js:goto('/create')" class="element button"><label><img
                     src="{% static 'img/icon/menu/create.svg'%}" />Create</label></div>
     </header>
-    <div id="Main">
-
-    </div>
+    <form id="Main" class="post">
+        {% csrf_token %}
+        <h3>Title</h3>
+        <input required maxlength="100" name="title" type="text" placeholder="Write..." />
+        <h3>Details</h3>
+        <textarea required maxlength="200" name="text" placeholder="Write..."></textarea>
+        <h4>Image</h4>
+        <input type="file" id="File" name="File" multiple accept="image/*" />
+        <h4>Preview</h4>
+        <div class="previewController">
+            <input type="button" onclick="js:prev()" value="Prev"/>
+            <input type="button" onclick="js:next()" value="Next"/>
+        </div>
+        <div id="ImagePreview"></div>
+        <script>
+            function prev() {
+                var imgs = document.getElementById('ImagePreview').getElementsByTagName('img');
+                imgs[idx].style.display = "none";
+                idx = (idx - 1 + imgs.length) % imgs.length;
+                imgs[idx].style.display = "block";
+            }
+            function next() {
+                var imgs = document.getElementById('ImagePreview').getElementsByTagName('img');
+                imgs[idx].style.display = "none";
+                idx = (idx + 1) % imgs.length;
+                imgs[idx].style.display = "block";
+            }
+            var idx = 0;
+            document.getElementById('File').addEventListener('change', function (e) {
+                var cnt = 0;
+                idx = 0;
+                var files = e.target.files;
+                var previewContainer = document.getElementById('ImagePreview');
+                previewContainer.innerHTML = '';
+                for (var i = 0; i < files.length; i++) {
+                    var file = files[i];
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.style.display = (cnt == 0) ? "block" : "none";
+                        previewContainer.appendChild(img);
+                        cnt++;
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+        </script>
+        <div>
+            {% for account in accounts %}
+            {% if account.connected == True %}
+            <input type="checkbox" name="account" value="{{account.id}}" />
+            {% endif %}
+            {% endfor %}
+        </div>
+        <input type="submit" value="Post" />
+    </form>
     <div id="Title">
-        
+        Create
     </div>
     <div id="Sub">
 
     </div>
+    <div id="Navigation">
+        {% for account in accounts %}
+        {% endfor %}
+    </div>
     <div id="Subtitle">
-        
+
     </div>
 </body>
 

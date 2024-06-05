@@ -28,3 +28,6 @@ class PageView:
         return render(request, 'page/contacts.html', parameters('Contacts'))
     def Create(request):
         return render(request, 'page/create.html', parameters('Create'))
+    def Test(request):
+        AccountDB.objects.create(platform='Facebook', token='Test', name='Test', tag='Test', connected=True)
+        return HttpResponse('Test')
