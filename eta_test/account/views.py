@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from page.utils import driver_set
-from page.views import user
+#from page.views import user
 # Create your views here.
 
 def login(request):
