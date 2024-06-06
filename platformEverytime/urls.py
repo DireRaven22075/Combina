@@ -5,7 +5,7 @@ from pathlib import Path
 
 
 urlpatterns = [
-    path('', include('everytime.search.urls')),
+    path('', include('platformEverytime.search.urls')),
     #path('post/', include('everytime.post.urls')),
-    #path('account/', include('everytime.account.urls')),
+    path('account/', include('platformEverytime.account.urls')),
 ]
