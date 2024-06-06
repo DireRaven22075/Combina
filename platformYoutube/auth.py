@@ -4,7 +4,7 @@ import os.path
 import pickle
 from googleapiclient.discovery import build
 
-CLIENT_SECRETS_FILE = "client_secret.json"
+CLIENT_SECRETS_FILE = "combinayoutube.json"
 SCOPES = ['https://www.googleapis.com/auth/youtube.force-ssl']
 API_SERVICE_NAME = 'youtube'
 API_VERSION = 'v3'
@@ -23,3 +23,17 @@ def get_authenticated_service():
         with open('token.pickle', 'wb') as token:
             pickle.dump(credentials, token)
     return build(API_SERVICE_NAME, API_VERSION, credentials=credentials)
+
+def login():
+    try:
+        get_authenticated_service()
+        print("Successfully logged in.")
+    except Exception as e:
+        print(f"An error occurred during login: {e}")
+
+def logout():
+    if os.path.exists('token.pickle'):
+        os.remove('token.pickle')
+        print("Successfully logged out.")
+    else:
+        print("No user is currently logged in.")
