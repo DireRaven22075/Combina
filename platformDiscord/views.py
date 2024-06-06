@@ -1,14 +1,14 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from asgiref.sync import sync_to_async
-from page.models import ContentDB, AccountDB  # 모델 참조 업데이트
+from page.models import ContentDB, AccountDB, FileDB  # 모델 참조 업데이트
 from .forms import TokenForm
 from .discord_bot import DiscordBotService
 from django.templatetags.static import static
 import json
 
 class DiscordBotView:
-    DEFAULT_PROFILE_IMAGE_URL = 'img/icon/logo/discord-mark-blue.svg'
+    DEFAULT_PROFILE_IMAGE_URL = '/static/img/old/discord-mark-blue.svg'
 
     @staticmethod
     async def fetch_discord_messages(request):
@@ -16,34 +16,44 @@ class DiscordBotView:
             bot_token = await sync_to_async(request.session.get)('bot_token')
             data = json.loads(request.body)
             num_messages = int(data.get('num_messages', 20))
-            bot_service = DiscordBotService(bot_token)
+            bot_service = DiscordBotService(bot_token)  # 수정된 부분
             await bot_service.run_bot(num_messages)
             messages = await sync_to_async(list)(
-                ContentDB.objects.filter(platform='discord').order_by('-id')[:num_messages].values('name', 'author_id', 'text', 'image_url', 'profile_image_url', 'time')
+                ContentDB.objects.filter(platform='discord').order_by('-id')[:num_messages].values('userID', 'userIcon', 'text', 'image_url')
             )
             for message in messages:
-                message['time'] = message['time'].isoformat()
-                if not message['profile_image_url']:
-                    message['profile_image_url'] = DiscordBotView.DEFAULT_PROFILE_IMAGE_URL
+                if not message['userIcon']:
+                    message['userIcon'] = DiscordBotView.DEFAULT_PROFILE_IMAGE_URL
 
-                # 필드 이름 변경
-                message['author'] = message.pop('name')
-                message['content'] = message.pop('text')
-
-            # print(messages)  # 디버깅 하려고 만든 거
             return JsonResponse({'messages': messages})
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
-
-
     @staticmethod
     def index(request):
-        messages = ContentDB.objects.all().order_by('-time')[:20]
-        profile_image_url = static('img/icon/logo/discord-mark-blue.svg')
+        current_account = AccountDB.objects.filter(platform='discord').first()
+        messages = ContentDB.objects.filter(platform='discord').order_by('-id')[:20]
+        message_list = []
+        for msg in messages:
+            image_url = 'http://default.url/no-image.png'
+            if msg.image_url != 0:
+                try:
+                    file_db = FileDB.objects.get(uid=msg.image_url)
+                    image_url = file_db.url
+                except FileDB.DoesNotExist:
+                    pass
+
+            message_list.append({
+                'text': msg.text,
+                'userIcon': msg.userIcon,
+                'userID': msg.userID,
+                'image_url': image_url
+            })
+
+        profile_image_url = '/static/img/old/discord-mark-blue.svg'  # Default profile image URL
         return render(request, 'discord_template/index.html', {
-            'messages': messages,
-            'profile_image_url': profile_image_url,
-            'current_channel': request.GET.get('channel_id', '')
+            'messages': message_list,
+            'current_channel': current_account.tag if current_account else '',
+            'profile_image_url': profile_image_url
         })
 
     @staticmethod

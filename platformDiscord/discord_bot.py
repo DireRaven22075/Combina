@@ -5,15 +5,15 @@ import discord
 import warnings
 import aiohttp
 import base64
+from django.db import models
 from asgiref.sync import sync_to_async
+from page.models import ContentDB as DiscordMessage, AccountDB as DiscordChannel, FileDB
 from io import BytesIO
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'combina.settings')
 
 django.setup()
-
-from page.models import ContentDB as DiscordMessage, AccountDB as DiscordChannel
 
 warnings.filterwarnings("ignore", category=ResourceWarning, message="unclosed.*<TCPTransport.*>")
 
@@ -22,6 +22,7 @@ class DiscordBotService:
         self.token = token
         self.intents = discord.Intents.default()
         self.intents.message_content = True
+        self.intents.members = True  # 멤버 정보를 가져오기 위해 설정
 
     class MyClient(discord.Client):
         def __init__(self, token, num_messages, *args, **kwargs):
@@ -36,12 +37,12 @@ class DiscordBotService:
             await self.wait_until_ready()
             channel_id_obj = await sync_to_async(DiscordChannel.objects.first)()
             if channel_id_obj:
-                channelID = channel_id_obj.tag  # tag 필드를 사용
+                channelID = channel_id_obj.tag
             else:
                 print("Error: No channel ID found in the database.")
                 return
 
-            channel = self.get_channel(int(channelID))  # 채널 ID가 정수일 경우 변환
+            channel = self.get_channel(int(channelID))
             if not channel or not isinstance(channel, discord.TextChannel):
                 print(f"Error: Channel with ID {channelID} not found or is not a text channel.")
                 return
@@ -49,22 +50,25 @@ class DiscordBotService:
             await sync_to_async(DiscordMessage.objects.all().delete)()
             messages = [message async for message in channel.history(limit=self.num_messages)]
             for message in messages:
-                image_url = None
+                image_uid = 0
                 if message.attachments:
-                    image_url = message.attachments[0].url  # 첫 번째 첨부 파일의 URL 가져오기
-                profile_image_url = str(message.author.avatar.url) if message.author.avatar else None  # 프로필 이미지 URL 가져오기
+                    file_url = message.attachments[0].url
+                    max_uid = await sync_to_async(lambda: FileDB.objects.aggregate(models.Max('uid'))['uid__max'] or 0)()
+                    new_uid = max_uid + 1 if max_uid is not None else 1
+                    file_db = await sync_to_async(FileDB.objects.create)(uid=new_uid, url=file_url)
+                    image_uid = file_db.uid
+
+                profile_image_url = str(message.author.display_avatar.url) if message.author.display_avatar else 'http://default.url/icon.png'
+                username = message.author.name
                 await sync_to_async(DiscordMessage.objects.create)(
-                    text=message.content,  # content를 text로 저장
-                    name=message.author.name,  # author를 name으로 저장
-                    author_id=message.author.id,  # 사용자 ID 저장
-                    image_url=image_url,
-                    profile_image_url=profile_image_url,  # 프로필 이미지 URL 저장
-                    platform='discord',  # 플랫폼 지정
-                    time=message.created_at,  # 메시지 생성 시간
-                    file=0  # 기본 파일 ID 설정 (필요시 수정)
+                    platform='discord',
+                    userID=username,  # userID 필드에 사용자 이름을 저장
+                    userIcon=profile_image_url,
+                    text=message.content,
+                    image_url=image_uid,
+                    vote=0
                 )
             await self.close()
-
 
     async def run_bot(self, num_messages):
         client = self.MyClient(self.token, num_messages, intents=self.intents)
