@@ -1,0 +1,6 @@
+function openSetting() {
+
+}
+function closeSetting() {
+    
+}

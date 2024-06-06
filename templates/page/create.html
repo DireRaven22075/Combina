@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+{% load static %}
+
+<head>
+    <title>Combina : {{page}}</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href='https://fonts.googleapis.com/css?family=Noto Sans' rel='stylesheet'>
+
+    <!-- StyleSheet Link (Section) -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Body.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Main.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Title.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Sub.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Subtitle.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Navigation.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Menubar.css' %}" />
+
+    <!-- StyleSheet Link (additional Style) -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style/Platform.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style/Noselect.css' %}" />
+
+    <!-- StyleSheet Link (Element) -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/element/content.css' %}" />
+
+    <!-- Javascript Link (Interaction) -->
+    <script src="{% static 'js/Menubar.js' %}"></script>
+
+    <!-- Javascript Link (ui-updates) -->
+    <script src="{% static 'js/ui-updates/navigation.js' %}"></script>
+</head>
+
+<body>
+    <header id="Menubar">
+        <div class="title"><label><img src="{% static 'img/logo/black.svg' %}" />Combina</label></div>
+        <div onclick="js:goto('/home')" class="element button"><label><img
+                    src="{% static 'img/icon/menu/home.svg'%}" />Home</label></div>
+        <div onclick="js:goto('/explore')" class="element button"><label><img
+                    src="{% static 'img/icon/menu/explore.svg'%}" />Explore</label></div>
+        <div onclick="js:goto('/contacts')" class="element button"><label><img
+                    src="{% static 'img/icon/menu/contacts.svg'%}" />Contacts</label></div>
+        <div onclick="js:goto('/watch')" class="element button"><label><img
+                    src="{% static 'img/icon/menu/watch.svg'%}" />Watch</label></div>
+        <div onclick="js:goto('/create')" class="element button"><label><img
+                    src="{% static 'img/icon/menu/create.svg'%}" />Create</label></div>
+    </header>
+    <div id="Main">
+
+    </div>
+    <div id="Title">
+        
+    </div>
+    <div id="Sub">
+
+    </div>
+    <div id="Subtitle">
+        
+    </div>
+</body>
+
+</html>
