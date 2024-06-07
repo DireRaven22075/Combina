@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="ko">
-{% load static %}
 <head>
     <title>Combina</title>
     <meta charset="UTF-8" />
@@ -16,6 +15,7 @@
             justify-content: center;
             min-height: 100vh;
         }
+
         .container {
             background-color: white;
             padding: 20px;
@@ -25,6 +25,7 @@
             max-width: 600px;
             margin-bottom: 20px;
         }
+
         h1 {
             font-size: 36px;
             margin-bottom: 20px;
@@ -32,6 +33,7 @@
             color: white;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
         }
+
         h2 {
             font-size: 24px;
             margin-bottom: 20px;
@@ -39,6 +41,7 @@
             border-bottom: 2px solid #5865F2;
             padding-bottom: 10px;
         }
+
         #message-container {
             border: 1px solid #ddd;
             padding: 15px;
@@ -48,16 +51,20 @@
             overflow-y: auto;
             background-color: #f8f8f8;
         }
+
         #message-container::-webkit-scrollbar {
             width: 8px;
         }
+
         #message-container::-webkit-scrollbar-thumb {
             background-color: #5865F2;
             border-radius: 4px;
         }
+
         #message-container::-webkit-scrollbar-track {
             background-color: #f8f8f8;
         }
+
         .message-card {
             margin: 10px 0;
             padding: 15px;
@@ -67,6 +74,7 @@
             display: flex;
             flex-direction: column;
         }
+
         .message-author {
             display: flex;
             align-items: center;
@@ -74,34 +82,41 @@
             color: #333;
             margin-bottom: 5px;
         }
+
         .message-author img {
             width: 32px;
             height: 32px;
             border-radius: 50%;
             margin-right: 10px;
         }
+
         .message-content {
             color: #555;
         }
+
         .message-card img {
             max-width: 100%;
             height: auto;
             border-radius: 8px;
             margin-top: 10px;
         }
+
         .message-input-container {
             display: flex;
             align-items: center;
             width: 100%;
             gap: 10px;
         }
-        input[type="text"], textarea {
+
+        input[type="text"],
+        textarea {
             flex: 1;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 4px;
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+
         button {
             padding: 10px 20px;
             border: none;
@@ -111,25 +126,30 @@
             cursor: pointer;
             transition: background-color 0.3s, box-shadow 0.3s;
         }
+
         button:disabled {
             background-color: #aaa;
             cursor: not-allowed;
         }
+
         button:hover:enabled {
             background-color: #4e5bd0;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+
         .button-group {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
+
         .file-input-container {
             position: relative;
             width: fit-content;
             cursor: pointer;
             color: white;
         }
+
         .file-input {
             position: absolute;
             top: 0;
@@ -139,6 +159,7 @@
             opacity: 0;
             cursor: pointer;
         }
+
         .custom-file-button {
             padding: 10px 20px;
             border: none;
@@ -149,10 +170,12 @@
             transition: background-color 0.3s, box-shadow 0.3s;
             display: inline-block;
         }
+
         .custom-file-button:hover {
             background-color: #4e5bd0;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+
         .file-name {
             margin-left: 10px;
             font-style: italic;
@@ -180,24 +203,19 @@
                 messageContainer.innerHTML = '';
                 const defaultProfileImageUrl = "/static/img/old/discord-mark-blue.svg";
                 data.messages.forEach(msg => {
-                    var profileImageUrl;
-                    if (msg.profile_image_url != null) {
-                        profileImageUrl = msg.profile_image_url;
-                    } else {
-                        profileImageUrl = defaultProfileImageUrl;
-                    }
+                    const profileImageUrl = msg.userIcon || defaultProfileImageUrl;
                     const messageElement = document.createElement('div');
                     messageElement.className = 'message-card';
                     messageElement.innerHTML = `
                         <div class="message-author">
-                            <a href="https://discord.com/users/${msg.author_id}" target="_blank">
-                                <img src="${profileImageUrl}" alt="Profile Image">
+                            <a href="https://discord.com/users/${msg.userID}" target="_blank">
+                                <img src="${profileImageUrl}" alt="Profile Image" onerror="this.src='${defaultProfileImageUrl}'">
                             </a>
-                            ${msg.author}
+                            ${msg.userID}
                         </div>
-                        <div class="message-content">${msg.content}</div>
+                        <div class="message-content">${msg.text}</div>
                     `;
-                    if (msg.image_url) {
+                    if (msg.image_url && msg.image_url !== 'http://default.url/no-image.png') {
                         const imgElement = document.createElement('img');
                         imgElement.src = msg.image_url;
                         messageElement.appendChild(imgElement);
@@ -216,7 +234,7 @@
             let cookieValue = null;
             if (document.cookie && document.cookie !== '') {
                 const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
+                for (let i = 0; cookies.length; i++) {
                     const cookie = cookies[i].trim();
                     if (cookie.substring(0, name.length + 1) === (name + '=')) {
                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
@@ -240,7 +258,7 @@
             if (imageInput.files.length > 0) {
                 const file = imageInput.files[0];
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     imageData = e.target.result.split(',')[1];
                     sendToServer(message, imageData);
                 };
@@ -319,7 +337,7 @@
             if (botAvatarInput.files.length > 0) {
                 const file = botAvatarInput.files[0];
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     botAvatar = e.target.result.split(',')[1];
                     sendProfileUpdate(botName, botAvatar);
                 };
@@ -365,6 +383,7 @@
         }
     </script>
 </head>
+
 <body>
     <h1>Combina</h1>
     <div class="container">
@@ -390,22 +409,7 @@
             </select>
             <button id="fetch-button" onclick="fetchMessages()">새로고침</button>
         </div>
-        <div id="message-container">
-            {% for message in messages %}
-                <div class="message-card">
-                    <div class="message-author">
-                        <a href="https://discord.com/users/{{ message.author_id }}" target="_blank">
-                            <img src="{{ message.profile_image_url|default:profile_image_url }}" alt="Profile Image">
-                        </a>
-                        {{ message.author }}
-                    </div>
-                    <div class="message-content">{{ message.content }}</div>
-                    {% if message.image_url %}
-                        <img src="{{ message.image_url }}" alt="Image">
-                    {% endif %}
-                </div>
-            {% endfor %}
-        </div>
+        <div id="message-container"></div>
     </div>
     <div class="container">
         <h2>봇 프로필 수정</h2>
@@ -422,7 +426,7 @@
     <div class="container">
         <h2>채널 ID 설정</h2>
         <div class="message-input-container">
-            <input type="text" id="channel-id-input" placeholder="Enter channel ID" value="{{ current_channel }}" />
+            <input type="text" id="channel-id-input" placeholder="Enter channel ID" value="1235024218433917048" />
             <button id="set-channel-button" onclick="setChannelID()">설정</button>
         </div>
     </div>
