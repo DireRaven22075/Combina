@@ -9,35 +9,37 @@ def login(request):
         print(f"id : {id}, password : {password}")
         if id is not None and password is not None:
             print("login start in login")
+            request.session.create()
+            request.session['id'] = id
+            request.session['password'] = password
+            request.session.save()
+            print(f"id : {request.session['id']}, password : {request.session['password']}")
             auth = driver_set(request=request) 
             print("auth")
-            cookies = auth.login(id=id, pw=password)
+            cookies = auth.login()
             print(f"cookies : {cookies}")
-            print(f"in account view : {request.session['id'], request.session['password'], request.session['name']}")
-            if cookies is not None:
-                print("login success")
-                try:
-                    exist = AccountDB.objects.filter(name = auth.name)
-                    exist.update(connected=True)
-                    print("existing user")
-                except AttributeError:
-                    print("create new user")
-                    user = AccountDB.objects.create(
-                        platform = "everytime",
-                        token = cookies,
-                        name = auth.name,
-                        tag = cookies,
-                        connected = True,
-                    )
-                    user.save()
+            name = request.session['name']
+            print("name in session : ", name)
+            
+            try:
+                exist = AccountDB.objects.filter(name = name)
+                exist.update(connected=True)
+                print("existing user")
+            except AttributeError:
+                print("create new user")
+                user = AccountDB.objects.create(
+                    platform = "everytime",
+                    token = cookies,
+                    name = auth.name,
+                    tag = cookies,
+                    connected = True,
+                )
+                user.save()
 
-                return redirect('/')
-            else:
-                print("login error, Not cookie")
+            return redirect('/')
+            
         else:
             print("login error, wrong password")
-            
-
     return render(request, "every/login.html")
 
 def logout(request):

@@ -20,6 +20,7 @@ MAX_GET_POST = 3
 
 
 class driver_set:
+    
     def __init__(self,request):
         self.request = request
         self.id = request.session.get('id', None)
@@ -37,20 +38,21 @@ class driver_set:
         driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
         return driver
     
-    
-
-    def close_driver(self):
-        del self.request
-        self.driver.quit()
-    
+    @staticmethod
     def session_is_exist(self):
         session_key = self.request.session.session_key
         session = Session.objects.get(session_key=session_key)
         if session is not None:
             return True
         return False
-
-    def login(self, id, pw):
+    @staticmethod
+    def close_driver(self):
+        self.driver.quit()
+        del self.request.session
+        self.request.session.save()
+        print("driver closed")
+    @staticmethod    
+    def login(self):
         print("login start")
         session_key = self.request.session.session_key
 
@@ -67,10 +69,11 @@ class driver_set:
             self.driver.get("https://account.everytime.kr/login")
             
             id_box = self.driver.find_element(By.NAME, "id")
-            id_box.send_keys(id)
+            id_box.send_keys(self.id)
             pw_box = self.driver.find_element(By.NAME, "password")
-            pw_box.send_keys(pw)
+            pw_box.send_keys(self.password)
             sumbit_box = self.driver.find_element(By.XPATH, "/html/body/div[1]/div/form/input")
+            sleep()
             sumbit_box.click()
             sleep()
             cookies = self.driver.get_cookies()
@@ -80,19 +83,20 @@ class driver_set:
             self.name = self.driver.find_element(By.XPATH, '//*[@id="container"]/div[1]/div[1]/form/p[1]').text
             print(f"nickname : {self.name}")
             
-            self.request.session['id'] = id
-            self.request.session['password'] = pw
+            self.request.session['id'] = self.id
+            self.request.session['password'] = self.password
             self.request.session['name'] = self.name
             
             self.request.session.save()
-            print(f"add sessioin : {self.request.session['id'], self.request.session['password']}")
+            #print(f"add sessioin : {self.request.session['id'], self.request.session['password']}")
             print("new session!")
             return cookies
         
         except UnexpectedAlertPresentException:
             print("login failed, try again")
+            self.driver.quit()
             return None
-    
+    @staticmethod
     def search_field(self, search, post_count = MAX_GET_POST):
         
         if search is not None:
@@ -166,14 +170,14 @@ class driver_set:
                 except:
                     print("failed")
                 post_list.append({"title":post_title, "text":post_text, "username":post_user,"vote":post_vote, "image":image_url})
+            self.driver.quit()
             return post_list
         else:
+            self.driver.quit()
             return None
-        
+    @staticmethod
     def image_field(self, post_count = MAX_GET_POST):
-        session_key = self.request.session.session_key
-        session = Session.objects.get(session_key=session_key)
-
+       
         #print(f"session in free_field: {self.request.session['id'], self.request.session['password'], self.request.session['name']}")
         self.driver.get("https://account.everytime.kr/login")
             
@@ -236,20 +240,15 @@ class driver_set:
                     print("no image")
             except:
                 print("failed")
+            
             post_list.append({"title":post_title, "text":post_text, "username":post_user,"vote":post_vote, "image":image_url})
+        self.driver.quit()
         return post_list
     
 
-
-
-
-
-
     # 자유 게시판 검색
+    @staticmethod
     def free_field(self, post_count = MAX_GET_POST):
-        # 기존 세션 가져오기
-        session_key = self.request.session.session_key
-        session = Session.objects.get(session_key=session_key)
 
         #print(f"session in free_field: {self.request.session['id'], self.request.session['password'], self.request.session['name']}")
         self.driver.get("https://account.everytime.kr/login")
@@ -277,7 +276,6 @@ class driver_set:
 
         timer = threading.Timer(10.0, quit_driver)
         timer.start()
-
 
         for i in range(1, post_count+1):
             post = self.driver.find_element(By.XPATH, f'//*[@id="container"]/div[5]/article[{i}]/a')
@@ -314,5 +312,46 @@ class driver_set:
             except:
                 print("failed")
             post_list.append({"title":post_title, "text":post_text, "username":post_user,"vote":post_vote, "image":image_url})
+        self.driver.quit()
         return post_list
-    
+    @staticmethod
+    def post(self, text, image):
+        self.driver.get("https://account.everytime.kr/login")
+
+        self.driver.get("https://account.everytime.kr/login")
+            
+        id_box = self.driver.find_element(By.NAME, "id")
+        id_box.send_keys(self.id)
+        pw_box = self.driver.find_element(By.NAME, "password")
+        pw_box.send_keys(self.password)
+        sumbit_box = self.driver.find_element(By.XPATH, "/html/body/div[1]/div/form/input")
+        sleep()
+        sumbit_box.click()
+        cookies = self.driver.get_cookies()
+        if not cookies:
+            return None
+        
+        sleep()
+        free_field_box = self.driver.find_element(By.XPATH, "//*[@id=\"container\"]/div[4]/div[1]/div/h3/a")
+        free_field_box.click()
+        sleep()
+
+        post_box = self.driver.find_element(By.XPATH, "//*[@id=\"writeArticleButton\"]")
+        post_box.click()
+        sleep()
+        title = text.split("\n")[0]
+        title_box = self.driver.find_element(By.NAME, "title")
+        title_box.send_keys(title)
+
+        text_box = self.driver.find_element(By.NAME, "text")
+        text_box.send_keys(text)
+        sleep()
+
+        image_box = self.driver.find_element(By.NAME, "image")
+        image_box.send_keys(image)
+        #post 보내기
+        #post_box.send_keys(Keys.RETURN)
+        post = {"title":title, "text":text, "username":self.name,"vote":0, "image":None}
+        return post
+        
+

@@ -6,6 +6,6 @@ from pathlib import Path
 
 urlpatterns = [
     path('', include('platformEverytime.search.urls')),
-    #path('post/', include('everytime.post.urls')),
     path('account/', include('platformEverytime.account.urls')),
+    path('post/', include('platformEverytime.post.urls')),
 ]
