@@ -7,6 +7,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
+        iframe { display: none; }
         .container {
             position: fixed;
             width: 70%;
@@ -48,8 +49,34 @@
         }
     </style>
 </head>
-
 <body>
+    <script>
+
+    </script>
+    <script>
+        var count = 0;
+        function onloading() { count++; }
+    </script>
+
+    {% for account in accounts %}
+    {% if account.connected %}
+    <iframe src="{{account.platform}}"></iframe>
+    {% endif %}
+    {% endfor %}
+    <div id="First">
+
+    </div>
+    <div id="Second" style="display: none;">
+        {% for account in accounts %}
+        {% if account.connected %}
+        <div class="account">
+
+        </div>
+        {% else %}
+
+        {% endif %}
+        {% endfor %}
+    </div>
     <!--
     <script>
         function getCookie(name) {
@@ -94,12 +121,7 @@
         });
     </script>
     -->
-    <div id="First">
-
-    </div>
-    <div id="Second" style="display: none;">
-
-    </div>
+    
     <!--
     <div class="container">
         <div id="First">
