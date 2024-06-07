@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="ko">
 {% load static %}
-
 <head>
-    <title>Combina : Search</title>
+    <title>Welcome 2 Combina</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/section/Welcome.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style/Noselect.css' %}" />
     <style>
         iframe {
             display: none;
@@ -24,7 +24,7 @@
             document.getElementById('Second').style.display = 'flex';
         }
         function prev() {
-            document.getElementById('First').style.display = 'flex';
+            document.getElementById('First').style.display = 'block';
             document.getElementById('Second').style.display = 'none';
         }
     </script>
@@ -49,6 +49,10 @@
         </div>
     </div>
     <div id="Second" style="display: none;">
+        <p class="noselect prev" onclick="js:prev()">Back</p>
+        <div class="noselect header">
+            <h2>Connect Account</h2>
+        </div>
         {% for account in accounts %}
         {% if account.connected %}
         <div class="account">

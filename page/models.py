@@ -6,6 +6,7 @@ class AccountDB(models.Model):
     name = models.CharField(max_length=100)
     tag = models.CharField(max_length=30)  # 채널 ID로 사용
     connected = models.BooleanField(default=False, null=False)
+    icon = models.URLField()
 
 class ContentDB(models.Model):
     platform = models.CharField(max_length=30)  # Discord == discord // Discord
