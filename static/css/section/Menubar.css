@@ -3,7 +3,7 @@
     position: fixed;
     top: 0px;
     left: 0px;
-    width: 18%;
+    width: 15rem;
     height: 100%;
     background-color: white;
     .title {
@@ -27,8 +27,8 @@
             vertical-align: middle;
         }
         img {
-            width: 2rem;
-            height: 2rem;
+            width: 1.9rem;
+            height: 1.9rem;
         }
         
     }
