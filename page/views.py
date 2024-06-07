@@ -17,6 +17,13 @@ def parameters(name):
     return data
 class PageView:
     def Init(request):
+        if (AccountDB.objects.all().count() == 0):
+            AccountDB.objects.create(platform='Facebook', connected=False)
+            AccountDB.objects.create(platform='Instagram', connected=False)
+            AccountDB.objects.create(platform='Discord', connected=False)
+            AccountDB.objects.create(platform='Reddit', connected=False)
+            AccountDB.objects.create(platform='Everytime', connected=False)
+            AccountDB.objects.create(platform='Youtube', connected=False)
         return render(request, 'page/init.html', parameters('Start'))
     def Home(request):
         return render(request, 'page/home.html', parameters('Home'))

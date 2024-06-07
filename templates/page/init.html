@@ -6,75 +6,58 @@
     <title>Combina : Search</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Welcome.css' %}" />
     <style>
-        iframe { display: none; }
-        .container {
-            position: fixed;
-            width: 70%;
-            height: 70%;
-            top: 15%;
-            left: 15%;
-            background-color: white;
-            border-radius: 1rem;
+        iframe {
+            display: none;
         }
 
-        .left {
-            background-color: #00FFA8;
-            margin: 0px;
-            width: 50%;
-            height: 100%;
-            float: left;
-            border-top-left-radius: 1rem;
-            border-bottom-left-radius: 1rem;
-        }
-
-        img {
-            width: 45%;
-            margin-left: 2.5%;
-            margin-top: 10%;
-            height: auto;
-        }
-
-        input[type=button] {
-            background-color: #00FFA8;
-            position: relative;
-            display: block;
-            color: #FFFFFF;
-            width: 40%;
-            height: 3rem;
-            border: none;
-            bottom: 1rem;
-            border-radius: 1rem;
-            outline: none;
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #EBEBEB;
         }
     </style>
+    <script>
+        function next() {
+            document.getElementById('First').style.display = 'none';
+            document.getElementById('Second').style.display = 'flex';
+        }
+        function prev() {
+            document.getElementById('First').style.display = 'flex';
+            document.getElementById('Second').style.display = 'none';
+        }
+    </script>
 </head>
+
 <body>
     <iframe src="/discord/fetch-discord-messages/"></iframe>
     <script>
-
+        document.addEventListener("keydown", (e) => {
+            const first = document.getElementById('First');
+            if (first.style.display == "block") {
+                next();
+            }
+        });
     </script>
-    <script>
-        var count = 0;
-        function onloading() { count++; }
-    </script>
-
-    {% for account in accounts %}
-    {% if account.connected %}
-    <iframe src="{{account.platform}}"></iframe>
-    {% endif %}
-    {% endfor %}
     <div id="First">
-
+        <div class="header">
+            <img src="{% static 'img/combinalogo.svg' %}" />
+        </div>
+        <div class="body">
+            <input type="button" onclick="js:next()" value="Get started..." />
+        </div>
     </div>
     <div id="Second" style="display: none;">
         {% for account in accounts %}
         {% if account.connected %}
         <div class="account">
-
+            {{ account.platform }}
         </div>
         {% else %}
-
+        <div class="account">
+            
+        </div>
         {% endif %}
         {% endfor %}
     </div>
@@ -122,7 +105,7 @@
         });
     </script>
     -->
-    
+
     <!--
     <div class="container">
         <div id="First">
