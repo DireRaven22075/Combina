@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from asgiref.sync import sync_to_async
-from page.models import ContentDB, AccountDB, FileDB  # 모델 참조 업데이트
+from page.models import ContentDB, AccountDB, FileDB
 from .forms import TokenForm
 from .discord_bot import DiscordBotService
 from django.templatetags.static import static
@@ -16,7 +16,7 @@ class DiscordBotView:
             bot_token = await sync_to_async(request.session.get)('bot_token')
             data = json.loads(request.body)
             num_messages = int(data.get('num_messages', 20))
-            bot_service = DiscordBotService(bot_token)  # 수정된 부분
+            bot_service = DiscordBotService(bot_token)
             await bot_service.run_bot(num_messages)
             messages = await sync_to_async(list)(
                 ContentDB.objects.filter(platform='discord').order_by('-id')[:num_messages].values('userID', 'userIcon', 'text', 'image_url')
@@ -24,6 +24,14 @@ class DiscordBotView:
             for message in messages:
                 if not message['userIcon']:
                     message['userIcon'] = DiscordBotView.DEFAULT_PROFILE_IMAGE_URL
+                if message['image_url'] != 0:
+                    try:
+                        file_db = await sync_to_async(FileDB.objects.get)(uid=message['image_url'])
+                        message['image_url'] = file_db.url
+                    except FileDB.DoesNotExist:
+                        message['image_url'] = None  # 이미지가 없는 경우 None 설정
+                else:
+                    message['image_url'] = None  # 이미지가 없는 경우 None 설정
 
             return JsonResponse({'messages': messages})
         return JsonResponse({'error': 'Invalid request method'}, status=400)
@@ -34,7 +42,7 @@ class DiscordBotView:
         messages = ContentDB.objects.filter(platform='discord').order_by('-id')[:20]
         message_list = []
         for msg in messages:
-            image_url = 'http://default.url/no-image.png'
+            image_url = None
             if msg.image_url != 0:
                 try:
                     file_db = FileDB.objects.get(uid=msg.image_url)
@@ -49,7 +57,7 @@ class DiscordBotView:
                 'image_url': image_url
             })
 
-        profile_image_url = '/static/img/old/discord-mark-blue.svg'  # Default profile image URL
+        profile_image_url = '/static/img/old/discord-mark-blue.svg'
         return render(request, 'discord_template/index.html', {
             'messages': message_list,
             'current_channel': current_account.tag if current_account else '',
@@ -61,7 +69,7 @@ class DiscordBotView:
         if request.method == 'POST':
             data = json.loads(request.body)
             message = data.get('message')
-            image_data = data.get('image')  # 이미지 데이터
+            image_data = data.get('image')
             bot_token = await sync_to_async(request.session.get)('bot_token')
             bot_service = DiscordBotService(bot_token)
             if message or image_data:

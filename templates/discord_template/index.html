@@ -215,7 +215,7 @@
                         </div>
                         <div class="message-content">${msg.text}</div>
                     `;
-                    if (msg.image_url) {
+                    if (msg.image_url && msg.image_url !== 'http://default.url/no-image.png') {
                         const imgElement = document.createElement('img');
                         imgElement.src = msg.image_url;
                         messageElement.appendChild(imgElement);

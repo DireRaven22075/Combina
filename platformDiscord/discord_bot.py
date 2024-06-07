@@ -22,7 +22,7 @@ class DiscordBotService:
         self.token = token
         self.intents = discord.Intents.default()
         self.intents.message_content = True
-        self.intents.members = True  # 멤버 정보를 가져오기 위해 설정
+        self.intents.members = True
 
     class MyClient(discord.Client):
         def __init__(self, token, num_messages, *args, **kwargs):
@@ -62,7 +62,7 @@ class DiscordBotService:
                 username = message.author.name
                 await sync_to_async(DiscordMessage.objects.create)(
                     platform='discord',
-                    userID=username,  # userID 필드에 사용자 이름을 저장
+                    userID=username,
                     userIcon=profile_image_url,
                     text=message.content,
                     image_url=image_uid,
@@ -80,19 +80,19 @@ class DiscordBotService:
             await client.close()
 
     async def send_message_to_discord(self, message, image_data=None):
-        client = self.MyClient(self.token, 20, intents=self.intents)  # 기본 메시지 수 20개로 설정
+        client = self.MyClient(self.token, 20, intents=self.intents)
         try:
             await client.login(self.token)
             await client.connect()
 
             channel_id_obj = await sync_to_async(DiscordChannel.objects.first)()
             if channel_id_obj:
-                channelID = channel_id_obj.tag  # tag 필드를 사용
+                channelID = channel_id_obj.tag
             else:
                 print("Error: No channel ID found in the database.")
                 return False
 
-            channel = client.get_channel(int(channelID))  # 채널 ID가 정수일 경우 변환
+            channel = client.get_channel(int(channelID))
             if channel and isinstance(channel, discord.TextChannel):
                 if image_data:
                     image = BytesIO(base64.b64decode(image_data))
@@ -128,5 +128,5 @@ class DiscordBotService:
                     return True
                 else:
                     print(f"Error updating bot profile: {response.status}")
-                    print(await response.text())  # 오류 메시지 확인
+                    print(await response.text())
                     return False
