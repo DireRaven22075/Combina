@@ -1,12 +1,12 @@
 #Main {
-    width: 35%;
+    width: 25rem;
     position: fixed;
     margin: 0px;
     padding: 0px;
     height: auto;
     top: 1rem;
     bottom: 1rem;
-    left: calc(18% + 1rem);
+    left: calc(15rem + 1rem);
     background-color: white;
     border-radius: 0.5em;
     padding-top: 7rem;
