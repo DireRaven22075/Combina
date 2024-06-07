@@ -82,9 +82,25 @@
 
     .account {
         position: relative;
-        width: 40%;
+        width: 30%;
         height: 3rem;
         margin-bottom: 1rem;
-        background: linear-gradient(0.25turn, rgb(0, 0, 255), rgb(0, 160, 255));
+        border-radius: 0.5rem;
+        background-color: #EBEBEB;
+        img {
+            width: 2rem;
+            height: 2rem;
+            margin: 0.5rem;
+            float: left;
+        }
+        input[type=image] {
+            width: 2rem;
+            height: 2rem;
+            margin:0.5rem;
+            float: right;
+        }
+        p {
+            float: left;
+        }
     }
 }
