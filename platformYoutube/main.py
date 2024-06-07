@@ -25,7 +25,7 @@ def main():
         print("9. Get Playlist Items")
         print("10. Get Video Comments")
         print("11. Exit")
-        choice = input("Enter your choice (1/2/3/4/5/6/7/8/9/10/11): ")
+        choice = input("Enter your choice: ")
 
         if choice == '1':
             auth.login()
