@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home Page</title>
+</head>
+<body>
+    <h1>Welcome Everytime!</h1>
+    <a href="/login">Login</a> 
+    <form method="post" action="/every/search/">
+        {% csrf_token %}
+        <label for="search">Search:</label>
+        <input type="text" id="search" name="search" placeholder="Enter your search term">
+        <button type="submit">Search</button>
+        
+    </form>
+    {% if posts %}
+        <h2>Search Results</h2>
+        <ul>
+            {% for post in posts %}
+                <li>title : {{ post.title }}</li>
+                <li>text : {{ post.text }}</li>
+                <li>name : {{ post.username }}</li>
+                <li>likes : {{ post.vote }}</li>
+                <li>image : {{ post.image }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Input Page</title>
+</head>
+<body>
+    <form method="POST" action="/every/post/post_info/" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form.as_p}}
+        <textarea id="multiline-text" name="text" placeholder="Enter your contents" rows="10" cols="50"></textarea>
+        <input type="file" name="image" accept="image/*" multiple>
+        <button type="submit">submit</button>
+    </form>
+    <h1>Everytime</h1>
+    {% if post %}
+        <li>{{ post.title }}</li>
+        <p>{{ post.text }}</p>
+        <!--<img src="{{ post_image.url }}" alt="{{post_image}}"> -->
+    {% endif %}
+</body>
+</html>
