@@ -16,6 +16,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/section/Subtitle.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/section/Navigation.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/section/Menubar.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Popup.css' %}" />
 
     <!-- StyleSheet Link (additional Style) -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/style/Platform.css' %}" />
@@ -35,17 +36,17 @@
 
 <body>
     <header id="Menubar">
-        <div class="title"><label><img src="{% static 'img/logo/black.svg' %}" />Combina</label></div>
-        <div onclick="js:goto('/home')" class="element button"><label><img
-                    src="{% static 'img/icon/home.svg'%}" />Home</label></div>
+        <div class="title"><label><img src="{% static 'img/combinalogo.svg' %}" <label></div>
+         <div onclick="js:goto('/home')" class="element button"><label><img
+                    src="{% static 'img/icon/home.svg'%}" </label></div>
         <div onclick="js:goto('/explore')" class="element button"><label><img
-                    src="{% static 'img/icon/explore.svg'%}" />Explore</label></div>
+                    src="{% static 'img/icon/explore.svg'%}" </label></div>
         <div onclick="js:goto('/contacts')" class="element button"><label><img
-                    src="{% static 'img/icon/contacts.svg'%}" />Contacts</label></div>
+                    src="{% static 'img/icon/contacts.svg'%}" </label></div>
         <div onclick="js:goto('/watch')" class="element button"><label><img
-                    src="{% static 'img/icon/watch.svg'%}" />Watch</label></div>
+                    src="{% static 'img/icon/watch.svg'%}" </label></div>
         <div onclick="js:goto('/create')" class="element button"><label><img
-                    src="{% static 'img/icon/create.svg'%}" />Create</label></div>
+                    src="{% static 'img/icon/create.svg'%}" </label></div>
     </header>
 
     <div id="Main">
@@ -54,7 +55,7 @@
             <input type="text" value="{{content}}" style="display: none;"/>
             <div class="header"><img class="icon noselect" src="{{content.icon}}" />
                 <span class="info">
-                    <p>{{content.name}}</p>
+                    <p>{{content.userID}}</p>
                     <p>{{content.platform}}</p>
                 </span>
             </div>
@@ -233,9 +234,8 @@
             </div>
         </div>
     </div>
-    <div id="Title">
-        All
-        <img src="{% static 'img/icon/menu.svg' %}" />
+    <div id="Title" style="text-align: center; display: flex; justify-content: center; align-items: center;">
+        <div>All</div>
     </div>
     <div id="Navigation" style="background: rgb(255, 255, 255)">
         <input type="button" onclick="js:navigation('All')" value="All" />
@@ -248,28 +248,11 @@
     <div id="Subtitle" style="display: none;">
         <input onclick="js:closeDetail();" type="image" src= "{% static 'img/icon/quit.svg' %}" />
     </div>
-    <!--
-    <header id="Header">
-        <form class="left search noselect" method="POST" action="/home/">
-            <img id="Logo_Black" class="noselect" src="{% static 'img/logo-black.svg' %}" />
-            {% csrf_token %}
-            <input type="text" id="Search" placeholder="Search..." />
-        </form>
-        <div id="Menu">
-            <input disabled type="image" src="{% static 'img/icon/home.svg' %}" onclick="js:goto('/home/')" />
-            <input disabled type="image" src="{% static 'img/icon/home.svg' %}" onclick="js:goto('/home/')" />
-            <input disabled type="image" src="{% static 'img/icon/home.svg' %}" onclick="js:goto('/home/')" />
-            <input disabled type="image" src="{% static 'img/icon/home.svg' %}" onclick="js:goto('/home/')" />
+    <div id="Popup" style="display: none">
+        <div class="popup">
+
         </div>
-        <div id="Platform" class="noselect">
-            <div class="target"></div>
-            <input disabled type="button" onclick="js:filter(this, 'All')" value="All" />
-            {% for platform in platforms %}
-            <input type="button" onclick="js:filter(this, '{{platform}}')" value="{{platform}}" />
-            {% endfor %}
-        </div>
-    </header>
-    -->
+    </div>
 </body>
 
 </html>

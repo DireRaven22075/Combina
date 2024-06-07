@@ -1,5 +1,9 @@
 function navigation(platform) {
     const target = document.getElementById("Navigation");
+    for (const child of target.children) {
+        child.style.color = (platform == "All" || platform == "Everytime") ? "#000000" : "#FFFFFF";
+        child.disabled = child.value == platform;
+    }
     switch(platform) {
         case "All": target.style.background = "#FFFFFF"; break;
         case "Facebook": target.style.background = "#0052FF"; break;
@@ -8,6 +12,6 @@ function navigation(platform) {
         case "Discord": target.style.background = "#6900FF"; break;
         case "Reddit": target.style.background = "#FF4300"; break;
         case "Everytime": target.style.background = "#FFFFFF"; break;
-        case "Youtube": target.style.background = "#E93E29"; break;
+        case "Youtube": target.style.background = "#FF1A00"; break;
     }
 }
