@@ -15,5 +15,7 @@
         width: auto;
         background: none;
         border: none;
+        align-items: center;
+        justify-content: center;
     }
 }
