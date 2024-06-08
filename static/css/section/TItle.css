@@ -1,5 +1,6 @@
 #Title
 {
+    user-select: none;
     width: 33rem;
     position: fixed;
     display: block;

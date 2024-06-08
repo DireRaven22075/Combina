@@ -1,4 +1,5 @@
 #Menubar {
+    user-select: none;
     display: box;
     position: fixed;
     top: 0px;
