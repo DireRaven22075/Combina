@@ -8,9 +8,15 @@
     justify-self: center;
     background-color: white;
     color: #000000;
+
     &:hover {
+        background-color: #f9f9f9; /* Replace #yourColor with the color you want */
+    }
+
+    &:active {
         background-color: #e9e9e9; /* Replace #yourColor with the color you want */
     }
+
     .header {
         padding: 0px;
         display: flex;
