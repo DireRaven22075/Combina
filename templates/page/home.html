@@ -227,7 +227,7 @@
                 </span>
             </div>
             <div class="body">
-                <p>ㅇㅁㄴㅇㄴㄹㅁㄹ</p>
+                <p>Test</p>
                 <img src="{{content.image}}" />
             </div>
             <div class="footer">
@@ -237,10 +237,10 @@
     <div id="Title" style="text-align: center; display: flex; justify-content: center; align-items: center;">
         <div>Home</div>
     </div>
-    <div id="Navigation" style="background: rgb(255, 255, 255)">
-        <input type="button" onclick="js:navigation('All')" value="All" />
+    <div id="Navigation" style="background: rgb(255, 255, 255); display: flex;">
+        <input type="button" onclick="js:navigation('All')" value="All" style=" font-size: 1rem;"/>
         {% for platform in platforms %}
-        <input type="button" onclick="js:navigation('{{platform}}')" value="{{platform}}" />
+        <input type="button" onclick="js:navigation('{{platform}}')" value="{{platform}}" style=" font-size: 1rem;"/>
         {% endfor %}
     </div>
     <div id="Sub" style="display: none;">

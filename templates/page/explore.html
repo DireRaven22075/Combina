@@ -53,10 +53,10 @@
         <input type="text" placeholder="Search..." />
         <img src="{% static 'img/icon/menu.svg' %}" />
     </div>
-    <div id="Navigation" style="background: rgb(255, 255, 255)">
-        <input type="button" onclick="js:navigation('All')" value="All" />
+    <div id="Navigation" style="background: rgb(255, 255, 255); display: flex;">
+        <input type="button" onclick="js:navigation('All')" value="All" style=" font-size: 1rem;"/>
         {% for platform in platforms %}
-        <input type="button" onclick="js:navigation('{{platform}}')" value="{{platform}}" />
+        <input type="button" onclick="js:navigation('{{platform}}')" value="{{platform}}" style=" font-size: 1rem;"/>
         {% endfor %}
     </div>
     <div id="Sub">

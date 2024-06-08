@@ -1,11 +1,11 @@
 #Navigation {
     position: fixed;
     top: 3rem;
-    width: 30rem;
+    width: 33rem;
     display: block;
-    margin: 0px;
-    padding:0px;
-    justify-content: space-between;
+    margin: 0rem;
+    padding: 0px;
+    justify-content: space-evenly;
     align-items: center;
     left: calc(14rem + 0.2rem);
     height: 3rem;
