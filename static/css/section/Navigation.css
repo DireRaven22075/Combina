@@ -7,7 +7,7 @@
     padding:0px;
     justify-content: space-between;
     align-items: center;
-    left: calc(7rem);
+    left: calc(14rem + 1rem);
     height: 3rem;
     border-bottom: 0px solid #EBEBEB;
     input[type=button] {
@@ -15,7 +15,5 @@
         width: auto;
         background: none;
         border: none;
-        align-items: center;
-        justify-content: center;
     }
 }

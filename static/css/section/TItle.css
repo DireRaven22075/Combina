@@ -6,7 +6,7 @@
     margin: 0px;
     padding: 0px;
     top: 1rem;
-    left: calc(7rem);
+    left: calc(14rem + 1rem);
     height: 3rem;
     position: fixed;
     background-color: white;
