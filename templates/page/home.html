@@ -53,9 +53,9 @@
                     src="{% static 'img/icon/watch.svg'%}" >Watch</label></div>
         <div onclick="js:goto('/create')" class="element button create-button"><label><img
                     src="{% static 'img/icon/create.svg'%}" >Create</label></div>
-        <div onclick="js:goto('/create')" class="element button create-button"><label><img
+        <div onclick="js:goto('/account')" class="element button create-button"><label><img
                     src="{% static 'img/icon/create.svg'%}" >Account</label></div>
-        <div onclick="js:goto('/create')" class="element button create-button"><label><img
+        <div onclick="js:goto('/settings')" class="element button create-button"><label><img
                     src="{% static 'img/icon/create.svg'%}" >Settings</label></div>
     </header>
 
@@ -247,7 +247,7 @@
     <div id="Title" style="text-align: center; display: flex; justify-content: center; align-items: center;">
         <div>Home</div>
     </div>
-    <div id="Navigation" style="background: #f9f9f9; display: flex;">
+    <div id="Navigation" style="display: flex;">
         <input type="button" onclick="js:navigation('All')" value="All"/>
         {% for platform in platforms %}
         <input type="button" onclick="js:navigation('{{platform}}')" value="{{platform}}"/>

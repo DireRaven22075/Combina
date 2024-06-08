@@ -9,4 +9,6 @@ urlpatterns = [
     path('contacts/', PageView.Contacts, name="Contacts"),
     path('watch/', PageView.Watch, name="Video"),
     path('create/', PageView.Create, name="Create"),
+    path('account/', views.account, name='Account'),
+    path('settings/', views.account, name='Settings'),
 ]

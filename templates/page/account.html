@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
 {% load static %}
-
 <head>
     <title>Combina : {{page}}</title>
     <meta charset="UTF-8" />
@@ -31,7 +30,7 @@
     <script src="{% static 'js/ui-updates/navigation.js' %}"></script>
 
     <style>
-        .explore-button {
+        .watch-button {
             background-color: #e9e9e9;
         }
     </style>
@@ -56,21 +55,13 @@
 
     </div>
     <div id="Title">
-        <input type="text" placeholder="Search..." />
-        <img src="{% static 'img/icon/menu.svg' %}" />
-    </div>
-    <div id="Navigation" style="display: flex;">
-        <input type="button" onclick="js:navigation('All')" value="All"/>
-        {% for platform in platforms %}
-        <input type="button" onclick="js:navigation('{{platform}}')" value="{{platform}}"/>
-        {% endfor %}
+
     </div>
     <div id="Sub">
 
     </div>
     <div id="Subtitle">
-
+        
     </div>
 </body>
-
 </html>
