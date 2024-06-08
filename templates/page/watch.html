@@ -28,21 +28,27 @@
 
     <!-- Javascript Link (ui-updates) -->
     <script src="{% static 'js/ui-updates/navigation.js' %}"></script>
+
+    <style>
+        .watch-button {
+            background-color: #e9e9e9;
+        }
+    </style>
 </head>
 
 <body>
     <header id="Menubar">
         <div class="title"><label><img src="{% static 'img/combinalogo.svg' %}" <label></div>
-         <div onclick="js:goto('/home')" class="element button"><label><img
-                    src="{% static 'img/icon/home.svg'%}" </label></div>
-        <div onclick="js:goto('/explore')" class="element button"><label><img
-                    src="{% static 'img/icon/explore.svg'%}" </label></div>
-        <div onclick="js:goto('/contacts')" class="element button"><label><img
-                    src="{% static 'img/icon/contacts.svg'%}" </label></div>
-        <div onclick="js:goto('/watch')" class="element button"><label><img
-                    src="{% static 'img/icon/watch.svg'%}" </label></div>
-        <div onclick="js:goto('/create')" class="element button"><label><img
-                    src="{% static 'img/icon/create.svg'%}" </label></div>
+            <div onclick="js:goto('/home')" class="element button home-button"><label><img
+                    src="{% static 'img/icon/home.svg'%}" >Home</label></div>
+        <div onclick="js:goto('/explore')" class="element button explore-button"><label><img
+                    src="{% static 'img/icon/explore.svg'%}" >Explore</label></div>
+        <div onclick="js:goto('/contacts')" class="element button contacts-button"><label><img
+                    src="{% static 'img/icon/contacts.svg'%}" >Contacts</label></div>
+        <div onclick="js:goto('/watch')" class="element button watch-button"><label><img
+                    src="{% static 'img/icon/watch.svg'%}" >Watch</label></div>
+        <div onclick="js:goto('/create')" class="element button create-button"><label><img
+                    src="{% static 'img/icon/create.svg'%}" >Create</label></div>
     </header>
 
     <div id="Main">
