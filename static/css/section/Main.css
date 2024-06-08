@@ -6,9 +6,9 @@
     height: auto;
     top: 1rem;
     bottom: 1rem;
-    left: calc(5.5rem + 1rem);
+    left: calc(7rem);
     background-color: white;
-    border-radius: 0.5em;
+    border-radius: 0.2em;
     padding-top: 7rem;
     align-items: center;
     justify-content: center;

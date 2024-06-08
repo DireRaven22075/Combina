@@ -9,15 +9,8 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/section/Welcome.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/style/Noselect.css' %}" />
     <style>
-        iframe {
-            display: none;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #EBEBEB;
-        }
+        iframe {display: none;}
+        body {margin: 0;padding: 0;background-color: #EBEBEB;}
     </style>
     <script>
         function next() {
@@ -93,11 +86,15 @@
         {% for account in accounts %}
         {% if account.connected %}
         <div class="account">
-            {{ account.platform }}
+            <img src="{{account.icon}}" />
+            <p>{{account.platform}} - {{account.name}}</p>
+            <input type="image" src="{% static 'img/icon/disconnect.svg' %}" />
         </div>
         {% else %}
         <div class="account">
-
+            <img src="{% static 'img/platform/{{account.platform}}.svg' %}" />
+            <p>{{account.platform}}</p>
+            <input type="image" src="{% static 'img/icon/connect.svg' %}" />
         </div>
         {% endif %}
         {% endfor %}
