@@ -9,7 +9,7 @@
     left: calc(14rem + 0.2rem);
     height: 3rem;
     position: fixed;
-    background-color: #ffffff90;
+    background-color: #ffffff;
     border-bottom: 0em solid #EBEBEB;
-    backdrop-filter: blur(20px);
+    /*backdrop-filter: blur(20px);*/
 }
