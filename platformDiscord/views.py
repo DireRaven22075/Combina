@@ -1,56 +1,53 @@
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseBadRequest
 from asgiref.sync import sync_to_async
 from page.models import ContentDB, AccountDB, FileDB
 from .forms import TokenForm
 from .discord_bot import DiscordBotService
-from django.templatetags.static import static
+from django.views.decorators.csrf import csrf_exempt
 import json
 
 class DiscordBotView:
     # 디스코드의 기본 프로필 이미지 URL 설정
     DEFAULT_PROFILE_IMAGE_URL = '/static/img/old/discord-mark-blue.svg'
 
-    @staticmethod
+    @csrf_exempt
     async def fetch_discord_messages(request):
-        """
-        비동기로 디스코드 메시지를 가져오는 함수
-        - POST 요청을 받으면 세션에서 봇 토큰을 가져옴
-        - DiscordBotService를 사용해 지정된 수만큼의 메시지를 가져옴
-        - ContentDB에서 가져온 메시지를 리스트로 변환하여 JSON으로 반환
-        """
         if request.method == 'POST':
-            # 세션에서 봇 토큰 가져오기
+            try:
+                data = json.loads(request.body)
+            except json.JSONDecodeError:
+                return HttpResponseBadRequest('Invalid JSON')
+
+            num_messages = data.get('num_messages', 20)
+
+            # 세션 데이터 비동기 접근
             bot_token = await sync_to_async(request.session.get)('bot_token')
-            # 요청 데이터 파싱
-            data = json.loads(request.body)
-            # 기본으로 가져올 메시지 수 설정 (기본값 20)
-            num_messages = int(data.get('num_messages', 20))
+            if not bot_token:
+                return JsonResponse({'error': 'Bot token not found in session'}, status=400)
+
             bot_service = DiscordBotService(bot_token)
-            # 디스코드 봇을 실행하여 메시지 가져오기
             await bot_service.run_bot(num_messages)
-            # ContentDB에서 메시지 필터링 및 정렬 후 리스트로 변환
+
             messages = await sync_to_async(list)(
                 ContentDB.objects.filter(platform='discord').order_by('-id')[:num_messages].values('userID', 'userIcon', 'text', 'image_url')
             )
+
             for message in messages:
-                # 프로필 이미지가 없을 경우 기본 이미지 설정
                 if not message['userIcon']:
-                    message['userIcon'] = DiscordBotView.DEFAULT_PROFILE_IMAGE_URL
-                # 이미지 URL이 있는 경우 파일 데이터베이스에서 URL 가져오기
+                    message['userIcon'] = '/static/img/old/discord-mark-blue.svg'
                 if message['image_url'] != 0:
                     try:
                         file_db = await sync_to_async(FileDB.objects.get)(uid=message['image_url'])
                         message['image_url'] = file_db.url
                     except FileDB.DoesNotExist:
-                        # 이미지가 존재하지 않으면 None 설정
                         message['image_url'] = None
                 else:
-                    message['image_url'] = None  # 이미지가 없는 경우 None 설정
+                    message['image_url'] = None
 
-            # 메시지 리스트를 JSON 형태로 반환
             return JsonResponse({'messages': messages})
-        return JsonResponse({'error': 'Invalid request method'}, status=400)
+        else:
+            return HttpResponseBadRequest('Invalid request method')
 
     @staticmethod
     def index(request):
