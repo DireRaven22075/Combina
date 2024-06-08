@@ -5,6 +5,7 @@ from .content import Content
 from .post import Post
 from page.models import ContentDB, FileDB
 import json
+from asgiref.sync import sync_to_async
 
 class Everytime:
 
@@ -13,20 +14,22 @@ class Everytime:
         return render(request, "every/home.html")
     
     @staticmethod
-    def ev_login(request):
+    async def ev_login(request):
         if request.method == "POST":
             id = request.POST.get("id")
             password = request.POST.get("password")
             try:
-                Everytime.save_session(request, id, password)
+                #세션 저장 비동기화
+                await sync_to_async(Everytime.save_session)(request, id, password)
                 
-                driver = Account.login(request)
+                # 로그인처리 비동기화
+                driver = await sync_to_async(Account.login)(request)
 
                 if driver is not None:
                     print("Account success")
-                    Content.free_field(request,driver)
+                    await sync_to_async(Content.free_field)(request,driver)
                     
-                    driver.quit()
+                    await sync_to_async(driver.quit)()
                     return redirect('/')
                 else:
                     print("login error, try again")
