@@ -244,11 +244,12 @@
         <div>Home</div>
     </div>
     <div id="Navigation" style="background: rgb(255, 255, 255); display: flex;">
-        <input type="button" onclick="js:navigation('All')" value="All" style=" font-size: 1rem;"/>
+        <input type="button" onclick="js:navigation('All')" value="All"/>
         {% for platform in platforms %}
-        <input type="button" onclick="js:navigation('{{platform}}')" value="{{platform}}" style=" font-size: 1rem;"/>
+        <input type="button" onclick="js:navigation('{{platform}}')" value="{{platform}}"/>
         {% endfor %}
     </div>
+
     <div id="Sub" style="display: none;">
     </div>
     <div id="Subtitle" style="display: none;">
