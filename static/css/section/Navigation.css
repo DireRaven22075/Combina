@@ -7,7 +7,7 @@
     align-items: center;
     left: calc(14rem + 0.2rem);
     height: 2.5rem;
-    border-bottom: 0px solid #EBEBEB;
+    backdrop-filter: blur(10px);
     input[type=button] {
         align-self: center;
         width: auto;
