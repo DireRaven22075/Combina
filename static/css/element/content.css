@@ -1,9 +1,8 @@
 .content {
-    margin: 0px;
-    /*box-shadow: 5px 5px 5px 1px gray;*/
+
     width: 31rem;
     margin-left: 1rem;
-    padding: 0px;
+
     border-bottom: 1px solid #e9e9e9;
     justify-self: center;
     background-color: white;
@@ -52,11 +51,14 @@
     }
 
     .body {
+
+        font-size: 0.9em;
+
         img {
             width: 100%;
         }
     }
-
+    /*
     .footer {
         display: flex;
         align-items: center;
@@ -87,4 +89,5 @@
             display: none;
         }
     }
+        */
 }
