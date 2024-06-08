@@ -1,6 +1,6 @@
 #Subtitle {
     position: fixed;
-    width: calc(100% - 14rem - 30rem - 3rem);
+    width: calc(100% - 14rem - 30rem - 0.2rem - 2rem);
     height: 3rem;
     top: 1rem;
     right: 1rem;

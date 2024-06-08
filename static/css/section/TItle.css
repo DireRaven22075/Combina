@@ -5,12 +5,10 @@
     display: block;
     margin: 0px;
     padding: 0px;
-    top: 1rem;
-    left: calc(14rem + 1rem);
+    top: 0rem;
+    left: calc(14rem + 0.2rem);
     height: 3rem;
     position: fixed;
     background-color: white;
     border-bottom: 0em solid #EBEBEB;
-    border-top-left-radius: 0.4em;
-    border-top-right-radius: 0.4em;
 }
