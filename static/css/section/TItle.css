@@ -11,6 +11,6 @@
     position: fixed;
     background-color: white;
     border-bottom: 0em solid #EBEBEB;
-    border-top-left-radius: 0.5em;
-    border-top-right-radius: 0.5em;
+    border-top-left-radius: 0.3em;
+    border-top-right-radius: 0.3em;
 }
