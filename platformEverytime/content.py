@@ -5,23 +5,22 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from page.models import ContentDB, FileDB
-from .account import sleep, is_logged_in, Account
-from django.db.models import Count
+from .utils import sleep, quit_driver_forcefully
+from .account import Account
+from django.db.models import Count, Max
+
+MAX_POSTS = 5
 
 class Content:
     #DB에 값만 저장
     @staticmethod
-    def free_field(request, driver=None):
+    def free_field(driver):
         try:
-            
-            driver = Account.login(request, driver)
-            sleep()
-
             free_field_box = driver.find_element(By.XPATH, "//*[@id=\"submenu\"]/div/div[2]/ul/li[1]/a")
             free_field_box.click()
             sleep()
             
-            for i in range(1, 5):
+            for i in range(1, MAX_POSTS):
                 post = driver.find_element(By.XPATH, f'//*[@id="container"]/div[5]/article[{i}]/a')
                 info = driver.find_element(By.XPATH, f'//*[@id="container"]/div[5]/article[{i}]/a/div/div')
                 
@@ -46,37 +45,31 @@ class Content:
                     print("no vote")
                 image_url = 0
 
-                image_list = []
                 try:
+                    image_list = []
                     #이미지 uid 이용해서 contentDB's image_url, FileDB's uid uid 값 주고 FileDB url 에 이미지 url 저장
                     post_image = post.find_element(By.CLASS_NAME, f"attachthumbnail").get_attribute("style")
                     print(f"image : {post_image}")
-                    get_image = post_image.split("\"")[1]
-                    image_list.append(get_image)
+                    image_list.append(post_image.split("\"")[1])
                     
                     
-                    file_count = FileDB.objects.aggregate(count=Count('uid'))['count']
-                    if file_count > 0:
-                        latest = FileDB.objects.latest('uid')
-                        print(f"latest : {type(latest)}")
-                    else:
-                        latest = 0
+                    
+                    latest = FileDB.objects.aggregate(max_uid=Max('uid'))['max_uid']
+                    if latest is None:
+                        latest = 0  # 최신 값이 없으면 0으로 초기화
+                    image = None
+                    if image_list:
+                        for i, image in enumerate(image_list, start=1):
+                            print("image exist", image)
+                            image_url = latest + 1
 
-                        if image_list is not None:
-                            for i, image in enumerate(image_list, start=1):
-                                print("image exist", image)
-                                if latest == 0:
-                                    image_url = 1
-                                else:
-                                    image_url = latest.uid + 1
-
-                                # 이미지가 존재하는지 확인
-                                if not FileDB.objects.filter(url=image).exists():
-                                    # 이미지가 존재하지 않는 경우에만 저장
-                                    FileDB.objects.create(
-                                        uid=image_url,
-                                        url=image,
-                                    ).save()
+                            # # 이미지가 존재하는지 확인
+                            # if not FileDB.objects.filter(url=image).exists():
+                            #     # 이미지가 존재하지 않는 경우에만 저장
+                            FileDB.objects.create(
+                                uid=image_url,
+                                url=image,
+                            ).save()
 
                 except NoSuchElementException:
                     image_url = 0
@@ -88,27 +81,23 @@ class Content:
                     image_url = image_url,
                     vote = post_vote,
                 ).save()       
-         
+                
         except Exception as e:
             print("free_field error", e)
             return False
         finally:
             print("free_field done")
-            driver.quit()
+            quit_driver_forcefully(driver)
+            print("driver quit forcefully in free_field")
+            return True
+            
+
 
 
     @staticmethod
-    def search_field(request, search, driver = None):
-        
-        # 로그인 상태 확인
-        
+    def search_field(search, driver):
         try:
             
-            driver = Account.login(request, driver)
-            sleep()
-            #driver.get("https://everytime.kr/")
-
-           
             free_field_box = driver.find_element(By.XPATH, "//*[@id=\"submenu\"]/div/div[2]/ul/li[1]/a")
             free_field_box.click()
             sleep()
@@ -118,9 +107,8 @@ class Content:
             search_box.send_keys(Keys.RETURN)
             sleep()
 
-        
-            
-            for i in range(1, 5):
+    
+            for i in range(1, MAX_POSTS):
                 post = driver.find_element(By.XPATH, f'//*[@id="container"]/div[5]/article[{i}]/a')
                 info = driver.find_element(By.XPATH, f'//*[@id="container"]/div[5]/article[{i}]/a/div/div')
               
@@ -145,9 +133,9 @@ class Content:
 
                 image_url = 0
                 try:
+                    image_list = []
                     #이미지 uid 이용해서 contentDB's image_url, FileDB's uid uid 값 주고 FileDB url 에 이미지 url 저장
                     post_image = post.find_element(By.CLASS_NAME, f"attachthumbnail").get_attribute("style")
-                    image_list = []
                     image_list.append(post_image.split("\"")[1])
 
                     print(f"image url : {image_list}") ## 여기까지는 됨
@@ -161,7 +149,7 @@ class Content:
                     else:
                         latest = 0
 
-                    if image_list is not None:
+                    if image_list:
                         for i, image in enumerate(image_list, start=1):
                             print("image exist", image)
                             if latest == 0:
@@ -169,9 +157,9 @@ class Content:
                             else:
                                 image_url = latest.uid + 1
 
-                            # 이미지가 존재하는지 확인
-                            if not FileDB.objects.filter(url=image).exists():
-                                # 이미지가 존재하지 않는 경우에만 저장
+                            # # 이미지가 존재하는지 확인
+                            # if not FileDB.objects.filter(url=image).exists():
+                            #     # 이미지가 존재하지 않는 경우에만 저장
                                 FileDB.objects.create(
                                     uid=image_url,
                                     url=image,
@@ -189,11 +177,13 @@ class Content:
                     image_url = image_url,
                     vote = post_vote,
                 ).save()
-             
+
         except Exception as e:
             print("search_field error", e)
             return False
         finally:
             print("search_field done")
-            driver.quit()
+            quit_driver_forcefully(driver)
+            print("driver quit forcefully in search_field")
+            return True
                 

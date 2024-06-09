@@ -2,29 +2,11 @@ from django.shortcuts import render
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service as ChromeService
 from page.models import ContentDB, FileDB
-from .account import sleep, is_logged_in, Account
+from .account import Account
+from .utils import sleep, quit_driver_forcefully
 import tempfile
 import base64
 import os
-
-# def upload_base64_temp(driver, base64_image, upload_input_selector):
-#     # Base64 문자열을 디코딩하여 바이너리 데이터로 변환
-#     image_data = base64.b64decode(base64_image)
-
-#     # 임시 파일 생성
-#     with tempfile.NamedTemporaryFile(delete=False, suffix='.png') as tmp_file:
-#         tmp_file.write(image_data)
-#         tmp_file_path = tmp_file.name
-
-#     try:
-#         # <input type="file"> 요소에 파일 경로를 설정
-#         file_input = driver.find_element(By.CSS_SELECTOR, upload_input_selector)
-#         file_input.send_keys(tmp_file_path)
-#         print(f"Image uploaded: {tmp_file_path}")
-#     finally:
-#         # 임시 파일 삭제
-#         os.remove(tmp_file_path)
-#         print(f"Temporary file deleted: {tmp_file_path}")
 
 def upload_file_from_in_memory(driver, in_memory_file, upload_input_selector):
     # 임시 파일 생성
@@ -48,11 +30,9 @@ def upload_file_from_in_memory(driver, in_memory_file, upload_input_selector):
 
 class Post:
     @staticmethod
-    def post(request, text, images=None, driver=None):
+    def post(text, images=None, driver=None):
         
         try:
-            driver = Account.login(request, driver)
-            sleep()
 
             free_field_box = driver.find_element(By.XPATH, "//*[@id=\"container\"]/div[4]/div[1]/div/h3/a")
             free_field_box.click()
@@ -88,8 +68,13 @@ class Post:
                     upload_file_from_in_memory(driver, image, "input[type=\"file\"]")
                     sleep() 
                     
-
-            return True
         except Exception as e:
             print("post error", e)
             return False
+        finally:
+            print("post done")
+            driver.quit()
+            if driver:
+                quit_driver_forcefully(driver)
+                print("driver quit in post_field")
+            return True
