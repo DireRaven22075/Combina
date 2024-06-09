@@ -12,6 +12,7 @@ import random
 import subprocess
 from page.models import AccountDB   
 
+
 def sleep(a = 1.3, b= 1.5):
     time.sleep(random.uniform(a, b))
 
@@ -22,7 +23,7 @@ def delete_cookies_with_cdp(driver):
 def is_logged_in(driver):
         try:
             sleep()
-            driver.get("https://everytime.kr/")
+            #driver.get("https://everytime.kr/")
             # 로그인 상태에서만 존재하는 요소를 찾음
             sleep()
             WebDriverWait(driver, 5).until(
@@ -70,15 +71,16 @@ class Account:
                 
                 delete_cookies_with_cdp(driver)
 
-                sleep()
+                
                 if driver is not None:
                     print("driver is not none")
                 else:
                     print("driver is none")
-                sleep()    
+                driver.implicitly_wait(5)
+
                 driver.get("https://account.everytime.kr/login")
              
-                sleep()
+                driver.implicitly_wait(5)
                 id = request.session.get('id')
                 password = request.session.get('password')
                 print(f"id : {id}, password : {password}")
@@ -95,10 +97,12 @@ class Account:
                 sleep()
                 submit_box.click()
                 #actions.move_to_element(submit_box).click_and_hold().move_by_offset(5, 5).release().perform()
-                sleep()
+                driver.implicitly_wait(5)
                 print("login success")
                 name_box = driver.find_element(By.XPATH, '//*[@id="container"]/div[1]/div[1]/form/p[1]').text
-                print(f"nickname : {name_box}")
+                request.session['username'] = name_box
+                request.session.save()
+                print(f"nickname : {request.session['username']}")
                 exist = AccountDB.objects.filter(platform = "everytime", name = name_box)
                 if not exist:
                     AccountDB.objects.create(
@@ -107,16 +111,12 @@ class Account:
                     name = name_box,
                     tag = "none",
                     connected=True,
-                )
+                    ).save()
                 print("new login")
                 return driver
             else:
                 print("already logged in")
                 return driver
-          
-        except TimeoutException:
-            print("login error Timeout")
-            return None
         except Exception as e:
             print(f"login error {e}")
             return None

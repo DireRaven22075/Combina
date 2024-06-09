@@ -13,20 +13,14 @@ class Content:
     @staticmethod
     def free_field(request, driver=None):
         try:
+            
+            driver = Account.login(request, driver)
             sleep()
-            print("free_field is working")
-            # 로그인 상태 확인
-            # driver = driver
-            # if driver is None or not is_logged_in(driver):
-                # driver.get("https://everytime.kr/")
-                # sleep()
-            driver = Account.login(request)
-                
+
             free_field_box = driver.find_element(By.XPATH, "//*[@id=\"submenu\"]/div/div[2]/ul/li[1]/a")
             free_field_box.click()
             sleep()
             
-
             for i in range(1, 5):
                 post = driver.find_element(By.XPATH, f'//*[@id="container"]/div[5]/article[{i}]/a')
                 info = driver.find_element(By.XPATH, f'//*[@id="container"]/div[5]/article[{i}]/a/div/div')
@@ -94,10 +88,13 @@ class Content:
                     image_url = image_url,
                     vote = post_vote,
                 ).save()       
-        except TimeoutException:
-            print("TimeoutException in free_field")
-        except NoSuchElementException:
-            print("NoSuchElementException in free_field")
+         
+        except Exception as e:
+            print("free_field error", e)
+            return False
+        finally:
+            print("free_field done")
+            driver.quit()
 
 
     @staticmethod
@@ -105,14 +102,13 @@ class Content:
         
         # 로그인 상태 확인
         
-        # if driver is None or not is_logged_in(driver):
-        #     print("not logged in in search_field")
         try:
+            
             driver = Account.login(request, driver)
             sleep()
-            driver.get("https://everytime.kr/")
+            #driver.get("https://everytime.kr/")
 
-            sleep()
+           
             free_field_box = driver.find_element(By.XPATH, "//*[@id=\"submenu\"]/div/div[2]/ul/li[1]/a")
             free_field_box.click()
             sleep()
@@ -120,7 +116,7 @@ class Content:
             search_box = driver.find_element(By.NAME, "keyword")
             search_box.send_keys(search)
             search_box.send_keys(Keys.RETURN)
-            sleep(3, 4)
+            sleep()
 
         
             
@@ -193,7 +189,11 @@ class Content:
                     image_url = image_url,
                     vote = post_vote,
                 ).save()
-                    
-        except TimeoutException:
-            print("No such element")
+             
+        except Exception as e:
+            print("search_field error", e)
+            return False
+        finally:
+            print("search_field done")
+            driver.quit()
                 

@@ -8,6 +8,7 @@ urlpatterns = [
     path('account/login_info/', Everytime.ev_login, name='login_info'),
     path('logout/', Everytime.ev_logout, name='logout'),
     path('post/', Everytime.ev_post, name='post'),
+    path('post_field/', Everytime.ev_post, name='post_field'),
     path('free_field/', Everytime.ev_free_field, name='free_field'),
     path('search_field/', Everytime.ev_search_field, name='search_field'),
 ]

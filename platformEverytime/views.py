@@ -5,7 +5,7 @@ from .content import Content
 from .post import Post
 from page.models import ContentDB, FileDB
 import json
-from asgiref.sync import sync_to_async
+
 
 class Everytime:
 
@@ -14,22 +14,22 @@ class Everytime:
         return render(request, "every/home.html")
     
     @staticmethod
-    async def ev_login(request):
+    def ev_login(request):
         if request.method == "POST":
             id = request.POST.get("id")
             password = request.POST.get("password")
             try:
                 #세션 저장 비동기화
-                await sync_to_async(Everytime.save_session)(request, id, password)
+                Everytime.save_session(request, id, password)
                 
                 # 로그인처리 비동기화
-                driver = await sync_to_async(Account.login)(request)
-
+                driver = Account.login(request)
+                print(f"session in user name: {request.session['username']}")
                 if driver is not None:
                     print("Account success")
-                    await sync_to_async(Content.free_field)(request,driver)
+                    Content.free_field(request,driver)
                     
-                    await sync_to_async(driver.quit)()
+                    driver.quit()
                     return redirect('/')
                 else:
                     print("login error, try again")
@@ -47,7 +47,8 @@ class Everytime:
     @staticmethod
     def ev_free_field(request):
         #driver = Account(request.session['id'], request.session['password']).__any__()
-        Content.free_field(request)
+        #driver = Account.login(request)
+        #Content.free_field(request, driver)
         post_content = ContentDB.objects.filter(platform = "everytime").order_by('-id')[:5]
         upload = []
 
@@ -72,8 +73,9 @@ class Everytime:
     def ev_search_field(request):
         if request.method == "POST":
             search = request.POST.get('search')
-           
-            Content.search_field(request, search=search)
+            driver = Account.login(request)
+            Content.search_field(request, search=search, driver=driver)
+            
             post_content = ContentDB.objects.filter(platform = "everytime").order_by('-id')[:5]
             upload = []
             for post in post_content:
@@ -96,18 +98,25 @@ class Everytime:
     @staticmethod
     def ev_post(request):
         if request.method == "POST":
-            data = json.loads(request.body)
-            text = data['text']
-            images = data['images']
-            if text is not None:
-                
-                driver = Account.login(request)
-                Post.post(driver, text, images)
+            try:
+               
+                text = request.POST.get('text')
+                images = request.FILES.getlist('image')
 
-                return render(request, "every/home.html")
-            print("no text")
-            return HttpResponse(status=200)
+                print(f"text : {text}, images : {images}")
+                if text is not None:
+                    driver = Account.login(request)
+                    Post.post(request, text, images, driver)
+                    return render(request, "every/home.html")
+                
+                else:
+                    print("No text provided")
+                    return HttpResponse(status=400)  # Bad Request: 요청이 부적절한 경우
+            except json.JSONDecodeError:
+                print("Invalid JSON data")
+                return HttpResponse(status=400)  # Bad Request: 요청이 부적절한 경우
         return render(request, "every/post.html")
+    
     
     @staticmethod
     def save_session(request, id, password):
