@@ -7,7 +7,7 @@ function setColorById(platform, id) {
         case "X": target.style.background = "#101010"; element.style.color = "#FFFFFF"; break;
         case "Discord": target.style.background = "#6900FF"; break;
         case "Reddit": target.style.background = "#FF4300"; break;
-        case "Everytime": target.style.background = "#FFFFFF"; break;
+        case "Everytime": target.style.background = "#202020"; break;
         case "Youtube": target.style.background = "#E93E29"; break;
     }
 }
