@@ -5,7 +5,6 @@ from page.models import ContentDB, FileDB
 from .account import Account
 from .utils import sleep, quit_driver_forcefully
 import tempfile
-import base64
 import os
 
 def upload_file_from_in_memory(driver, in_memory_file, upload_input_selector):
@@ -67,14 +66,14 @@ class Post:
                     print("image uploading", image)
                     upload_file_from_in_memory(driver, image, "input[type=\"file\"]")
                     sleep() 
-                    
+            
+            #에타 포스팅 함부로 주석처리 해제하지 말 것
+            #submit_box = driver.find_element(By.XPATH, "//*[@id=\"container\"]/div[5]/form/ul/li[3]").click()
+
         except Exception as e:
             print("post error", e)
             return False
         finally:
-            print("post done")
-            driver.quit()
-            if driver:
-                quit_driver_forcefully(driver)
-                print("driver quit in post_field")
+            quit_driver_forcefully(driver)
+            print("driver quit in post_field")
             return True

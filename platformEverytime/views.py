@@ -5,11 +5,13 @@ from .content import Content
 from .post import Post
 from page.models import ContentDB, FileDB, AccountDB
 import json
+from asgiref.sync import sync_to_async
+
 
 
 
 class Everytime:
-
+    
     @staticmethod
     def home(request):
         userAccount = AccountDB.objects.filter(name = request.session['username']).first()
@@ -26,13 +28,6 @@ class Everytime:
 
             else:
                 post['image_url'] = None
-            # upload.append({
-            #     'text':post.text,
-            #     'user' : post.userID,
-            #     'vote' : post.vote,
-            #     'image' : image_url
-            # })
-            # print("current upload : ",upload)
         return render(request, "every_test/home.html" , {
             'contents': post_content, "username":userAccount.name})
     
@@ -48,8 +43,10 @@ class Everytime:
             
             try:
                 #세션 저장 
-                Everytime.save_session(request, id, password)
-                
+                session_saved = Everytime.save_session(request, id, password)
+                if not session_saved:
+                    print("session save error")
+                    return JsonResponse({"error":"session save error"},status=400)
                 driver = Account.login(request)
                 if driver:
                     print("Account success")
@@ -71,14 +68,14 @@ class Everytime:
     
     # 최신 컨텐츠 가져오기
     @staticmethod
-    def ev_free_field(request):
+    async def ev_free_field(request):
         if request.method == "POST":
             
             # 최신 컨텐츠 새로고침시
-            driver = Account.login(request)
+            driver = await sync_to_async(Account.login)(request)
             if driver:
 
-                crawling = Content.free_field(driver)
+                crawling = await sync_to_async(Content.free_field)(driver)
                 if crawling:
                     print("crawling success in free_field")
                     return JsonResponse({"contents":True})
@@ -94,7 +91,7 @@ class Everytime:
     
     # 검색어를 통한 컨텐츠 검색
     @staticmethod
-    def ev_search_field(request):
+    async def ev_search_field(request):
         if request.method == "POST":
             search = request.POST.get('search')
             print(f"search : {search}")
@@ -102,10 +99,10 @@ class Everytime:
                 print("검색어는 2글자 이상 입력해주세요.")
                 return JsonResponse({"error": "Your should input word at least 2 length"},status=400)
             
-            driver = Account.login(request)
+            driver = await sync_to_async(Account.login)(request)
 
             if driver:
-                crawling = Content.search_field(search, driver)
+                crawling = await sync_to_async(Content.search_field)(search, driver)
                 if crawling:
                     return JsonResponse({"success":True})
                 else:
@@ -120,7 +117,7 @@ class Everytime:
     
     # 게시글 작성 (현재 업로드만 막아둠)
     @staticmethod
-    def ev_post(request):
+    async def ev_post(request):
         if request.method == "POST":
             try:
                
@@ -130,12 +127,12 @@ class Everytime:
                 print(f"text : {text}, images : {images}")
                 valid = '\n' in text
                 if valid:
-                    driver = Account.login(request)
+                    driver = await sync_to_async(Account.login)(request)
                     if driver is None:
                         print("login error")
                         return JsonResponse({"error":"driver is None in post"},status=400)
                     
-                    posting = Post.post(text, images, driver)
+                    posting = await sync_to_async(Post.post)(text, images, driver)
                     if posting:
                         print("posting success")
                         return JsonResponse({"success": posting})

@@ -60,3 +60,20 @@ def quit_driver_forcefully(driver):
                     print("Driver process terminated forcefully.")
             except Exception as e:
                 print("Error occurred while terminating driver process:", e)
+
+
+
+def chrome_kill(driver):
+    try:
+    # do your stuff
+        pass
+    finally:
+        # close the driver
+        if driver.reactor:
+            while not driver.reactor.loop.is_closed():
+                try:
+                    driver.reactor.loop.close()
+                except:
+                    driver.reactor.event.set()
+                    time.sleep(0.5)
+        driver.quit()
