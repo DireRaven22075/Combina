@@ -15,7 +15,10 @@ def sleep(a = 1.3, b= 1.5):
 
 
 def delete_cookies_with_cdp(driver):
-    driver.execute_cdp_cmd("Network.clearBrowserCookies", {})
+    #driver.execute_script("window.chrome.browsingData.remove({\"since\": 0}, {\"cookies\": true, \"cache\": true, \"history\": true}, function() {});") # 그냥 종료시켜버림
+    #driver.delete_all_cookies() #실패
+    driver.execute_script("document.cookie.split(';').forEach(function(c) { document.cookie = c.trim().split('=')[0] + '=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;'; });")
+    #driver.execute_cdp_cmd("Network.clearBrowserCookies", {})
 
 def is_logged_in(driver):
         try:
@@ -38,7 +41,8 @@ def is_logged_in(driver):
 
 def quit_driver_forcefully(driver):
     try:
-        driver.quit()
+        driver.close()
+        print("Driver closed.")
     except:
         # 드라이버 프로세스 강제 종료
         driver_process = driver.service.process
@@ -46,34 +50,7 @@ def quit_driver_forcefully(driver):
             try:
                 # 드라이버 프로세스의 PID를 가져옴
                 driver_pid = driver_process.pid
-                
-                # 프로세스 종료
-                driver_process.terminate()
-                driver_process.wait(timeout=3)  # 종료 완료까지 대기
-                
-                # 프로세스가 종료되었는지 확인
-                if not psutil.pid_exists(driver_pid) or psutil.Process(driver_pid).status() == psutil.STATUS_ZOMBIE:
-                    print("Driver process terminated successfully.")
-                else:
-                    # 남아있는 프로세스가 있다면 강제로 종료
-                    os.kill(driver_pid, signal.SIGKILL)
-                    print("Driver process terminated forcefully.")
+                os.kill(driver_pid, signal.SIGKILL)
+                print("Driver process kill.")
             except Exception as e:
                 print("Error occurred while terminating driver process:", e)
-
-
-
-def chrome_kill(driver):
-    try:
-    # do your stuff
-        pass
-    finally:
-        # close the driver
-        if driver.reactor:
-            while not driver.reactor.loop.is_closed():
-                try:
-                    driver.reactor.loop.close()
-                except:
-                    driver.reactor.event.set()
-                    time.sleep(0.5)
-        driver.quit()

@@ -86,9 +86,10 @@ class Content:
             print("free_field error", e)
             return False
         finally:
-            # print("free_field done")
-            # quit_driver_forcefully(driver)
-            # print("driver quit forcefully in free_field")
+            print("free_field done")
+            #quit_driver_forcefully(driver)
+            driver.close()
+            print("driver quit forcefully in free_field")
             return True
             
 
@@ -182,8 +183,9 @@ class Content:
             print("search_field error", e)
             return False
         finally:
-            # print("search_field done")
-            # quit_driver_forcefully(driver)
-            # print("driver quit forcefully in search_field")
+            print("search_field done")
+            #quit_driver_forcefully(driver)
+            driver.close()
+            print("driver quit forcefully in search_field")
             return True
                 

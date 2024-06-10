@@ -9,6 +9,8 @@ from asgiref.sync import sync_to_async
 
 
 
+# 로그인 정보 json으로 받아서 처리
+# 비동기화 json 출력
 
 class Everytime:
     
@@ -35,10 +37,24 @@ class Everytime:
     @staticmethod
     def ev_login(request):
         if request.method == "POST":
+            # try:
+            # # 요청의 본문을 변수에 저장
+            #     request_body = request.body
+                
+            #     json_data = json.loads(request_body)
+            #     # Check if the JSON data is valid
+            #     if not isinstance(json_data, dict):
+            #         print("Invalid JSON data in instance")
+                    
+            # except json.JSONDecodeError:
+            #     print("Invalid JSON data in error")
+            #     return JsonResponse("잘못된 JSON 데이터입니다.", status=400)
+
             id = request.POST.get("id")
             password = request.POST.get("password")
+            print(f"id : {id}, password : {password}")
             if not id or not password:
-                print("no id or password")
+                print("no id or password in sentence")
                 return JsonResponse("아이디 또는 비밀번호를 입력하세요.", status=400)
             
             try:
@@ -60,7 +76,7 @@ class Everytime:
                     print("login error, try again")
                     return JsonResponse({"error":"driver is None"},status=200)
             except KeyError:
-                print("no id or password")
+                print("no id or password in KeyError")
                 return JsonResponse({"error":"ID or PASSWORD are incorrect"},status=200) # 아이디 혹은 비밀번호 없음
             
         return render(request, "every_test/login.html")
@@ -77,8 +93,25 @@ class Everytime:
 
                 crawling = await sync_to_async(Content.free_field)(driver)
                 if crawling:
+                    #post_content = await sync_to_async(ContentDB.objects.filter(platform="everytime").order_by('-id').values)("userID", "text", "image_url", "vote")[:5]
+                    queryset = ContentDB.objects.filter(platform="everytime").order_by('-id').values("userID", "text", "image_url", "vote")[:5]
+                    post_content = await sync_to_async(list)(queryset)
+
+                    
+                    
+                    for post in post_content:
+                        
+                        if post['image_url'] != 0:
+                            try:
+                                file = await sync_to_async(FileDB.objects.get)(uid = post['image_url'])
+                                post['image_url'] = file.url
+                            except FileDB.DoesNotExist:
+                                post['image_url'] = None
+
+                        else:
+                            post['image_url'] = None
                     print("crawling success in free_field")
-                    return JsonResponse({"contents":True})
+                    return JsonResponse({"contents":post_content})
                 else:
                     print("crawling error")
                     return JsonResponse({"error":"crawling error in free_field"},status=400)
@@ -93,7 +126,11 @@ class Everytime:
     @staticmethod
     async def ev_search_field(request):
         if request.method == "POST":
-            search = request.POST.get('search')
+            # json_data = json.loads(request.body)
+            # search = json_data.get('search')
+            
+            search = request.POST.get("search")
+            
             print(f"search : {search}")
             if search is None or len(search) < 2:
                 print("검색어는 2글자 이상 입력해주세요.")
@@ -104,7 +141,22 @@ class Everytime:
             if driver:
                 crawling = await sync_to_async(Content.search_field)(search, driver)
                 if crawling:
-                    return JsonResponse({"success":True})
+                    #post_content = await sync_to_async(ContentDB.objects.filter(platform="everytime").order_by('-id').values)("userID", "text", "image_url", "vote")[:5]
+                    queryset = ContentDB.objects.filter(platform="everytime").order_by('-id').values("userID", "text", "image_url", "vote")[:5]
+                    post_content = await sync_to_async(list)(queryset)
+
+                    for post in post_content:
+                        
+                        if post['image_url'] != 0:
+                            try:
+                                file = await sync_to_async(FileDB.objects.get)(uid = post['image_url'])
+                                post['image_url'] = file.url
+                            except FileDB.DoesNotExist:
+                                post['image_url'] = None
+                        else:
+                            post['image_url'] = None
+                    print("crawling success in search_field")
+                    return JsonResponse({"contents":post_content})
                 else:
                     print("crawling error")
                     return JsonResponse({"error":"crawling error in search_field"},status=400)
@@ -120,9 +172,12 @@ class Everytime:
     async def ev_post(request):
         if request.method == "POST":
             try:
-               
-                text = request.POST.get('text')
-                images = request.FILES.getlist('image')
+                # json_data = json.loads(request.body)
+                # text = json_data.get('text')
+                # images = json_data.get('image')
+
+                text = request.POST.get("text")
+                images = request.FILES.getlist("image")
 
                 print(f"text : {text}, images : {images}")
                 valid = '\n' in text
@@ -149,17 +204,22 @@ class Everytime:
         return JsonResponse({"error":"No post in ev_post"},status=400)
     
     
-    @staticmethod
     def save_session(request, id, password):
         try:
+            # if request.session['ev_id'] is not None or request.session['ev_password'] is not None:
+            #     print("session already exists")
+            #     request.session.pop('ev_id', None)  # 'ev_id'가 존재하면 삭제
+            #     request.session.pop('ev_password', None)  # 'ev_password'가 존재하면 삭제
+            #     request.session.pop('username', None)  # 'username'이 존재하면 삭제
+            
             request.session.create()
-            request.session['id'] = id
-            request.session['password'] = password
+            request.session['ev_id'] = id
+            request.session['ev_password'] = password
             request.session.save()
-            print(f"id : {request.session['id']}, password : {request.session['password']}")
+            print(f"id : {request.session['ev_id']}, password : {request.session['ev_password']}")
             return request
         except KeyError:
-            print("no id or password")
+            print("no id or password in session")
             return None
        
     
