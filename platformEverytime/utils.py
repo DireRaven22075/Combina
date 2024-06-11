@@ -17,8 +17,8 @@ def sleep(a = 1.3, b= 1.5):
 def delete_cookies_with_cdp(driver):
     #driver.execute_script("window.chrome.browsingData.remove({\"since\": 0}, {\"cookies\": true, \"cache\": true, \"history\": true}, function() {});") # 그냥 종료시켜버림
     #driver.delete_all_cookies() #실패
-    driver.execute_script("document.cookie.split(';').forEach(function(c) { document.cookie = c.trim().split('=')[0] + '=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;'; });")
-    #driver.execute_cdp_cmd("Network.clearBrowserCookies", {})
+    #driver.execute_script("document.cookie.split(';').forEach(function(c) { document.cookie = c.trim().split('=')[0] + '=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;'; });") #강제 종료
+    driver.execute_cdp_cmd("Network.clearBrowserCookies", {})
 
 def is_logged_in(driver):
         try:
