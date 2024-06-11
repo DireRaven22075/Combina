@@ -15,6 +15,12 @@ class DiscordBotView:
 
     @csrf_exempt
     async def get_content(request):
+        """
+        디스코드 메시지를 가져오는 함수
+        - GET 또는 POST 요청을 처리하여 메시지를 가져옴
+        - num_messages 파라미터로 가져올 메시지 개수를 결정
+        - 메시지를 가져와 JSON으로 반환
+        """
         if request.method == 'POST' or request.method == 'GET':
             if request.method == 'POST':
                 try:
@@ -166,6 +172,11 @@ class DiscordBotView:
 
     @staticmethod
     def connect(request):
+        """
+        디스코드 봇 토큰을 설정하고 리다이렉트하는 함수
+        - POST 요청을 통해 봇 토큰을 설정
+        - GET 요청을 통해 반환 URL을 설정하여 리다이렉트
+        """
         if request.method == 'POST':
             form = TokenForm(request.POST)
             if form.is_valid():
@@ -184,6 +195,10 @@ class DiscordBotView:
 
 class RedirectPageView(View):
     def post(self, request, *args, **kwargs):
+        """
+        페이지 리다이렉트를 처리하는 함수
+        - POST 요청을 받아 'page' 파라미터에 따라 다른 URL로 리다이렉트
+        """
         try:
             data = json.loads(request.body)
             page = data.get('page', 'init')
@@ -197,6 +212,10 @@ class RedirectPageView(View):
 
 class PostAccountView(View):
     def post(self, request, *args, **kwargs):
+        """
+        계정 정보를 POST로 처리하는 함수
+        - 'account' 파라미터를 받아 True일 경우 성공 메시지 반환
+        """
         try:
             data = json.loads(request.body)
             account = data.get('account', False)
@@ -207,9 +226,14 @@ class PostAccountView(View):
                 return HttpResponseBadRequest('Account value not provided')
         except json.JSONDecodeError:
             return HttpResponseBadRequest('Invalid JSON')
-        
+
 class DisconnectView(View):
     def get(self, request):
+        """
+        디스코드와의 연결을 해제하고 관련 데이터를 삭제하는 함수
+        - 세션에서 디스코드 관련 데이터 삭제
+        - 성공 메시지를 JSON으로 반환
+        """
         # 세션에서 디스코드 관련 데이터 삭제
         keys_to_delete = ['bot_token', 'discord_channel_id', 'discord_messages']
         for key in keys_to_delete:
