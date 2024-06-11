@@ -7,12 +7,15 @@ body {
     padding-top: 6rem;
     display: flex;
     font-family: 'Noto Sans';
-    background: #e9e9e9;
+    background: #E9E9E9;
     color: #202020;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     scrollbar-width: none;
+    iframe {
+        display: none;
+    }
 }
 
 /* Hide scrollbar for webkit browsers */

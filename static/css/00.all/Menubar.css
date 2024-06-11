@@ -1,3 +1,4 @@
+/* 좌측에 있는 메뉴 바를 위한 css */
 #Menubar {
     user-select: none;
     display: box;
@@ -33,9 +34,8 @@
         }
 
         &:active {
-            background-color: #e9e9e9; /* Replace #yourColor with the color you want */
+            background-color: #e9e9e9;
         }
-
         img {
             vertical-align: middle;
             margin-top: -0.2rem;

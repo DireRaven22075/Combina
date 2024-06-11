@@ -6,23 +6,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href='https://fonts.googleapis.com/css?family=Noto Sans' rel='stylesheet'>
-
-    <!-- StyleSheet Link (Section) -->
-    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Body.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Main.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Title.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Sub.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Subtitle.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Navigation.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Menubar.css' %}" />
-
-    <!-- StyleSheet Link (additional Style) -->
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style/Platform.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style/Noselect.css' %}" />
-
-    <!-- StyleSheet Link (Element) -->
-    <link rel="stylesheet" type="text/css" href="{% static 'css/element/content.css' %}" />
-
+    <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/Body.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/Noselect.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/Menubar.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/MainContainer.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/SubContainer.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/05.accounts/menuButton.css' %}" />
+    
     <!-- Javascript Link (Interaction) -->
     <script src="{% static 'js/Menubar.js' %}"></script>
 
@@ -30,7 +20,7 @@
     <script src="{% static 'js/ui-updates/navigation.js' %}"></script>
 
     <style>
-        .settings-button {
+        .accounts-button {
             background-color: #e9e9e9;
         }
     </style>
@@ -41,12 +31,8 @@
         <div class="title"><label><img src="{% static 'img/combinalogo.svg' %}" <label></div>
             <div onclick="js:goto('/home')" class="element button home-button"><label><img
                     src="{% static 'img/icon/home.svg'%}" >Home</label></div>
-        <div onclick="js:goto('/explore')" class="element button explore-button"><label><img
-                    src="{% static 'img/icon/explore.svg'%}" >Explore</label></div>
         <div onclick="js:goto('/contacts')" class="element button contacts-button"><label><img
                     src="{% static 'img/icon/contacts.svg'%}" >Contacts</label></div>
-        <div onclick="js:goto('/watch')" class="element button watch-button"><label><img
-                    src="{% static 'img/icon/watch.svg'%}" >Watch</label></div>
         <div onclick="js:goto('/create')" class="element button create-button"><label><img
                     src="{% static 'img/icon/create.svg'%}" >Create</label></div>
         <div onclick="js:goto('/accounts')" class="element button accounts-button"><label><img
@@ -61,11 +47,7 @@
     <div id="Title">
 
     </div>
-    <div id="Sub">
-
-    </div>
-    <div id="Subtitle">
-        
-    </div>
+    <div id="Sub" style="display: none;"></div>
+    <div id="Subtitle" style="display: none;"></div>
 </body>
 </html>

@@ -1,5 +1,11 @@
-function setColorById(platform, id) {
+function setColorById(this, platform, id) {
     const target = document.getElementById(id);
+    const page = {
+        "Title": document.getElementById("Detail_Title"),
+        "Text": document.getElementById("Detail_Content"),
+        "Image": document.getElementById("Detail_Image"),
+        "Video": document.getElementById("Detail_Video")
+    };
     switch(platform) {
         case "All": target.style.background = "#f9f9f9"; break;
         case "Facebook": target.style.background = "#0052FF"; break;

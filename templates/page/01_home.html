@@ -3,28 +3,20 @@
 {% load static %}
 
 <head>
-    <title>Combina : {{page}}</title>
+    <title>Combina : Home</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href='https://fonts.googleapis.com/css?family=Noto Sans' rel='stylesheet'>
-
-    <!-- StyleSheet Link (Section) -->
-    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Body.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Main.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Title.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Sub.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Subtitle.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Navigation.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Menubar.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Popup.css' %}" />
-
-    <!-- StyleSheet Link (additional Style) -->
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style/Platform.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style/Noselect.css' %}" />
-
-    <!-- StyleSheet Link (Element) -->
-    <link rel="stylesheet" type="text/css" href="{% static 'css/element/content.css' %}" />
-
+    <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/Body.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/Noselect.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/Menubar.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/MainContainer.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/SubContainer.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/02.home/menuButton.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/02.home/content.css' %}" />
+    
+    <!-- Javascript -->
+    <script src="{% static 'js/func/filter.js' %}"></script>
     <!-- Javascript Link (Interaction) -->
     <script src="{% static 'js/interacts/detail.js' %}"></script>
     <script src="{% static 'js/Menubar.js' %}"></script>
@@ -33,11 +25,6 @@
     <script src="{% static 'js/ui-updates/navigation.js' %}"></script>
     <script src="{% static 'js/ui-updates/detail.js' %}"></script>
 
-    <style>
-        .home-button {
-            background-color: #e9e9e9;
-        }
-    </style>
 </head>
 
 <body>
@@ -45,12 +32,8 @@
         <div class="title"><label><img src="{% static 'img/combinalogo.svg' %}" <label></div>
             <div onclick="js:goto('/home')" class="element button home-button"><label><img
                     src="{% static 'img/icon/home.svg'%}" >Home</label></div>
-        <div onclick="js:goto('/explore')" class="element button explore-button"><label><img
-                    src="{% static 'img/icon/explore.svg'%}" >Explore</label></div>
         <div onclick="js:goto('/contacts')" class="element button contacts-button"><label><img
                     src="{% static 'img/icon/contacts.svg'%}" >Contacts</label></div>
-        <div onclick="js:goto('/watch')" class="element button watch-button"><label><img
-                    src="{% static 'img/icon/watch.svg'%}" >Watch</label></div>
         <div onclick="js:goto('/create')" class="element button create-button"><label><img
                     src="{% static 'img/icon/create.svg'%}" >Create</label></div>
         <div onclick="js:goto('/accounts')" class="element button accounts-button"><label><img
@@ -61,7 +44,7 @@
     
     <div id="Main">
         {% for content in contents %}
-        <div onclick="js:detail(this); js:setColorById('{{content.platform}}', 'Subtitle')" class="content">
+        <div onclick="js:detail(this); js:setColorById(this, '{{content.platform}}', 'Subtitle');" class="content {{content.platform}}">
             <input type="text" value="{{content}}" style="display: none;"/>
             <div class="header"><img class="icon noselect" src="{{content.icon}}" />
                 <span class="info">
@@ -78,8 +61,8 @@
             </div>
         </div>
         {% endfor %}
-        <div onclick="js:openDetail(this); js:setColorById('Facebook', 'Subtitle')" class="content">
-            <input type="text" value="{{content}}" style="display: none;"/>
+        <div onclick="js:openDetail(this); js:setColorById(this, 'Facebook', 'Subtitle');" class="content">
+            <input type="text" value="{'text' : 'title|temp', 'icon': 'fdsaf'}" style="display: none;"/>
             <div class="header"><img class="icon" src="fsafa" />
                 <span class="info">
                     <p>한윤수</p>
@@ -93,12 +76,12 @@
             <div class="footer">
             </div>
         </div>
-        <div onclick="js:openDetail(this); js:setColorById('Instagram', 'Subtitle')" class="content">
+        <div onclick="js:openDetail(this); js:setColorById(this, 'Facebook', 'Subtitle')" class="content Everytime">
             <input type="text" value="{{content}}" style="display: none;"/>
             <div class="header"><img class="icon" src="fsafa" />
                 <span class="info">
-                    <p>임진형</p>
-                    <p>Instagram</p>
+                    <p>한윤수</p>
+                    <p>Facebook</p>
                 </span>
             </div>
             <div class="body">
@@ -108,11 +91,41 @@
             <div class="footer">
             </div>
         </div>
-        <div onclick="js:openDetail(this); js:setColorById('Everytime', 'Subtitle')" class="content">
+        <div onclick="js:openDetail(this); js:setColorById(this, 'Facebook', 'Subtitle')" class="content Youtube">
             <input type="text" value="{{content}}" style="display: none;"/>
             <div class="header"><img class="icon" src="fsafa" />
                 <span class="info">
-                    <p>한철연</p>
+                    <p>한윤수</p>
+                    <p>Youtube</p>
+                </span>
+            </div>
+            <div class="body">
+                <p>ㅇㅁㄴㅇㄴㄹㅁfsdfafasㄹ</p>
+                <video src="{{content.image}}" controls></video>
+            </div>
+            <div class="footer">
+            </div>
+        </div>
+        <div onclick="js:openDetail(this); js:setColorById(this, 'Facebook', 'Subtitle')" class="content Facebook">
+            <input type="text" value="{{content}}" style="display: none;"/>
+            <div class="header"><img class="icon" src="fsafa" />
+                <span class="info">
+                    <p>한윤수</p>
+                    <p>Facebook</p>
+                </span>
+            </div>
+            <div class="body">
+                <p>ㅇㅁㄴㅇㄴㄹㅁㄹ</p>
+                <img src="{{content.image}}" />
+            </div>
+            <div class="footer">
+            </div>
+        </div>
+        <div onclick="js:openDetail(this); js:setColorById(this, 'Facebook', 'Subtitle')" class="content Everytime">
+            <input type="text" value="{{content}}" style="display: none;"/>
+            <div class="header"><img class="icon" src="fsafa" />
+                <span class="info">
+                    <p>한윤수</p>
                     <p>Everytime</p>
                 </span>
             </div>
@@ -123,112 +136,7 @@
             <div class="footer">
             </div>
         </div>
-        <div onclick="js:openDetail(this); js:setColorById('Discord', 'Subtitle')" class="content">
-            <input type="text" value="{{content}}" style="display: none;"/>
-            <div class="header"><img class="icon" src="fsafa" />
-                <span class="info">
-                    <p>오현승</p>
-                    <p>Discord</p>
-                </span>
-            </div>
-            <div class="body">
-                <p>ㅇㅁㄴㅇㄴㄹㅁㄹ</p>
-                <img src="{{content.image}}" />
-            </div>
-            <div class="footer">
-            </div>
-        </div>
-        <div onclick="js:openDetail(this); js:setColorById('Facebook', 'Subtitle')" class="content">
-            <input type="text" value="{{content}}" style="display: none;"/>
-            <div class="header"><img class="icon" src="fsafa" />
-                <span class="info">
-                    <p>한윤수</p>
-                    <p>Facebook</p>
-                </span>
-            </div>
-            <div class="body">
-                <p>ㅇㅁㄴㅇㄴㄹㅁㄹ</p>
-                <img src="{{content.image}}" />
-            </div>
-            <div class="footer">
-            </div>
-        </div>
-        <div onclick="js:openDetail(this); js:setColorById('Facebook', 'Subtitle')" class="content">
-            <input type="text" value="{{content}}" style="display: none;"/>
-            <div class="header"><img class="icon" src="fsafa" />
-                <span class="info">
-                    <p>한윤수</p>
-                    <p>Facebook</p>
-                </span>
-            </div>
-            <div class="body">
-                <p>ㅇㅁㄴㅇㄴㄹㅁㄹ</p>
-                <img src="{{content.image}}" />
-            </div>
-            <div class="footer">
-            </div>
-        </div>
-        <div onclick="js:openDetail(this); js:setColorById('Facebook', 'Subtitle')" class="content">
-            <input type="text" value="{{content}}" style="display: none;"/>
-            <div class="header"><img class="icon" src="fsafa" />
-                <span class="info">
-                    <p>한윤수</p>
-                    <p>Facebook</p>
-                </span>
-            </div>
-            <div class="body">
-                <p>ㅇㅁㄴㅇㄴㄹㅁㄹ</p>
-                <img src="{{content.image}}" />
-            </div>
-            <div class="footer">
-            </div>
-        </div>
-        <div onclick="js:openDetail(this); js:setColorById('Facebook', 'Subtitle')" class="content">
-            <input type="text" value="{{content}}" style="display: none;"/>
-            <div class="header"><img class="icon" src="fsafa" />
-                <span class="info">
-                    <p>한윤수</p>
-                    <p>Facebook</p>
-                </span>
-            </div>
-            <div class="body">
-                <p>ㅇㅁㄴㅇㄴㄹㅁㄹ</p>
-                <img src="{{content.image}}" />
-            </div>
-            <div class="footer">
-            </div>
-        </div>
-        <div onclick="js:openDetail(this); js:setColorById('Facebook', 'Subtitle')" class="content">
-            <input type="text" value="{{content}}" style="display: none;"/>
-            <div class="header"><img class="icon" src="fsafa" />
-                <span class="info">
-                    <p>한윤수</p>
-                    <p>Facebook</p>
-                </span>
-            </div>
-            <div class="body">
-                <p>ㅇㅁㄴㅇㄴㄹㅁㄹ</p>
-                <img src="{{content.image}}" />
-            </div>
-            <div class="footer">
-            </div>
-        </div>
-        <div onclick="js:openDetail(this); js:setColorById('Facebook', 'Subtitle')" class="content">
-            <input type="text" value="{{content}}" style="display: none;"/>
-            <div class="header"><img class="icon" src="fsafa" />
-                <span class="info">
-                    <p>한윤수</p>
-                    <p>Facebook</p>
-                </span>
-            </div>
-            <div class="body">
-                <p>ㅇㅁㄴㅇㄴㄹㅁㄹ</p>
-                <img src="{{content.image}}" />
-            </div>
-            <div class="footer">
-            </div>
-        </div>
-        <div onclick="js:openDetail(this); js:setColorById('Facebook', 'Subtitle')" class="content">
+        <div onclick="js:openDetail(this); js:setColorById(this, 'Facebook', 'Subtitle')" class="content Instagram">
             <input type="text" value="{{content}}" style="display: none;"/>
             <div class="header"><img class="icon" src="fsafa" />
                 <span class="info">
@@ -248,21 +156,20 @@
         <div>Home</div>
     </div>
     <div id="Navigation" style="display: flex;">
-        <input type="button" onclick="js:navigation('All')" value="All"/>
+        <input type="button" onclick="js:navigation('All'); js:filter('All')" value="All"/>
         {% for platform in platforms %}
-        <input type="button" onclick="js:navigation('{{platform}}')" value="{{platform}}"/>
+        <input type="button" onclick="js:navigation('{{platform}}'); js:filter('{{platform}}')" value="{{platform}}"/>
         {% endfor %}
     </div>
 
     <div id="Sub" style="display: none;">
+        <h3 id="Detail_Title"></h3>
+        <p id="Detail_Content"></p>
+        <video id="Detail_Video" controls></video>
+        <img id="Detail_Image" />
     </div>
     <div id="Subtitle" style="display: none;">
         <input onclick="js:closeDetail();" type="image" src= "{% static 'img/icon/quit.svg' %}" />
-    </div>
-    <div id="Popup" style="display: none">
-        <div class="popup">
-
-        </div>
     </div>
 </body>
 

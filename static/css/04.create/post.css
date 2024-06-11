@@ -7,8 +7,14 @@
         width: 90%;
         padding: 0.5em;
         margin: 0.5em;
-        border: 1px solid black;
+        /*border: 1px solid black;*/
+        border: none;
         border-radius: 0.5em;
+    }
+    input[type=text]:focus { 
+        border: 1px solid #00FFA9;
+        border-radius: 0.5rem;
+        outline: none;
     }
     textarea {
         width: 90%;
@@ -16,8 +22,12 @@
         height: 10rem;
         padding: 0.5em;
         margin: 0.5em;
-        border: 1px solid black;
-        border-radius: 0.5em;
+        border: none;
+    }
+    textarea:focus {
+        border: 1px solid #00FFA9;
+        border-radius: 0.5rem;
+        outline: none;
     }
     input[type=file] {
         width: 90%;

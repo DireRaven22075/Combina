@@ -1,3 +1,4 @@
+/* 시작화면 : 맨 처음 페이지 전용 css */
 #First {
     width: 80%;
     top: 10%;
@@ -7,7 +8,6 @@
     padding: 0;
     background-color: white;
     border-radius: 0.5rem;
-
     .header {
         display: flex;
         background: linear-gradient(0.25turn, rgb(0, 0, 255), rgb(0, 160, 255));
@@ -20,14 +20,12 @@
         align-items: center;
         justify-content: center;
         justify-items: center;
-
         img {
             width: 60%;
             height: auto;
             filter: invert(100%);
         }
     }
-
     .body {
         display: flex;
         height: 50%;
@@ -37,7 +35,5 @@
         flex-direction: column;
         align-items: center;
         justify-content: flex-end;
-
-        
     }
 }
