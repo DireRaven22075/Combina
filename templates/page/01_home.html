@@ -7,6 +7,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href='https://fonts.googleapis.com/css?family=Noto Sans' rel='stylesheet'>
+    <!-- StyleSheet Link -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/Body.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/Noselect.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/Menubar.css' %}" />
@@ -14,17 +15,10 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/SubContainer.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/02.home/menuButton.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/02.home/content.css' %}" />
-    
-    <!-- Javascript -->
-    <script src="{% static 'js/func/filter.js' %}"></script>
-    <!-- Javascript Link (Interaction) -->
-    <script src="{% static 'js/interacts/detail.js' %}"></script>
-    <script src="{% static 'js/Menubar.js' %}"></script>
 
-    <!-- Javascript Link (ui-updates) -->
-    <script src="{% static 'js/ui-updates/navigation.js' %}"></script>
-    <script src="{% static 'js/ui-updates/detail.js' %}"></script>
-
+    <!-- Javascript Link -->
+    <script src="{% static 'js/00.all/Menubar.js' %}"></script>
+    <script src="{% static 'js/00.all/MainContainer.js' %}"></script>
 </head>
 
 <body>
@@ -44,6 +38,7 @@
     
     <div id="Main">
         {% for content in contents %}
+        {% if searching %}
         <div onclick="js:detail(this); js:setColorById(this, '{{content.platform}}', 'Subtitle');" class="content {{content.platform}}">
             <input type="text" value="{{content}}" style="display: none;"/>
             <div class="header"><img class="icon noselect" src="{{content.icon}}" />
@@ -60,6 +55,25 @@
                 {% endif %}
             </div>
         </div>
+        {% else %}
+        <div onclick="js:detail(this); js:setColorById(this, '{{content.platform}}', 'Subtitle');" class="content {{content.platform}}">
+            <input type="text" value="{{content}}" style="display: none;"/>
+            <div class="header"><img class="icon noselect" src="{{content.icon}}" />
+                <span class="info">
+                    <p>{{content.userID}}</p>
+                    <p>{{content.platform}}</p>
+                </span>
+            </div>
+            <div class="body">
+                <p>{{content.text}}</p><img src="{{content.image}}" />
+            </div>
+            <div class="footer">
+                {% if content.platform == 'Facebook' %}
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
         {% endfor %}
         <div onclick="js:openDetail(this); js:setColorById(this, 'Facebook', 'Subtitle');" class="content">
             <input type="text" value="{'text' : 'title|temp', 'icon': 'fdsaf'}" style="display: none;"/>
