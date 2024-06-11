@@ -1,15 +1,23 @@
 <!DOCTYPE html>
 <html lang="ko">
 {% load static %}
+
 <head>
     <title>Welcome 2 Combina</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Welcome.css' %}" />
+    <link href='https://fonts.googleapis.com/css?family=Noto Sans' rel='stylesheet'>
+
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/section/welcome/First.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/section/welcome/Second.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/element/welcome/Button.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/element/account.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/style/Noselect.css' %}" />
+    <script src="{% static 'js/func/welcome/control.js' %}"></script>
+    <script src="{% static 'js/func/goto.js' %}"></script>
     <style>
-        iframe {
-            display: none;
+        iframe {display: none;
         }
 
         body {
@@ -18,108 +26,41 @@
             background-color: #EBEBEB;
         }
     </style>
-    <script>
-        function next() {
-            document.getElementById('First').style.display = 'none';
-            document.getElementById('Second').style.display = 'flex';
-        }
-        function prev() {
-            document.getElementById('First').style.display = 'block';
-            document.getElementById('Second').style.display = 'none';
-        }
-    </script>
 </head>
 
 <body>
     <iframe src="/discord/fetch-discord-messages/"></iframe>
-    <script>
-        document.addEventListener("keydown", (e) => {
-            const first = document.getElementById('First');
-            if (first.style.display == "block") {
-                next();
-            }
-        });
-    </script>
-    <div id="First">
+    {% if connection %}<div id="First" style="display: none">{% else %}<div id="First" style="display:flex;">{% endif %}
         <div class="header">
             <img src="{% static 'img/combinalogo.svg' %}" />
         </div>
-        <div class="body">
-            <input type="button" onclick="js:next()" value="Get started..." />
-        </div>
     </div>
-    <div id="Second" style="display: none;">
-        <p class="noselect prev" onclick="js:prev()">Back</p>
-        <div class="noselect header">
-            <h2>Connect Account</h2>
-        </div>
+    {% if connection %}<div id="Second">{% else %}<div id="Second" style="display: none;">{% endif %}
+        <p class="noselect prev" onclick="js:control('back')">Back</p>
+        <div class="noselect header"><h2>Connect Account</h2></div>
         {% for account in accounts %}
+        {% with platformDisconnect='/'|add:account.platform|add:'/disconnect' %}
+        {% with platformConnect='/'|add:account.platform|add:'/connect' %}
+        {% with platformIcon='img/icon/platform/'|add:account.platform|add:'.svg' %}
         {% if account.connected %}
-        <div class="account">
-            {{ account.platform }}
+        <div class="account" onclick="js:goto('{{platformDisconnect}}')">
+            {% else %}
+            <div class="account" onclick="js:goto('{{platformConnect}}')">
+                {% endif %}
+                <img class="icon" src="{% static platformIcon %}" />
+                {% if account.connected %}
+                {{account.platform}} - {{account.userId}}
+                {% else %}
+                {{account.platform}}
+                {% endif %}
+            </div>
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+            {% endfor %}
         </div>
-        {% else %}
-        <div class="account">
-            
-        </div>
-        {% endif %}
-        {% endfor %}
     </div>
-    <!--
-    <script>
-        function getCookie(name) {
-            var cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                var cookies = document.cookie.split(';');
-                for (var i = 0; i < cookies.length; i++) {
-                    var cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-        document.onload(() => {
-            // 요청 보내기
-            fetch('/test', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': getCookie('csrftoken') // CSRF 토큰 추가
-                },
-                body: JSON.stringify({
-                })
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json(); // JSON 형식의 응답이라 가정
-                })
-                .then(data => {
-                    // 서버 응답에 대한 처리
-                    console.log(data);
-                })
-                .catch(error => {
-                    // 오류 처리
-                    console.error('There was a problem with the fetch operation:', error);
-                });
-        });
-    </script>
-    -->
-
-    <!--
-    <div class="container">
-        <div id="First">
-
-        </div>
-        <div class="left"></div>
-        <img src="{% static 'img/logo-full.png' %}" />
-        <input type="button" onclick="js:goto('/home/')" value="Start..." />
-    </div>
-    -->
+    <input id="Btn" type="button" onclick="js:control('next')" value="Get started..." />
 </body>
 
 </html>
