@@ -77,7 +77,7 @@ class Content:
                 ContentDB.objects.create(
                     platform = "everytime",
                     userID = post_user,
-                    text = post_title+"\n" + post_text,
+                    text = post_title+"|||" + post_text,
                     image_url = image_url,
                     vote = post_vote,
                 ).save()       
@@ -174,7 +174,7 @@ class Content:
                 ContentDB.objects.create(
                     platform = "everytime",
                     userID = post_user,
-                    text = post_title+"\n" + post_text,
+                    text = post_title+"|||" + post_text,
                     image_url = image_url,
                     vote = post_vote,
                 ).save()

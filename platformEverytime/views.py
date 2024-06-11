@@ -8,9 +8,11 @@ import json
 from asgiref.sync import sync_to_async
 
 
-
 # 로그인 정보 json으로 받아서 처리
-# 비동기화 json 출력
+# 에타에서 로그인 토큰 받아오기
+# 에타 쿠키 완전 삭제
+# 로그아웃 추가
+#
 
 class Everytime:
     
@@ -221,6 +223,52 @@ class Everytime:
         except KeyError:
             print("no id or password in session")
             return None
-       
     
+    @staticmethod
+    def logout(request):
+        try:
+            # 처음에 세션 값이 있는지 검사
+            initial_ev_id = request.session.get('ev_id')
+            initial_ev_password = request.session.get('ev_password')
+            initial_username = request.session.get('username')
+            
+            if initial_ev_id is None or initial_ev_password is None or initial_username is None:
+                missing_keys = []
+                if initial_ev_id is None:
+                    missing_keys.append('ev_id')
+                if initial_ev_password is None:
+                    missing_keys.append('ev_password')
+                if initial_username is None:
+                    missing_keys.append('username')
+                error_message = f"Missing session keys initially: {', '.join(missing_keys)}"
+                print(error_message)
+                return JsonResponse({"error": error_message}, status=400)
+
+            # 세션 값 삭제
+            request.session.pop('ev_id', None)
+            request.session.pop('ev_password', None)
+            request.session.pop('username', None)
+
+            # 삭제 후 세션 값이 남아 있는지 검사
+            if request.session.get('ev_id') is not None or request.session.get('ev_password') is not None or request.session.get('username') is not None:
+                remaining_keys = []
+                if request.session.get('ev_id') is not None:
+                    remaining_keys.append('ev_id')
+                if request.session.get('ev_password') is not None:
+                    remaining_keys.append('ev_password')
+                if request.session.get('username') is not None:
+                    remaining_keys.append('username')
+                error_message = f"Failed to remove session keys: {', '.join(remaining_keys)}"
+                print(error_message)
+                return JsonResponse({"error": error_message}, status=400)
+
+            # 성공 메시지
+            print("logout success")
+            return JsonResponse({"success": "logout success"})
+
+        except Exception as e:
+            error_message = f"Error during logout: {str(e)}"
+            print(error_message)
+            return JsonResponse({"error": error_message}, status=400)
+                
         
