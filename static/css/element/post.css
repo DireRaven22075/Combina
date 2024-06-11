@@ -1,0 +1,55 @@
+.post {
+    h3 {
+        font-size: 1.5em;
+        margin: 0;
+    }
+    input[type=text] {
+        width: 90%;
+        padding: 0.5em;
+        margin: 0.5em;
+        border: 1px solid black;
+        border-radius: 0.5em;
+    }
+    textarea {
+        width: 90%;
+        resize: none;
+        height: 10rem;
+        padding: 0.5em;
+        margin: 0.5em;
+        border: 1px solid black;
+        border-radius: 0.5em;
+    }
+    input[type=file] {
+        width: 90%;
+        padding: 0.5em;
+        margin: 0.5em;
+        border: 1px solid black;
+        border-radius: 0.5em;
+    }
+    .previewController {
+        width: 90%;
+        height: 3rem;
+        display: flex;
+        justify-content: space-between;
+        margin: 0.5em;
+    }
+    #ImagePreview {
+        width: 90%;
+        height: auto;
+        border: 1px solid black;
+        border-radius: 0.5em;
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+    input[type=submit] {
+        width: 90%;
+        padding: 0.5em;
+        margin: 0.5em;
+        border: 1px solid black;
+        border-radius: 0.5em;
+        background-color: #E9E9E9;
+    }
+}

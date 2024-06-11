@@ -1,65 +1,40 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from . import sql
-
-parameters = {
-    "chats": [
-        {
-            "icon": "https://www.facebook.com/images/fb_icon_325x325.png",
-            "target": "한철연",
-            "topMessage": "뭐함",
-            "time": "2020-01-01 12:00:00",
-            "unread": 3
-        },
-        # 기타 파라미터들...
-    ],
-    "contents": [
-        {
-            "platform": "Facebook",
-            "account": "AEK",
-            "time": "2020-01-01 12:00:00",
-            "text": "TTTT",
-            "image": "https://cdn.mos.cms.futurecdn.net/2aeE963L5B7jnfCAWFoFYW-1920-80.jpg.webp"
-        },
-        # 기타 콘텐츠들...
-    ],
-    "accounts": [
-        {
-            "connected": 1,
-            "platform": "Facebook",
-            "id": "gskids053",
-            "name": "DireRaven22075",
-            "tag": "hanyoonsoo"
-        },
-        # 기타 계정들...
+from .models import *
+def parameters(name):
+    data = {}
+    data['platforms'] = [
+        "Facebook",
+        "Instagram",
+        "Discord",
+        "Reddit",
+        "Everytime",
+        "Youtube"
     ]
-}
-
-def Welcome(request):
-    return render(request, 'welcome.html', parameters)
-def Home(request):
-    return render(request, 'home.html', parameters)
-
-def Post(request):
-    return render(request, 'post.html', parameters)
-
-def Find(request):
-    return render(request, 'find.html', parameters)
-
-def Menu(request):
-    return render(request, 'menu.html', parameters)
-
-def DBINIT(request):
-    sql.Account.deleteDataAll()
-    sql.Account.addData('Facebook', 'gskids053')
-    return render(request, 'menu.html', parameters)
-
-def DBTest(request):
-    result = sql.get_account()
-    sql.Account.test()
-    return HttpResponse(result)
-
-def Disconnect(request):
-    platform = request.POST.get('platform')
-    sql.Account.deleteData(platform)
-    return render(request, 'menu.html', parameters)
+    data['contents'] = ContentDB.objects.all()
+    data['accounts'] = AccountDB.objects.all()
+    data['page'] = name
+    return data
+class PageView:
+    def Init(request):
+        if (AccountDB.objects.all().count() == 0):
+            AccountDB.objects.create(platform='Facebook', connected=False)
+            AccountDB.objects.create(platform='Instagram', connected=False)
+            AccountDB.objects.create(platform='Discord', connected=False)
+            AccountDB.objects.create(platform='Reddit', connected=False)
+            AccountDB.objects.create(platform='Everytime', connected=False)
+            AccountDB.objects.create(platform='Youtube', connected=False)
+        return render(request, 'page/init.html', parameters('Start'))
+    def Home(request):
+        return render(request, 'page/home.html', parameters('Home'))
+    def Explore(request):
+        return render(request, 'page/explore.html', parameters('Explore'))
+    def Watch(request):
+        return render(request, 'page/watch.html', parameters('Watch'))
+    def Contacts(request):
+        return render(request, 'page/contacts.html', parameters('Contacts'))
+    def Create(request):
+        return render(request, 'page/create.html', parameters('Create'))
+    def Test(request):
+        AccountDB.objects.create(platform='Facebook', token='Test', name='Test', tag='Test', connected=True)
+        return HttpResponse('Test')

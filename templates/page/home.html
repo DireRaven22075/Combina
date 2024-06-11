@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ko">
+{% load static %}
+
+<head>
+    <title>Combina : {{page}}</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href='https://fonts.googleapis.com/css?family=Noto Sans' rel='stylesheet'>
+
+    <!-- StyleSheet Link (Section) -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Body.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Main.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Title.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Sub.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Subtitle.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Navigation.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Menubar.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/section/Popup.css' %}" />
+
+    <!-- StyleSheet Link (additional Style) -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style/Platform.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style/Noselect.css' %}" />
+
+    <!-- StyleSheet Link (Element) -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/element/content.css' %}" />
+
+    <!-- Javascript Link (Interaction) -->
+    <script src="{% static 'js/interacts/detail.js' %}"></script>
+    <script src="{% static 'js/Menubar.js' %}"></script>
+
+    <!-- Javascript Link (ui-updates) -->
+    <script src="{% static 'js/ui-updates/navigation.js' %}"></script>
+    <script src="{% static 'js/ui-updates/detail.js' %}"></script>
+</head>
+
+<body>
+    <header id="Menubar">
+        <div class="title"><label><img src="{% static 'img/AppLogo.svg' %}" <label></div>
+         <div onclick="js:goto('/home')" class="element button"><label><img
+                    src="{% static 'img/icon/home.svg'%}" </label></div>
+        <div onclick="js:goto('/explore')" class="element button"><label><img
+                    src="{% static 'img/icon/explore.svg'%}" </label></div>
+        <div onclick="js:goto('/contacts')" class="element button"><label><img
+                    src="{% static 'img/icon/contacts.svg'%}" </label></div>
+        <div onclick="js:goto('/watch')" class="element button"><label><img
+                    src="{% static 'img/icon/watch.svg'%}" </label></div>
+        <div onclick="js:goto('/create')" class="element button"><label><img
+                    src="{% static 'img/icon/create.svg'%}" </label></div>
+    </header>
+
+    <div id="Main">
+        {% for content in contents %}
+        <div onclick="js:detail(this); js:setColorById('{{content.platform}}', 'Subtitle')" class="content">
+            <input type="text" value="{{content}}" style="display: none;"/>
+            <div class="header"><img class="icon noselect" src="{{content.icon}}" />
+                <span class="info">
+                    <p>{{content.userID}}</p>
+                    <p>{{content.platform}}</p>
+                </span>
+            </div>
+            <div class="body">
+                <p>{{content.text}}</p><img src="{{content.image}}" />
+            </div>
+            <div class="footer">
+                {% if content.platform == 'Facebook' %}
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+        <div onclick="js:openDetail(this); js:setColorById('Facebook', 'Subtitle')" class="content">
+            <input type="text" value="{{content}}" style="display: none;"/>
+            <div class="header"><img class="icon" src="fsafa" />
+                <span class="info">
+                    <p>한윤수</p>
+                    <p>Facebook</p>
+                </span>
+            </div>
+            <div class="body">
+                <p>ㅇㅁㄴㅇㄴㄹㅁㄹ</p>
+                <img src="{{content.image}}" />
+            </div>
+            <div class="footer">
+            </div>
+        </div>
+        <div onclick="js:openDetail(this); js:setColorById('Instagram', 'Subtitle')" class="content">
+            <input type="text" value="{{content}}" style="display: none;"/>
+            <div class="header"><img class="icon" src="fsafa" />
+                <span class="info">
+                    <p>한윤수</p>
+                    <p>Facebook</p>
+                </span>
+            </div>
+            <div class="body">
+                <p>ㅇㅁㄴㅇㄴㄹㅁㄹ</p>
+                <img src="{{content.image}}" />
+            </div>
+            <div class="footer">
+            </div>
+        </div>
+        <div onclick="js:openDetail(this); js:setColorById('Facebook', 'Subtitle')" class="content">
+            <input type="text" value="{{content}}" style="display: none;"/>
+            <div class="header"><img class="icon" src="fsafa" />
+                <span class="info">
+                    <p>한윤수</p>
+                    <p>Facebook</p>
+                </span>
+            </div>
+            <div class="body">
+                <p>ㅇㅁㄴㅇㄴㄹㅁㄹ</p>
+                <img src="{{content.image}}" />
+            </div>
+            <div class="footer">
+            </div>
+        </div>
+        <div onclick="js:openDetail(this); js:setColorById('Facebook', 'Subtitle')" class="content">
+            <input type="text" value="{{content}}" style="display: none;"/>
+            <div class="header"><img class="icon" src="fsafa" />
+                <span class="info">
+                    <p>한윤수</p>
+                    <p>Facebook</p>
+                </span>
+            </div>
+            <div class="body">
+                <p>ㅇㅁㄴㅇㄴㄹㅁㄹ</p>
+                <img src="{{content.image}}" />
+            </div>
+            <div class="footer">
+            </div>
+        </div>
+        <div onclick="js:openDetail(this); js:setColorById('Facebook', 'Subtitle')" class="content">
+            <input type="text" value="{{content}}" style="display: none;"/>
+            <div class="header"><img class="icon" src="fsafa" />
+                <span class="info">
+                    <p>한윤수</p>
+                    <p>Facebook</p>
+                </span>
+            </div>
+            <div class="body">
+                <p>ㅇㅁㄴㅇㄴㄹㅁㄹ</p>
+                <img src="{{content.image}}" />
+            </div>
+            <div class="footer">
+            </div>
+        </div>
+        <div onclick="js:openDetail(this); js:setColorById('Facebook', 'Subtitle')" class="content">
+            <input type="text" value="{{content}}" style="display: none;"/>
+            <div class="header"><img class="icon" src="fsafa" />
+                <span class="info">
+                    <p>한윤수</p>
+                    <p>Facebook</p>
+                </span>
+            </div>
+            <div class="body">
+                <p>ㅇㅁㄴㅇㄴㄹㅁㄹ</p>
+                <img src="{{content.image}}" />
+            </div>
+            <div class="footer">
+            </div>
+        </div>
+        <div onclick="js:openDetail(this); js:setColorById('Facebook', 'Subtitle')" class="content">
+            <input type="text" value="{{content}}" style="display: none;"/>
+            <div class="header"><img class="icon" src="fsafa" />
+                <span class="info">
+                    <p>한윤수</p>
+                    <p>Facebook</p>
+                </span>
+            </div>
+            <div class="body">
+                <p>ㅇㅁㄴㅇㄴㄹㅁㄹ</p>
+                <img src="{{content.image}}" />
+            </div>
+            <div class="footer">
+            </div>
+        </div>
+        <div onclick="js:openDetail(this); js:setColorById('Facebook', 'Subtitle')" class="content">
+            <input type="text" value="{{content}}" style="display: none;"/>
+            <div class="header"><img class="icon" src="fsafa" />
+                <span class="info">
+                    <p>한윤수</p>
+                    <p>Facebook</p>
+                </span>
+            </div>
+            <div class="body">
+                <p>ㅇㅁㄴㅇㄴㄹㅁㄹ</p>
+                <img src="{{content.image}}" />
+            </div>
+            <div class="footer">
+            </div>
+        </div>
+        <div onclick="js:openDetail(this); js:setColorById('Facebook', 'Subtitle')" class="content">
+            <input type="text" value="{{content}}" style="display: none;"/>
+            <div class="header"><img class="icon" src="fsafa" />
+                <span class="info">
+                    <p>한윤수</p>
+                    <p>Facebook</p>
+                </span>
+            </div>
+            <div class="body">
+                <p>ㅇㅁㄴㅇㄴㄹㅁㄹ</p>
+                <img src="{{content.image}}" />
+            </div>
+            <div class="footer">
+            </div>
+        </div>
+        <div onclick="js:openDetail(this); js:setColorById('Facebook', 'Subtitle')" class="content">
+            <input type="text" value="{{content}}" style="display: none;"/>
+            <div class="header"><img class="icon" src="fsafa" />
+                <span class="info">
+                    <p>한윤수</p>
+                    <p>Facebook</p>
+                </span>
+            </div>
+            <div class="body">
+                <p>ㅇㅁㄴㅇㄴㄹㅁㄹ</p>
+                <img src="{{content.image}}" />
+            </div>
+            <div class="footer">
+            </div>
+        </div>
+        <div onclick="js:openDetail(this); js:setColorById('Facebook', 'Subtitle')" class="content">
+            <input type="text" value="{{content}}" style="display: none;"/>
+            <div class="header"><img class="icon" src="fsafa" />
+                <span class="info">
+                    <p>한윤수</p>
+                    <p>Facebook</p>
+                </span>
+            </div>
+            <div class="body">
+                <p>ㅇㅁㄴㅇㄴㄹㅁㄹ</p>
+                <img src="{{content.image}}" />
+            </div>
+            <div class="footer">
+            </div>
+        </div>
+    </div>
+    <div id="Title" style="text-align: center; display: flex; justify-content: center; align-items: center;">
+        <div>Home</div>
+    </div>
+    <div id="Navigation" style="background: rgb(255, 255, 255)">
+        <input type="button" onclick="js:navigation('All')" value="All" />
+        {% for platform in platforms %}
+        <input type="button" onclick="js:navigation('{{platform}}')" value="{{platform}}" />
+        {% endfor %}
+    </div>
+    <div id="Sub" style="display: none;">
+    </div>
+    <div id="Subtitle" style="display: none;">
+        <input onclick="js:closeDetail();" type="image" src= "{% static 'img/icon/quit.svg' %}" />
+    </div>
+    <div id="Popup" style="display: none">
+        <div class="popup">
+
+        </div>
+    </div>
+</body>
+
+</html>

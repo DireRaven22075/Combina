@@ -1,11 +1,12 @@
 from django.urls import path
 from .views import *
-from .sql import *
-from asgiref.sync import async_to_sync
+
 urlpatterns = [
-    path('', Welcome, name='home'),
-    path('home/', Home, name='home'),
-    path('find/', Find, name='find'),
-    path('post/', Post, name='post'),
-    path('menu/', Menu, name='menu'),
+    path('', PageView.Init, name="Start"),
+    path('test/', PageView.Test, name="Test"),
+    path('home/', PageView.Home, name="Home"),
+    path('explore/', PageView.Explore, name="Search"),
+    path('contacts/', PageView.Contacts, name="Contacts"),
+    path('watch/', PageView.Watch, name="Video"),
+    path('create/', PageView.Create, name="Create"),
 ]

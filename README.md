@@ -9,36 +9,32 @@ Combina: Combine + @
 
 ## Authors
 
-- [@AEROKnight0210](https://github.com/AEROKnight0210) - 임진형 - 2023041006
+- 2023041006 - [임진형@AEROKnight0210](https://github.com/AEROKnight0210)
 1. front-end 디자인 & 서브 프로그래밍
 2. API 시스템 프로그래밍
 3. Web Crawling 서브 프로그래밍
 4. React Native를 통한 앱 포팅
 
-- [@direraven22075](https://www.github.com/DireRaven22075) - 한윤수 - 2023041004
+- 2023041004 - [한윤수@direraven22075](https://www.github.com/DireRaven22075)
 1. git repository 관리
 2. front-end 메인 프로그래밍
 3. django 시스템 구축
 
-- [@scalar0114](https://www.github.com/scalar0114) - 오현승 - 2023041001
+- 2023041004 - [오현승@scalar0114](https://www.github.com/scalar0114)
 1. chatting 시스템 구축
 2. django 시스템 서브 구축
 
-- [@hcy0157](https://github.com/hcy0157) - 한철연 - 2023041033
+- 2023041033 - [한철연@hcy0157](https://github.com/hcy0157)
 1. API 시스템 프로그래밍
 2. Data Conversion
 3. Web Crawling 프로그래밍
 
-## Screenshots
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
-
 ## Supported social accounts/platforms
 
-- Facebook (Crawling)
-- Instagram (Crawling)
+- Facebook
+- Instagram
 - Youtube
-- X(Twitter)
+- Everytime
 - Discord
 - Reddit
 
