@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <title>Combina</title>
+    <title>Discord-Chating</title>
     <meta charset="UTF-8" />
     <style>
         body {
@@ -190,7 +190,7 @@
             button.disabled = true;
 
             try {
-                const response = await fetch('/discord/fetch-discord-messages/', {
+                const response = await fetch('/discord/get-content/', {
                     method: 'POST',
                     headers: {
                         'X-CSRFToken': getCookie('csrftoken'),
@@ -385,7 +385,7 @@
 </head>
 
 <body>
-    <h1>Combina</h1>
+    <h1>Discord-Chating</h1>
     <div class="container">
         <h2>메시지 보내기</h2>
         <div class="message-input-container">

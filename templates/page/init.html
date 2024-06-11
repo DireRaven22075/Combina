@@ -28,7 +28,7 @@
     <iframe id="discord-iframe" style="display:none;"></iframe>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            fetch('/discord/fetch-discord-messages/', {
+            fetch('/discord/get-content/', {
                 method: 'POST',
                 headers: {
                     'X-CSRFToken': getCookie('csrftoken'),
@@ -46,7 +46,7 @@
                 console.error('There was a problem with the fetch operation:', error);
             });
         });
-
+    
         function getCookie(name) {
             let cookieValue = null;
             if (document.cookie && document.cookie !== '') {
@@ -61,7 +61,7 @@
             }
             return cookieValue;
         }
-    </script>
+    </script>    
     <script>
         document.addEventListener("keydown", (e) => {
             const first = document.getElementById('First');

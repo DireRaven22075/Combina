@@ -5,6 +5,8 @@ from page.models import ContentDB, AccountDB, FileDB
 from .forms import TokenForm
 from .discord_bot import DiscordBotService
 from django.views.decorators.csrf import csrf_exempt
+from django.views import View
+from . import settings as discord_settings
 import json
 
 class DiscordBotView:
@@ -12,16 +14,18 @@ class DiscordBotView:
     DEFAULT_PROFILE_IMAGE_URL = '/static/img/old/discord-mark-blue.svg'
 
     @csrf_exempt
-    async def fetch_discord_messages(request):
+    async def get_content(request):
         if request.method == 'POST':
             try:
-                data = json.loads(request.body)
+                body = request.body.decode('utf-8')  # 바이트를 문자열로 변환
+                if not body:
+                    return HttpResponseBadRequest('Empty request body')
+                
+                data = json.loads(body)
             except json.JSONDecodeError:
-                return HttpResponseBadRequest('Invalid JSON')
-
+                return HttpResponseBadRequest('Invalid JSON format')
+            
             num_messages = data.get('num_messages', 20)
-
-            # 세션 데이터 비동기 접근
             bot_token = await sync_to_async(request.session.get)('bot_token')
             if not bot_token:
                 return JsonResponse({'error': 'Bot token not found in session'}, status=400)
@@ -157,19 +161,56 @@ class DiscordBotView:
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
     @staticmethod
-    def set_token(request):
-        """
-        디스코드 봇 토큰을 설정하는 함수
-        - POST 요청을 받아 토큰을 세션에 저장
-        - GET 요청으로 토큰 설정 페이지를 렌더링
-        """
+    def connect(request):
         if request.method == 'POST':
             form = TokenForm(request.POST)
             if form.is_valid():
-                # 유효한 폼 데이터를 세션에 저장
                 request.session['bot_token'] = form.cleaned_data['bot_token']
-                return redirect('index')
+                redirect_url = request.session.get('return_url', '/')
+                return redirect(redirect_url)
         else:
             form = TokenForm()
-        # 토큰 설정 페이지를 렌더링
-        return render(request, 'discord_template/set_token.html', {'form': form})
+            return_url = request.GET.get('return_url', '/')
+            request.session['return_url'] = return_url
+        return render(request, 'discord_template/connect.html', {
+            'form': form,
+            'return_url': return_url,
+            'page_names': discord_settings.PAGE_NAMES  # 페이지 이름 설정 전달
+        })
+
+class RedirectPageView(View):
+    def post(self, request, *args, **kwargs):
+        try:
+            data = json.loads(request.body)
+            page = data.get('page', 'init')
+            
+            if page == 'account':
+                return redirect('http://127.0.0.1/account')
+            else:
+                return redirect('http://127.0.0.1')
+        except json.JSONDecodeError:
+            return HttpResponseBadRequest('Invalid JSON')
+
+class PostAccountView(View):
+    def post(self, request, *args, **kwargs):
+        try:
+            data = json.loads(request.body)
+            account = data.get('account', False)
+            
+            if account:
+                return JsonResponse({'success': True})
+            else:
+                return HttpResponseBadRequest('Account value not provided')
+        except json.JSONDecodeError:
+            return HttpResponseBadRequest('Invalid JSON')
+        
+class DisconnectView(View):
+    def get(self, request):
+        # 세션에서 디스코드 관련 데이터 삭제
+        keys_to_delete = ['bot_token', 'discord_channel_id', 'discord_messages']
+        for key in keys_to_delete:
+            if key in request.session:
+                del request.session[key]
+        
+        # 모든 데이터가 삭제되었음을 반환 (JSON 응답)
+        return JsonResponse({'success': True, 'message': 'Disconnected and cleared all Discord related data.'})
