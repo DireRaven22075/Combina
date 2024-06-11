@@ -1,0 +1,121 @@
+<!-- templates/home.html -->
+{% extends 'every_test/base.html' %}
+
+{% block content %}
+<h1>Posts</h1>
+<div id="post-list">
+    {% for post in contents %}
+        <div class="post">
+            <p>{{ post.text }}</p>
+            <p>By: {{ post.userID }}</p>
+            <p>Votes: {{ post.vote }}</p>
+            {% if post.image_url %}
+                <img src="{{ post.image_url }}" alt="Post Image">
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
+
+<h2>Create Post</h2>
+<form id="create-post-form" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <textarea id="multiline-text" name="text" placeholder="Enter your contents" rows="10" cols="50"></textarea>
+    <input type="file" name="image" accept="image/*">
+    <button type="submit">Submit</button>
+</form>
+
+<h2>Search Posts</h2>
+<form id="search-post-form" method="post">
+    {% csrf_token %}
+    <input type="text" name="search" placeholder="Search keyword" required>
+    <button type="submit">Search</button>
+</form>
+<h2>Reload Posts</h2>
+<form method="post" action="/every/free_field/">
+    {% csrf_token %}
+    <button type="submit">Reload</button> 
+</form>
+
+<div id="search-results"></div>
+
+<script>
+// 포스트 생성
+$('#create-post-form').submit(function(event) {
+    event.preventDefault();
+    var formData = new FormData(this);
+    $.ajax({
+        url: '/every/post_field/',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            if (response.status === 'success') {
+                $('#post-list').prepend(
+                    '<div class="post">' +
+                    '<p>' + response.post.text + '</p>' +
+                    (response.post.image ? '<img src="' + response.post.image + '" alt="Post Image">' : '') +
+                    '</div>'
+                );
+                $('#create-post-form')[0].reset();
+            }
+        }
+    });
+});
+
+// 포스트 검색
+$('#search-post-form').submit(function(event) {
+    event.preventDefault();
+    $.ajax({
+        url: '/every/search/',
+        type: 'POST',
+        data: $(this).serialize(),
+        success: function(response) {
+            if (response.status === 'success') {
+                var resultsContainer = $('#search-results');
+                resultsContainer.empty();
+                response.posts.forEach(function(post) {
+                    resultsContainer.append(
+                        '<div class="post">' +
+                        '<p>' + post.text + '</p>' +
+                        '<p>By: ' + post.user + '</p>' +
+                        '<p>Votes: ' + post.vote + '</p>' +
+                        (post.image ? '<img src="' + post.image + '" alt="Post Image">' : '') +
+                        '</div>'
+                    );
+                });
+            }
+        }
+    });
+});
+</script>
+<script>
+    function submitForm() {
+        var form = document.getElementById('myForm');
+        var formData = new FormData(form); // FormData 객체 생성
+
+        // CSRF 토큰 가져오기
+        var csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+
+        fetch('/every/post_field/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken
+            },
+            body: formData // FormData 전송
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+</script>
+{% endblock %}

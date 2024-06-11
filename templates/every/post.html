@@ -2,14 +2,14 @@
 <html>
 <head>
     <title>Input Page</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <form method="POST" action="/every/post/post_info/" enctype="multipart/form-data">
+    <form id="myForm" enctype="multipart/form-data">
         {% csrf_token %}
-        {{form.as_p}}
         <textarea id="multiline-text" name="text" placeholder="Enter your contents" rows="10" cols="50"></textarea>
-        <input type="file" name="image" accept="image/*" multiple>
-        <button type="submit">submit</button>
+        <input type="file" id="image" name="image" accept="image/*" multiple>
+        <button type="button" onclick="submitForm()">Submit</button>
     </form>
     <h1>Everytime</h1>
     {% if post %}
@@ -17,5 +17,35 @@
         <p>{{ post.text }}</p>
         <!--<img src="{{ post_image.url }}" alt="{{post_image}}"> -->
     {% endif %}
+
+    <script>
+        function submitForm() {
+            var form = document.getElementById('myForm');
+            var formData = new FormData(form); // FormData 객체 생성
+
+            // CSRF 토큰 가져오기
+            var csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+
+            fetch('/every/post_field/', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken
+                },
+                body: formData // FormData 전송
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
 </body>
 </html>
