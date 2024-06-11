@@ -15,26 +15,30 @@ class DiscordBotView:
 
     @csrf_exempt
     async def get_content(request):
-        if request.method == 'POST':
-            try:
-                body = request.body.decode('utf-8')  # 바이트를 문자열로 변환
-                if not body:
-                    return HttpResponseBadRequest('Empty request body')
+        if request.method == 'POST' or request.method == 'GET':
+            if request.method == 'POST':
+                try:
+                    body = request.body.decode('utf-8')
+                    if not body:
+                        return HttpResponseBadRequest('Empty request body')
+
+                    data = json.loads(body)
+                except json.JSONDecodeError:
+                    return HttpResponseBadRequest('Invalid JSON format')
                 
-                data = json.loads(body)
-            except json.JSONDecodeError:
-                return HttpResponseBadRequest('Invalid JSON format')
-            
-            num_messages = data.get('num_messages', 20)
+                num_messages = data.get('num_messages', 20)
+            else:
+                num_messages = request.GET.get('num_messages', 20)
+
             bot_token = await sync_to_async(request.session.get)('bot_token')
             if not bot_token:
                 return JsonResponse({'error': 'Bot token not found in session'}, status=400)
 
             bot_service = DiscordBotService(bot_token)
-            await bot_service.run_bot(num_messages)
+            await bot_service.run_bot(int(num_messages))
 
             messages = await sync_to_async(list)(
-                ContentDB.objects.filter(platform='discord').order_by('-id')[:num_messages].values('userID', 'userIcon', 'text', 'image_url')
+                ContentDB.objects.filter(platform='discord').order_by('-id')[:int(num_messages)].values('userID', 'userIcon', 'text', 'image_url')
             )
 
             for message in messages:
