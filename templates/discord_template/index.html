@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+    <meta charset="UTF-8">
     <title>Discord-Chating</title>
-    <meta charset="UTF-8" />
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -139,8 +139,29 @@
 
         .button-group {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .button-group label {
+            font-size: 16px;
+            color: #333;
+            margin-right: 10px;
+        }
+
+        select {
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+            font-size: 16px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s;
+        }
+
+        select:focus {
+            border-color: #5865F2;
         }
 
         .file-input-container {
@@ -190,13 +211,12 @@
             button.disabled = true;
 
             try {
-                const response = await fetch('/discord/get-content/', {
-                    method: 'POST',
+                const response = await fetch('/discord/get-content/?num_messages=' + numMessages, {
+                    method: 'GET',
                     headers: {
                         'X-CSRFToken': getCookie('csrftoken'),
                         'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ num_messages: numMessages })
+                    }
                 });
                 const data = await response.json();
                 const messageContainer = document.getElementById('message-container');
