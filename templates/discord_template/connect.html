@@ -57,6 +57,25 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
     </style>
+    <script>
+        document.querySelector('form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const returnUrl = new URLSearchParams(window.location.search).get('return_url') || 'index';
+            fetch('/connect/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    bot_token: document.querySelector('[name="bot_token"]').value,
+                    return_url: returnUrl
+                })
+            }).then(response => response.json())
+            .then(data => window.location.href = data.return_url)
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
 </head>
 <body>
     <h1>Set Discord Bot Token</h1>
@@ -64,7 +83,8 @@
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit">봇 토큰 설정</button>
+            <input type="hidden" name="return_url" value="{{ request.session.return_url }}">
+            <button type="submit">Connect</button>
         </form>
     </div>
 </body>
