@@ -16,10 +16,8 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/03.contacts/message.css' %}" />
 
     <!-- Javascript Link -->
-    <script src="{% static 'js/func/goto.js' %}"></script>
-    <style>
-        .contacts-button {background-color: #e9e9e9;}
-    </style>
+    <script src="{% static 'js/00.all/Menubar.js' %}"></script>
+    <script src="{% static 'js/00.all/MainContainer.js' %}"></script>
 </head>
 
 <body>
@@ -38,21 +36,67 @@
     </header>
 
     <div id="Main">
-        <div class="message">
+        {% for message in messages %}
+        <div class="message" onclick="js:">
             <img class="icon" src="{% static 'img/logo-black.svg' %}" />
-            <p class="name">NAME</p>
-            <p class="platform">PLATFORM</p>
-            <br/>
-            <p class="recent">RECENT MESSAGE</p>
+            <div>
+                <p class="name">NAME</p>
+                <p class="platform">PLATFORM</p>
+            </div>
         </div>
+        {% endfor %}
+        {% if not messages %}
+        <div class="message" onclick="js:">
+            <img class="icon" src="{% static 'img/logo-black.svg' %}" />
+            <div>
+                <p class="name">NAME</p>
+                <p class="platform">PLATFORM</p>
+            </div>
+        </div>
+        <div class="message" onclick="js:">
+            <img class="icon" src="{% static 'img/logo-black.svg' %}" />
+            <div>
+                <p class="name">NAME</p>
+                <p class="platform">PLATFORM</p>
+            </div>
+        </div>
+        <div class="message" onclick="js:">
+            <img class="icon" src="{% static 'img/logo-black.svg' %}" />
+            <div>
+                <p class="name">NAME</p>
+                <p class="platform">PLATFORM</p>
+            </div>
+        </div>
+        <div class="message" onclick="js:">
+            <img class="icon" src="{% static 'img/logo-black.svg' %}" />
+            <div>
+                <p class="name">NAME</p>
+                <p class="platform">PLATFORM</p>
+            </div>
+        </div>
+        <div class="message" onclick="js:">
+            <img class="icon" src="{% static 'img/logo-black.svg' %}" />
+            <div>
+                <p class="name">NAME</p>
+                <p class="platform">PLATFORM</p>
+            </div>
+        </div>
+        <div class="message" onclick="js:">
+            <img class="icon" src="{% static 'img/logo-black.svg' %}" />
+            <div>
+                <p class="name">NAME</p>
+                <p class="platform">PLATFORM</p>
+            </div>
+        </div>
+        {% endif %}
     </div>
     <div id="Title">
         <div>Contacts</div>
     </div>
     <div id="Navigation" style="display: flex;">
-        <input type="button" onclick="js:navigation('All'); js:filter('All')" value="All"/>
+        <input type="button" onclick="js:ui_navigation('All'); js:filter('All')" value="All"/>
         {% for platform in platforms %}
-        <input type="button" onclick="js:navigation('{{platform}}'); js:filter('{{platform}}')" value="{{platform}}"/>
+        <input type="button" onclick="js:ui_navigation('{{platform}}'); js:filter('{{platform}}')" value="{{platform}}"/>
         {% endfor %}
     </div>
     <div id="Sub" style="display: none;"></div>

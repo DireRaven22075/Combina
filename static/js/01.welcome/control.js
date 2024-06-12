@@ -1,9 +1,7 @@
+/* 웰컴 화면 내의 모든 화면 컨트롤을 담당하는 함수 */
 function control(dest) {
     const btn = document.getElementById('Btn');
-    const page = [
-        document.getElementById('First'),
-        document.getElementById('Second')
-    ];
+    const page = [document.getElementById('First'), document.getElementById('Second')];
     if (dest=='next') {
         if (page[0].style.display == 'flex') {
             page[0].style.display = 'none';

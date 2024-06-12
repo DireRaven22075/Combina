@@ -28,7 +28,11 @@
             <img src="{% static 'img/combinalogo.svg' %}" />
         </div>
     </div>
-    {% if connection %}<div id="Second">{% else %}<div id="Second" style="display: none;">{% endif %}
+    {% if connection %}
+    <div id="Second">
+    {% else %}
+    <div id="Second" style="display: none;">
+    {% endif %}
         <p class="noselect prev" onclick="js:control('back')">◀</p>
         <div class="noselect header"><h2>Connect Account</h2></div>
         {% for account in accounts %}
@@ -37,6 +41,7 @@
         {% with platformIcon='img/icon/platform/'|add:account.platform|add:'.svg' %}
         {% if account.connected %}
         <div class="account noselect" onclick="js:goto('{{platformDisconnect}}')">
+<<<<<<< Updated upstream
             {% else %}
             <div class="account  noselect" onclick="js:goto('{{platformConnect}}')">
                 {% endif %}
@@ -50,8 +55,20 @@
             {% endwith %}
             {% endwith %}
             {% endwith %}
+=======
+        {% else %}
+        <div class="account  noselect" onclick="js:goto('{{platformConnect}}')">
+        {% endif %}
+            <img class="icon" src="{% static platformIcon %}" />
+            {% if account.connected %} {{account.platform}} - {{account.userId}}
+            {% else %} {{account.platform}} {% endif %}
+>>>>>>> Stashed changes
         </div>
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
         {% endfor %}
+        </div>
     </div>
     <input id="Btn" type="button" onclick="js:control('next')" value="Get started..." />
 </body>
