@@ -2,6 +2,7 @@
 <html lang="ko">
 {% load static %}
 <head>
+    
     <title>Combina : {{page}}</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -48,12 +49,12 @@
         {% with platformConnect='/'|add:account.platform|add:'/connect' %}
         {% with platformIcon='img/icon/platform/'|add:account.platform|add:'.svg' %}
         {% if account.connected %}
-        <div class="account noselect" onclick="js:goto('{{platformDisconnect}}')">
+        <div class="account noselect" onclick="js:goto('{{platformDisconnect}}')" style="width: 90%; margin-left: 3%;">
         {% else %}
-        <div class="account  noselect" onclick="js:goto('{{platformConnect}}')">
+        <div class="account  noselect" onclick="js:goto('{{platformConnect}}')" style="width: 90%; margin-left: 3%;">
         {% endif %}
             <img class="icon" src="{% static platformIcon %}" />
-            {% if account.connected %} {{account.platform}} - {{account.userId}}
+            {% if account.connected %} {{account.platform}} - {{account.name}}
             {% else %} {{account.platform}} {% endif %}
         </div>
         {% endwith %}
@@ -61,9 +62,8 @@
         {% endwith %}
         {% endfor %}
     </div>
-    <div id="Title">
-
-    </div>
+    <div id="Title"><div>Accounts</div></div>
+    <div id="Navigation"></div>
     <div id="Sub" style="display: none;"></div>
     <div id="Subtitle" style="display: none;"></div>
 </body>

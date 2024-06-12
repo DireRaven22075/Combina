@@ -14,8 +14,10 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/SubContainer.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/04.create/menuButton.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/04.create/Post.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/04.create/Preview.css' %}" />
 
     <script src="{% static 'js/00.all/Menubar.js' %}"></script>
+    <script src="{% static 'js/04.create/Preview.js' %}"></script>
 </head>
 
 <body>
@@ -33,19 +35,19 @@
                     src="{% static 'img/icon/more.svg'%}" >More</label></div>
     </header>
 
-    <form id="Main" class="post">
+    <form id="Main" method="POST" class="post" action="/server/post/">
         {% csrf_token %}
-        <h3>Title</h3>
+        <h3 class="noselect">Title</h3>
         <input required maxlength="100" id="PostTitle" name="title" type="text" placeholder="Write..." />
-        <h3>Details</h3>
+        <h3 class="noselect">Details</h3>
         <textarea required maxlength="200" id="PostContent" name="text" placeholder="Write..."></textarea>
-        <h4>Image</h4>
+        <h4 class="noselect">Media</h4>
         <input type="file" id="PostImage" name="File" multiple accept="image/*" />
         
         <div>
             {% for account in accounts %}
             {% if account.connected %}
-            <input type="checkbox" name="account" value="{{account.platform}}" />
+            <input type="checkbox" required name="account" value="{{account.platform}}" />
             <label>{{account.platform}}</label>
             {% endif %}
             {% endfor %}
@@ -53,44 +55,14 @@
         <input type="submit" value="Post" />
     </form>
     <div id="Title"><div>Create</div></div>
-    <div id="Sub">
-        <div id="Preview">
-            <h1 id="PreviewTitle">(TITLE)</h1>
-            <pre id="PreviewContent">(CONTENT)</pre>
-            <div id="PreviewImage"></div>
-        </div>
+    <div id="Sub" class="noselect">
+        <div id="Preview"><h1 id="PreviewTitle"></h1><pre id="PreviewContent"></pre><div id="PreviewImage"></div></div>
     </div>
     <div id="Navigation">
     </div>
-    <div id="Subtitle"></div>
+    <div id="Subtitle">Preview</div>
     <script>
-        const preview = {
-            "title": document.getElementById('PreviewTitle'),
-            "content": document.getElementById('PreviewContent'),
-            "image": document.getElementById('PreviewImage')
-        };
-        document.getElementById('PostTitle').addEventListener('focusout', function (e) {
-            if (e.target.value == '') e.target.value = "이곳에 타이틀이 표시됩니다.";
-            preview['title'].innerHTML = e.target.value;
-        });
-        document.getElementById('PostContent').addEventListener('focusout', function (e) {
-            if (e.target.value == '') e.target.value = "이곳에 내용이 표시됩니다.";
-            preview['content'].innerHTML = e.target.value;
-        });
-        document.getElementById('PostImage').addEventListener('change', function (e) {
-            var files = e.target.files;
-            preview["image"].innerHTML = "";
-            for (var i = 0; i < files.length; i++) {
-                var file = files[i];
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    var img = document.createElement('img');
-                    img.src = e.target.result;
-                    preview["image"].appendChild(img);
-                }
-                reader.readAsDataURL(file);
-            }
-        });
+        
     </script>
 </body>
 

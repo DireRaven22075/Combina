@@ -17,7 +17,7 @@ function filter(platform) {
 //#endregion 
 
 //#region ui-updates
-function navigation(platform) {
+function ui_navigation(platform) {
     const target = document.getElementById("Navigation");
     for (const child of target.children) {
         child.style.color = (platform == "All") ? "#000000" : "#FFFFFF";

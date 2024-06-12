@@ -19,6 +19,7 @@
     <!-- Javascript Link -->
     <script src="{% static 'js/00.all/Menubar.js' %}"></script>
     <script src="{% static 'js/00.all/MainContainer.js' %}"></script>
+    <script src="{% static 'js/02.home/SubContainer.js' %}"></script>
 </head>
 
 <body>
@@ -87,8 +88,7 @@
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque id tortor nec turpis sodales scelerisque a rhoncus odio. Integer dictum magna et finibus accumsan. Sed sit amet euismod quam, nec tincidunt mi. Vivamus varius commodo massa. Sed at elit quis arcu sodales egestas non id lacus. Suspendisse vel viverra libero. Curabitur ligula neque, suscipit eget orci eu, lacinia posuere metus. In suscipit nisl non metus consectetur, et aliquam metus semper. Cras gravida magna commodo neque pharetra, in pulvinar ligula dapibus. Aliquam pharetra lobortis lobortis. Pellentesque maximus sem dui, non rutrum velit maximus sed. Nulla ornare risus in quam mattis viverra. Pellentesque urna augue, posuere vitae gravida id, lacinia laoreet metus. Vestibulum quis rhoncus justo. Interdum et malesuada fames ac ante ipsum primis in faucibus.</p>
                 <img src="{{content.image}}" />
             </div>
-            <div class="footer">
-            </div>
+            <div class="footer"></div>
         </div>
         <div onclick="js:openDetail(this); js:setColorById(this, 'Facebook', 'Subtitle')" class="content Everytime">
             <input type="text" value="{{content}}" style="display: none;"/>
@@ -170,9 +170,9 @@
         <div>Home</div>
     </div>
     <div id="Navigation" style="display: flex;">
-        <input type="button" onclick="js:navigation('All'); js:filter('All')" value="All"/>
+        <input type="button" onclick="js:ui_navigation('All'); js:filter('All')" value="All"/>
         {% for platform in platforms %}
-        <input type="button" onclick="js:navigation('{{platform}}'); js:filter('{{platform}}')" value="{{platform}}"/>
+        <input type="button" onclick="js:ui_navigation('{{platform}}'); js:filter('{{platform}}')" value="{{platform}}"/>
         {% endfor %}
     </div>
 
