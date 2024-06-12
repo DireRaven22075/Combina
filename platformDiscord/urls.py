@@ -6,7 +6,7 @@ app_name = 'platformDiscord'
 
 urlpatterns = [
     path('', DiscordBotView.index, name='index'),
-    path('get-content/', async_to_sync(DiscordBotView.get_content), name='get_content'),  # 새로운 URL
+    path('get-content/', async_to_sync(DiscordBotView.get_content), name='get_content'),
     path('send-discord-message/', async_to_sync(DiscordBotView.send_discord_message), name='send_discord_message'),
     path('set-channel-id/', async_to_sync(DiscordBotView.set_channel_id), name='set_channel_id'),
     path('update-bot-profile/', async_to_sync(DiscordBotView.update_bot_profile_view), name='update_bot_profile'),

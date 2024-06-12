@@ -174,35 +174,45 @@ class DiscordBotView:
     def connect(request):
         """
         디스코드 봇 토큰을 설정하고 리다이렉트하는 함수
-        - POST 요청을 통해 봇 토큰을 설정
-        - GET 요청을 통해 반환 URL을 설정하여 리다이렉트
+        - POST 요청을 통해 봇 토큰을 설정하고 원래 페이지로 리다이렉트.
         """
         if request.method == 'POST':
-            form = TokenForm(request.POST)
-            if form.is_valid():
-                request.session['bot_token'] = form.cleaned_data['bot_token']
-                redirect_url = request.session.get('return_url', '/')
-                return redirect(redirect_url)
+            try:
+                body = request.body.decode('utf-8')
+                data = json.loads(body)
+                bot_token = data.get('bot_token')
+                return_url = data.get('return_url', '/')
+                if bot_token:
+                    request.session['bot_token'] = bot_token
+                    return JsonResponse({
+                        'redirect_url': return_url,
+                        'connection': True  # connection 값을 True로 설정
+                    })
+                else:
+                    return JsonResponse({'error': 'Bot token is required'}, status=400)
+            except json.JSONDecodeError:
+                return JsonResponse({'error': 'Invalid JSON format'}, status=400)
+            except Exception as e:
+                return JsonResponse({'error': str(e)}, status=400)
         else:
             form = TokenForm()
             return_url = request.GET.get('return_url', '/')
             request.session['return_url'] = return_url
-        return render(request, 'discord_template/connect.html', {
-            'form': form,
-            'return_url': return_url,
-            'page_names': discord_settings.PAGE_NAMES  # 페이지 이름 설정 전달
-        })
+            return render(request, 'discord_template/connect.html', {
+                'form': form,
+                'return_url': return_url
+            })
 
 class RedirectPageView(View):
     def post(self, request, *args, **kwargs):
         """
         페이지 리다이렉트를 처리하는 함수
-        - POST 요청을 받아 'page' 파라미터에 따라 다른 URL로 리다이렉트
+        - POST 요청을 받아 'page' 파라미터에 따라 다른 URL로 리다이렉트.
         """
         try:
             data = json.loads(request.body)
             page = data.get('page', 'init')
-            
+
             if page == 'account':
                 return redirect('http://127.0.0.1/account')
             else:
@@ -228,17 +238,42 @@ class PostAccountView(View):
             return HttpResponseBadRequest('Invalid JSON')
 
 class DisconnectView(View):
-    def get(self, request):
+    def post(self, request):
         """
-        디스코드와의 연결을 해제하고 관련 데이터를 삭제하는 함수
-        - 세션에서 디스코드 관련 데이터 삭제
-        - 성공 메시지를 JSON으로 반환
+        플랫폼 연결 해제.
+        - 관련된 모든 세션 데이터를 삭제.
+        - 성공 메시지 반환.
         """
-        # 세션에서 디스코드 관련 데이터 삭제
         keys_to_delete = ['bot_token', 'discord_channel_id', 'discord_messages']
         for key in keys_to_delete:
             if key in request.session:
                 del request.session[key]
         
-        # 모든 데이터가 삭제되었음을 반환 (JSON 응답)
         return JsonResponse({'success': True, 'message': 'Disconnected and cleared all Discord related data.'})
+
+class ConnectView(View):
+    def get(self, request):
+        """
+        플랫폼 연동을 위한 페이지를 반환.
+        - GET 요청에서 `return_url` 파라미터를 받아 세션에 저장.
+        """
+        return_url = request.GET.get('return_url', '/')
+        request.session['return_url'] = return_url
+        return render(request, 'platform_template/connect.html', {
+            'form': TokenForm(),
+            'return_url': return_url,
+        })
+
+    def post(self, request):
+        """
+        POST 요청에서 토큰을 받아 저장하고 원래 페이지로 리다이렉트.
+        """
+        form = TokenForm(request.POST)
+        if form.is_valid():
+            request.session['bot_token'] = form.cleaned_data['bot_token']
+            redirect_url = request.session.get('return_url', '/')
+            return JsonResponse({
+                'redirect_url': redirect_url,
+                'connection': True  # connection 값을 True로 설정
+            })
+        return JsonResponse({'error': 'Invalid form data'}, status=400)
