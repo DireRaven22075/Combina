@@ -24,72 +24,70 @@
     <button type="submit">Submit</button>
 </form>
 
-<h2>Search Posts</h2>
+<!-- <h2>Search Posts</h2>
 <form id="search-post-form" method="post">
     {% csrf_token %}
     <input type="text" name="search" placeholder="Search keyword" required>
     <button type="submit">Search</button>
-</form>
+</form> -->
 <h2>Reload Posts</h2>
-<form method="post" action="/every/free_field/">
+<form method="post" action="/Everytime/get-content/">
     {% csrf_token %}
     <button type="submit">Reload</button> 
 </form>
-
-<div id="search-results"></div>
+<button id="init-button" onclick="redirectToLoginPage()">Login</button>
 
 <script>
-// 포스트 생성
-$('#create-post-form').submit(function(event) {
-    event.preventDefault();
-    var formData = new FormData(this);
-    $.ajax({
-        url: '/every/post_field/',
-        type: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function(response) {
-            if (response.status === 'success') {
-                $('#post-list').prepend(
-                    '<div class="post">' +
-                    '<p>' + response.post.text + '</p>' +
-                    (response.post.image ? '<img src="' + response.post.image + '" alt="Post Image">' : '') +
-                    '</div>'
-                );
-                $('#create-post-form')[0].reset();
-            }
-        }
-    });
-});
+    function redirectToLoginPage() {   
+        // POST 데이터
+        var postData = { page: 'init' };
+        
+       
+        var csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+        postData.csrfmiddlewaretoken = csrfToken;
+        // POST 요청
+        $.post('/Everytime/connect/', postData)
+            .done(function(data) {
+                if (data.redirect_url) {
+                    console.log('Redirecting to:', data.redirect_url);
+                } else {
+                    console.error('No redirect URL found.');
+                }
+            })
+            .fail(function(xhr) {
+                console.error('Error:', xhr.responseText);
+            });
+            window.location.href = '/Everytime/connect/';
+    }
+</script>
 
-// 포스트 검색
-$('#search-post-form').submit(function(event) {
-    event.preventDefault();
-    $.ajax({
-        url: '/every/search/',
-        type: 'POST',
-        data: $(this).serialize(),
-        success: function(response) {
-            if (response.status === 'success') {
-                var resultsContainer = $('#search-results');
-                resultsContainer.empty();
-                response.posts.forEach(function(post) {
-                    resultsContainer.append(
+<script>
+    // 포스트 생성
+    $('#create-post-form').submit(function(event) {
+        event.preventDefault();
+        var formData = new FormData(this);
+        $.ajax({
+            url: '/Everytime/post_field/',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.status === 'success') {
+                    $('#post-list').prepend(
                         '<div class="post">' +
-                        '<p>' + post.text + '</p>' +
-                        '<p>By: ' + post.user + '</p>' +
-                        '<p>Votes: ' + post.vote + '</p>' +
-                        (post.image ? '<img src="' + post.image + '" alt="Post Image">' : '') +
+                        '<p>' + response.post.text + '</p>' +
+                        (response.post.image ? '<img src="' + response.post.image + '" alt="Post Image">' : '') +
                         '</div>'
                     );
-                });
+                    $('#create-post-form')[0].reset();
+                }
             }
-        }
+        });
     });
-});
+    
 </script>
-<script>
+<!-- <script>
     function submitForm() {
         var form = document.getElementById('myForm');
         var formData = new FormData(form); // FormData 객체 생성
@@ -117,5 +115,5 @@ $('#search-post-form').submit(function(event) {
             console.error('Error:', error);
         });
     }
-</script>
+</script> -->
 {% endblock %}

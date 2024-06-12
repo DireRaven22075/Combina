@@ -3,6 +3,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service as ChromeService
 from page.models import ContentDB, FileDB
 from .account import Account
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from .utils import sleep, quit_driver_forcefully
 import tempfile
 import os
@@ -33,10 +35,10 @@ class Post:
         
         try:
 
-            free_field_box = driver.find_element(By.XPATH, "//*[@id=\"container\"]/div[4]/div[1]/div/h3/a")
+            free_field_box = driver.find_element(By.XPATH, "//*[@id=\"submenu\"]/div/div[2]/ul/li[1]/a")
             free_field_box.click()
+            WebDriverWait(driver, 10).until(EC.new_window_is_opened)
             sleep()
-            
            # 글쓰기 //*[@id="writeArticleButton"] 
             post_box = driver.find_element(By.XPATH, "//*[@id=\"writeArticleButton\"]")
             post_box.click()

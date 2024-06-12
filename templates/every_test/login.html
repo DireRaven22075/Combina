@@ -7,74 +7,36 @@
     <title>Login</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        // Helper function to get CSRF token
-        function getCSRFToken() {
-            const csrfTokenElement = document.querySelector('[name=csrfmiddlewaretoken]');
-            return csrfTokenElement ? csrfTokenElement.value : '';
-        }
+       
+        $(document).ready(function() {
+            $('#backButton').click(function() {
+                var postData={
+                    'page':'init'
+                };
 
-        // Go Back button click handler
-        function goBack() {
-            const csrfToken = getCSRFToken();
-            const referrer = document.referrer || '/every/'; // Fallback to home if no referrer
 
-        
-            fetch(referrer, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-CSRFToken': csrfToken
-                },
-                body: new URLSearchParams({
-                    'page': 'account',
-                    'connection': 'True'
-                })
-            })
-            .then(response => {
-                if (response.ok) {
-                    // Redirect to the previous page
-                    console.log('Success:', response);
-                    window.location.href = referrer;
-                } else {
-                    // Handle errors
-                    response.json().then(data => alert('Error: ' + (data.error || response.statusText)));
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Failed to send request.');
+                console.log("Sending POST request with data:", postData);
+              
+                // POST 요청 및 페이지 이동
+                $.post('/Everytime/redirect_page/', postData)
+                    .done(function(data) {
+                        if (data.redirect_url) {
+                            console.log("Redirecting to:", data.redirect_url);
+                            if (data.connection) {
+                                console.log("User is logged in. Connection is True.");
+                            } else {
+                                console.log("User is not logged in. Connection is False.");
+                            }
+                            window.location.href = data.redirect_url;
+                        } else {
+                            console.error('No redirect URL found.');
+                        }
+                    })
+                    .fail(function(xhr) {
+                        console.error('Error:', xhr.responseText);
+                    });
             });
-        }
-        function goHome() {
-            const csrfToken = getCSRFToken();
-            const firstUrl = '/'; // First URL
-
-            // AJAX request
-            fetch(firstUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-CSRFToken': csrfToken
-                },
-                body: new URLSearchParams({
-                    'page': 'account',
-                    'connection': 'True'
-                })
-            })
-            .then(response => {
-                if (response.ok) {
-                    // Redirect to the first URL
-                    window.location.href = '/';
-                } else {
-                    // Handle errors
-                    response.json().then(data => alert('Error: ' + (data.error || response.statusText)));
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Failed to send request.');
-            });
-        }
+        });
     </script>
 </head>
 <body>
@@ -90,38 +52,6 @@
         {% csrf_token %}
         <button type="submit">Logout</button>
     </form>
-    <button type="button" onclick="goBack()">Go Back</button>
-    <button type="button" onclick="goHome()">Go Home</button>
-    <!-- <script>
-        document.getElementById('goback-button').addEventListener('click', function(event) {
-            event.preventDefault(); // Prevent the default form submission
-
-            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-            fetch(document.referrer, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-CSRFToken': csrfToken
-                },
-                body: new URLSearchParams({
-                    'page': 'account',
-                    'connection': 'True'
-                })
-            })
-            .then(response => {
-                if (response.ok) {
-                    // Redirect to the previous page or handle success
-                    window.location.href = document.referrer;
-                } else {
-                    // Handle errors
-                    alert('Error: ' + response.statusText);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        });
-    </script> -->
+    <button id="backButton">Back</button>
 </body>
 </html>

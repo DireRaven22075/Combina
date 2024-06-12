@@ -1,0 +1,161 @@
+URL을 하드코딩하지 않고 유연하게 구성하려면, Django의 URL 리버싱 기능을 사용하여 URL 패턴 이름을 기반으로 동적으로 URL을 생성하는 것이 좋습니다. 또한, 뷰 로직에서 URL을 하드코딩하지 않고 설정에서 기반 URL을 가져오거나 URL 패턴을 활용하여 생성할 수 있습니다.
+
+아래는 각 페이지에 대한 URL을 설정에서 정의하고, URL 리버싱을 활용하여 동적으로 URL을 생성하는 방법입니다.
+
+### **1. URL 리버싱을 위한 설정**
+
+**Django `urls.py`**
+
+URL 패턴을 이름으로 지정하여 리버싱을 사용할 수 있게 설정합니다.
+
+```python
+# urls.py
+
+from django.urls import path
+from .views import login_page, redirect_page, home_page, account_page
+
+urlpatterns = [
+    path('everytime/connect', login_page, name='login_page'),
+    path('', home_page, name='home_page'),
+    path('account', account_page, name='account_page'),
+    path('redirect_page', redirect_page, name='redirect_page'),
+]
+```
+
+### **2. URL 리버싱을 사용하여 뷰에서 동적 URL 생성**
+
+**Django `views.py`**
+
+`reverse` 함수를 사용하여 URL을 동적으로 생성합니다.
+
+```python
+# views.py
+
+from django.http import JsonResponse
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
+
+# 로그인 페이지 렌더링
+def login_page(request):
+    page = request.GET.get('page', 'init')  # 기본값 'init'
+    return render(request, 'login.html', {'page': page})
+
+# 로그인 상태 확인 함수
+def check_login_status(request):
+    return request.user.is_authenticated if hasattr(request, 'user') else False
+
+# 리다이렉션 및 POST 요청 처리
+@csrf_exempt
+def redirect_page(request):
+    if request.method == 'POST':
+        page = request.POST.get('page')
+        connection = request.POST.get('connection')
+
+        # 동적 URL 생성
+        if page == 'init':
+            url = reverse('home_page')
+        elif page == 'account':
+            url = reverse('account_page')
+        else:
+            url = reverse('login_page')
+
+        response_data = {'redirect_url': request.build_absolute_uri(url)}
+
+        # 로그인 상태 확인 후 connection 추가
+        if check_login_status(request):
+            response_data['connection'] = 'True'
+
+        return JsonResponse(response_data)
+    return JsonResponse({'error': 'Invalid request'}, status=400)
+```
+
+- `reverse` 함수는 URL 패턴의 이름을 사용하여 URL을 생성합니다.
+- `request.build_absolute_uri(url)`는 생성된 상대 URL을 절대 URL로 변환합니다.
+
+### **3. 템플릿에서 "Back" 버튼 설정**
+
+**Django `login.html`**
+
+템플릿은 변경할 필요가 없습니다. 여전히 `page` 값을 사용하여 JavaScript에서 처리합니다.
+
+```html
+<!-- login.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Page</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#backButton').click(function() {
+                var page = '{{ page }}';
+                var postData = { page: page };
+
+                // 로그인 상태 확인
+                if (checkLoginStatus()) {
+                    postData['connection'] = true;
+                }
+
+                // POST 요청 및 페이지 이동
+                $.post('/redirect_page', postData)
+                    .done(function(data) {
+                        if (data.redirect_url) {
+                            window.location.href = data.redirect_url;
+                        } else {
+                            console.error('No redirect URL found.');
+                        }
+                    })
+                    .fail(function(xhr) {
+                        console.error('Error:', xhr.responseText);
+                    });
+            });
+        });
+
+        // 로그인 상태 확인 함수
+        function checkLoginStatus() {
+            // 쿠키 기반 로그인 상태 확인 예시
+            return document.cookie.split(';').some((item) => item.trim().startsWith('sessionid='));
+        }
+    </script>
+</head>
+<body>
+    <h1>Login Page</h1>
+    <form method="post" action="/login">
+        <!-- 로그인 폼 요소들 -->
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+    </form>
+    <button id="backButton">Back</button>
+</body>
+</html>
+```
+
+### **4. 뷰에서 홈과 계정 페이지 렌더링**
+
+**Django `views.py`**
+
+홈 페이지와 계정 페이지를 렌더링하는 뷰를 추가합니다.
+
+```python
+# views.py
+
+from django.shortcuts import render
+
+def home_page(request):
+    return render(request, 'home.html')
+
+def account_page(request):
+    return render(request, 'account.html')
+```
+
+### **결론**
+
+- **동적 URL 생성**: URL 리버싱을 사용하여 뷰에서 동적으로 URL을 생성할 수 있습니다. 이를 통해 하드코딩된 URL을 제거하고 URL 설정이 변경되더라도 코드를 유지보수하기 쉽게 만듭니다.
+- **URL 리버싱**: `reverse` 함수를 사용하여 URL 패턴의 이름을 기반으로 동적으로 URL을 생성합니다. `request.build_absolute_uri`는 절대 URL을 반환하여 클라이언트 측에서 사용합니다.
+- **로그인 상태 처리**: 로그인 상태를 확인하는 `check_login_status` 함수는 `request`를 파라미터로 받아 세션을 검사합니다.
+
+이 접근 방식은 URL 변경에 유연하게 대처하며, 유지보수성을 높이고 Django의 기능을 잘 활용하는 방법입니다.

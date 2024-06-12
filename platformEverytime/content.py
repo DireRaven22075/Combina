@@ -8,8 +8,9 @@ from page.models import ContentDB, FileDB
 from .utils import sleep, quit_driver_forcefully
 from .account import Account
 from django.db.models import Count, Max
-
-MAX_POSTS = 5
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+MAX_POSTS = 20
 
 class Content:
     #DB에 값만 저장
@@ -18,9 +19,9 @@ class Content:
         try:
             free_field_box = driver.find_element(By.XPATH, "//*[@id=\"submenu\"]/div/div[2]/ul/li[1]/a")
             free_field_box.click()
+            WebDriverWait(driver, 10).until(EC.new_window_is_opened)
             sleep()
-            
-            for i in range(1, MAX_POSTS):
+            for i in range(MAX_POSTS, 0, -1):
                 post = driver.find_element(By.XPATH, f'//*[@id="container"]/div[5]/article[{i}]/a')
                 info = driver.find_element(By.XPATH, f'//*[@id="container"]/div[5]/article[{i}]/a/div/div')
                 
@@ -75,7 +76,7 @@ class Content:
                     image_url = 0
                     print("no image")
                 ContentDB.objects.create(
-                    platform = "everytime",
+                    platform = "Everytime",
                     userID = post_user,
                     text = post_title+"|||" + post_text,
                     image_url = image_url,
@@ -172,7 +173,7 @@ class Content:
                     print("no image")
 
                 ContentDB.objects.create(
-                    platform = "everytime",
+                    platform = "Everytime",
                     userID = post_user,
                     text = post_title+"|||" + post_text,
                     image_url = image_url,
