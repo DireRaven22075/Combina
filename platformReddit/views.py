@@ -1,8 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from page.models import *
-from .auth import get_credentials
-from .posts import get_saved_posts, get_upvoted_posts, get_subreddit_posts, get_random_subscribed_posts
 # Create your views here.
 class RedditView:
     # Connect to Reddit

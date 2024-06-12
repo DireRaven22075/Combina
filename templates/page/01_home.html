@@ -19,7 +19,7 @@
     <!-- Javascript Link -->
     <script src="{% static 'js/00.all/Menubar.js' %}"></script>
     <script src="{% static 'js/00.all/MainContainer.js' %}"></script>
-    <script src="{% static 'js/02.home/SubContainer.js' %}"></script>
+    <script src="{% static 'js/02.home/Detail.js' %}"></script>
 </head>
 
 <body>
@@ -39,9 +39,7 @@
     
     <div id="Main">
         {% for content in contents %}
-        {% if searching %}
-        <div onclick="js:detail(this); js:setColorById(this, '{{content.platform}}', 'Subtitle');" class="content {{content.platform}}">
-            <input type="text" value="{{content}}" style="display: none;"/>
+        <div onclick="js:setDetail(this); js:openDetail()" class="content {{content.platform}}">
             <div class="header"><img class="icon noselect" src="{{content.icon}}" />
                 <span class="info">
                     <p>{{content.userID}}</p>
@@ -49,122 +47,12 @@
                 </span>
             </div>
             <div class="body">
-                <p>{{content.text}}</p><img src="{{content.image}}" />
-            </div>
-            <div class="footer">
-                {% if content.platform == 'Facebook' %}
-                {% endif %}
+                <p>{{content.text}}</p>
+                <img src="{{content.image}}" />
+                <video src="{{content.video}}" controls></video>
             </div>
         </div>
-        {% else %}
-        <div onclick="js:detail(this); js:setColorById(this, '{{content.platform}}', 'Subtitle');" class="content {{content.platform}}">
-            <input type="text" value="{{content}}" style="display: none;"/>
-            <div class="header"><img class="icon noselect" src="{{content.icon}}" />
-                <span class="info">
-                    <p>{{content.userID}}</p>
-                    <p>{{content.platform}}</p>
-                </span>
-            </div>
-            <div class="body">
-                <p>{{content.text}}</p><img src="{{content.image}}" />
-            </div>
-            <div class="footer">
-                {% if content.platform == 'Facebook' %}
-                {% endif %}
-            </div>
-        </div>
-        {% endif %}
-
         {% endfor %}
-        <div onclick="js:openDetail(this); js:setColorById(this, 'Facebook', 'Subtitle');" class="content">
-            <input type="text" value="{'text' : 'title|temp', 'icon': 'fdsaf'}" style="display: none;"/>
-            <div class="header"><img class="icon" src="fsafa" />
-                <span class="info">
-                    <p>한윤수</p>
-                    <p>Facebook</p>
-                </span>
-            </div>
-            <div class="body">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque id tortor nec turpis sodales scelerisque a rhoncus odio. Integer dictum magna et finibus accumsan. Sed sit amet euismod quam, nec tincidunt mi. Vivamus varius commodo massa. Sed at elit quis arcu sodales egestas non id lacus. Suspendisse vel viverra libero. Curabitur ligula neque, suscipit eget orci eu, lacinia posuere metus. In suscipit nisl non metus consectetur, et aliquam metus semper. Cras gravida magna commodo neque pharetra, in pulvinar ligula dapibus. Aliquam pharetra lobortis lobortis. Pellentesque maximus sem dui, non rutrum velit maximus sed. Nulla ornare risus in quam mattis viverra. Pellentesque urna augue, posuere vitae gravida id, lacinia laoreet metus. Vestibulum quis rhoncus justo. Interdum et malesuada fames ac ante ipsum primis in faucibus.</p>
-                <img src="{{content.image}}" />
-            </div>
-            <div class="footer"></div>
-        </div>
-        <div onclick="js:openDetail(this); js:setColorById(this, 'Facebook', 'Subtitle')" class="content Everytime">
-            <input type="text" value="{{content}}" style="display: none;"/>
-            <div class="header"><img class="icon" src="fsafa" />
-                <span class="info">
-                    <p>한윤수</p>
-                    <p>Facebook</p>
-                </span>
-            </div>
-            <div class="body">
-                <p>ㅇㅁㄴㅇㄴㄹㅁㄹ</p>
-                <img src="{{content.image}}" />
-            </div>
-            <div class="footer">
-            </div>
-        </div>
-        <div onclick="js:openDetail(this); js:setColorById(this, 'Facebook', 'Subtitle')" class="content Youtube">
-            <input type="text" value="{{content}}" style="display: none;"/>
-            <div class="header"><img class="icon" src="fsafa" />
-                <span class="info">
-                    <p>한윤수</p>
-                    <p>Youtube</p>
-                </span>
-            </div>
-            <div class="body">
-                <p>ㅇㅁㄴㅇㄴㄹㅁfsdfafasㄹ</p>
-                <video src="{{content.image}}" controls></video>
-            </div>
-            <div class="footer">
-            </div>
-        </div>
-        <div onclick="js:openDetail(this); js:setColorById(this, 'Facebook', 'Subtitle')" class="content Facebook">
-            <input type="text" value="{{content}}" style="display: none;"/>
-            <div class="header"><img class="icon" src="fsafa" />
-                <span class="info">
-                    <p>한윤수</p>
-                    <p>Facebook</p>
-                </span>
-            </div>
-            <div class="body">
-                <p>ㅇㅁㄴㅇㄴㄹㅁㄹ</p>
-                <img src="{{content.image}}" />
-            </div>
-            <div class="footer">
-            </div>
-        </div>
-        <div onclick="js:openDetail(this); js:setColorById(this, 'Facebook', 'Subtitle')" class="content Everytime">
-            <input type="text" value="{{content}}" style="display: none;"/>
-            <div class="header"><img class="icon" src="fsafa" />
-                <span class="info">
-                    <p>한윤수</p>
-                    <p>Everytime</p>
-                </span>
-            </div>
-            <div class="body">
-                <p>ㅇㅁㄴㅇㄴㄹㅁㄹ</p>
-                <img src="{{content.image}}" />
-            </div>
-            <div class="footer">
-            </div>
-        </div>
-        <div onclick="js:openDetail(this); js:setColorById(this, 'Facebook', 'Subtitle')" class="content Instagram">
-            <input type="text" value="{{content}}" style="display: none;"/>
-            <div class="header"><img class="icon" src="fsafa" />
-                <span class="info">
-                    <p>한윤수</p>
-                    <p>Facebook</p>
-                </span>
-            </div>
-            <div class="body">
-                <p>Test</p>
-                <img src="{{content.image}}" />
-            </div>
-            <div class="footer">
-            </div>
-        </div>
     </div>
     <div id="Title">
         <div>Home</div>
@@ -176,14 +64,18 @@
         {% endfor %}
     </div>
 
-    <div id="Sub" style="display: none;">
-        <h3 id="Detail_Title"></h3>
-        <p id="Detail_Content"></p>
-        <video id="Detail_Video" controls></video>
-        <img id="Detail_Image" />
+    <div id="Sub" style="visibility: hidden;">
+        <h3 id="DetailTitle"></h3>
+        <p id="DetailContent"></p>
+        <video id="DetailVideo" controls></video>
+        <img id="DetailImage" />
     </div>
-    <div id="Subtitle" style="display: none;">
+    <div id="Subtitle" style="visibility: hidden;">
         <input onclick="js:closeDetail();" type="image" src= "{% static 'img/icon/quit.svg' %}" />
+        <div>
+            <h3 id="DetailUser"></h3>
+            <p id="DetailPlatform"></p>
+        </div>
     </div>
 </body>
 

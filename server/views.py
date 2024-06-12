@@ -6,32 +6,36 @@ from django.middleware.csrf import get_token
 from page.models import *
 from page.views import *
 class ServerView:
+    def Disconnect(request):
+        for account in AccountDB.objects.all():
+            account.name = ""
+            account.tag = ""
+            account.token = ""
+            account.connected = False
+            account.save()
+        return redirect(request.META.get('HTTP_REFERER', '/home'))
     def Post(request):
         if (request.method == "POST"):
             session = requests.Session()
             print(get_token(request))
             data = {}
             data["title"] = request.POST.get("title")
-            data["target"] = request.POST.get("platform")
             data["content"] = request.POST.get("content")
-            data["file"] = request.POST.get("file")
-            data['csrftoken'] = get_token(request)
-            headers = {
-                'X-CSRFToken': get_token(request),
-            }
-            requests.post('http://127.0.0.1:8000/server/test/',headers=headers, data=data)
-            #requests.get("/discord/post", data=data)
-            #requests.get("/everytime/post", data=data)
+            if (request.POST.get("Facebook") != None):
+                redirect('/facebook/post', data=data)
+            if (request.POST.get("Instagram") != None):
+                redirect('/instagram/post', data=data)
+            if (request.POST.get("Discord") != None):
+                redirect('/discord/post', data=data)
+            if (request.POST.get("Reddit") != None):
+                redirect('/reddit/post', data=data)
+            if (request.POST.get("Everytime") != None):
+                redirect('/everytime/post', data=data)
+            if (request.POST.get("Youtube") != None):
+                redirect('/youtube/post', data=data)
             return redirect(request.META.get('HTTP_REFERER', '/home'))
         else:
             return HttpResponse("Invalid request method")
-    def Test(request):
-        data = ContentDB(
-            text=request.POST.get("content"),
-        )
-        data.save()
-        ContentDB.objects.create(content=request.POST.get("content")).save()
-        return JsonResponse({"status": "success"})
     def ClearContent(request):
         ContentDB.objects.all().delete()
         FileDB.objects.all().delete()

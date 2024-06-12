@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+{% load static %}
+
+<head>
+    <title>Welcome 2 Combina</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href='https://fonts.googleapis.com/css?family=Noto Sans' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/Body.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/Noselect.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/01.welcome/First.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/01.welcome/Second.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/01.welcome/Button.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/01.welcome/FadeOut.css' %}" />
+
+    <script src="{% static 'js/01.welcome/control.js' %}"></script>
+    <script>function goto(dest) { window.location.href = dest; window.scrollTo(0, 0); return; }</script>
+</head>
+
+<body>
+    {% for platform in platforms %}
+    {% with get='/'|add:platform|add:'/get-content' %}
+    <iframe src="{{get}}"></iframe>
+    {% endwith %}
+    {% endfor %}
+    <div id="First" style="display:flex;">
+        <div class="header">
+            <img src="{% static 'img/combinalogo.svg' %}" />
+        </div>
+    </div>
+    <input id="Btn" type="button" onclick="js:goto('/start')" value="Get started..." />
+
+    {% if not connected %}
+    <div id="FadeOut">
+        연동된 계정이 존재하지 않아 시작화면으로 이동합니다.
+    </div>
+    {% endif %}
+</body>
+
+</html>

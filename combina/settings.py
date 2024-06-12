@@ -34,6 +34,10 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 INSTALLED_APPS = [
     "page",
     "platformDiscord",
+    "platformReddit",
+    "platformYoutube",
+    "platformFacebook",
+    "platformInstagram",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
