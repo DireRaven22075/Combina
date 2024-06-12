@@ -34,6 +34,7 @@
     position: fixed;
     background-color: #ffffff;
     border-bottom: 0em solid #EBEBEB;
+    text-align: center; display: flex; justify-content: center; align-items: center;
 }
 
 #Navigation {

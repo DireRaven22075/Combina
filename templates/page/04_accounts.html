@@ -12,7 +12,8 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/MainContainer.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/SubContainer.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/05.accounts/menuButton.css' %}" />
-    
+    <link rel="stylesheet" type="text/css" href="{% static 'css/05.accounts/account.css' %}" />
+
     <!-- Javascript Link (Interaction) -->
     <script src="{% static 'js/Menubar.js' %}"></script>
 
@@ -42,7 +43,23 @@
     </header>
 
     <div id="Main">
-
+        {% for account in accounts %}
+        {% with platformDisconnect='/'|add:account.platform|add:'/disconnect' %}
+        {% with platformConnect='/'|add:account.platform|add:'/connect' %}
+        {% with platformIcon='img/icon/platform/'|add:account.platform|add:'.svg' %}
+        {% if account.connected %}
+        <div class="account noselect" onclick="js:goto('{{platformDisconnect}}')">
+        {% else %}
+        <div class="account  noselect" onclick="js:goto('{{platformConnect}}')">
+        {% endif %}
+            <img class="icon" src="{% static platformIcon %}" />
+            {% if account.connected %} {{account.platform}} - {{account.userId}}
+            {% else %} {{account.platform}} {% endif %}
+        </div>
+        {% endwith %}
+        {% endwith %}
+        {% endwith %}
+        {% endfor %}
     </div>
     <div id="Title">
 

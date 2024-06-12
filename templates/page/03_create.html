@@ -13,13 +13,9 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/MainContainer.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/SubContainer.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/04.create/menuButton.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/04.create/Post.css' %}" />
 
-    <!-- Javascript Link (Interaction) -->
-    <script src="{% static 'js/Menubar.js' %}"></script>
-    <script src="{% static 'js/interacts/previewImage.js %'}"></script>
-
-    <!-- Javascript Link (ui-updates) -->
-    <script src="{% static 'js/ui-updates/navigation.js' %}"></script>
+    <script src="{% static 'js/00.all/Menubar.js' %}"></script>
 </head>
 
 <body>
@@ -40,51 +36,12 @@
     <form id="Main" class="post">
         {% csrf_token %}
         <h3>Title</h3>
-        <input required maxlength="100" name="title" type="text" placeholder="Write..." />
+        <input required maxlength="100" id="PostTitle" name="title" type="text" placeholder="Write..." />
         <h3>Details</h3>
-        <textarea required maxlength="200" name="text" placeholder="Write..."></textarea>
+        <textarea required maxlength="200" id="PostContent" name="text" placeholder="Write..."></textarea>
         <h4>Image</h4>
-        <input type="file" id="File" name="File" multiple accept="image/*" />
-        <h4>Preview</h4>
-        <div class="previewController">
-            <input type="button" onclick="js:prev()" value="Prev"/>
-            <input type="button" onclick="js:next()" value="Next"/>
-        </div>
-        <div id="ImagePreview"></div>
-        <script>
-            function prev() {
-                var imgs = document.getElementById('ImagePreview').getElementsByTagName('img');
-                imgs[idx].style.display = "none";
-                idx = (idx - 1 + imgs.length) % imgs.length;
-                imgs[idx].style.display = "block";
-            }
-            function next() {
-                var imgs = document.getElementById('ImagePreview').getElementsByTagName('img');
-                imgs[idx].style.display = "none";
-                idx = (idx + 1) % imgs.length;
-                imgs[idx].style.display = "block";
-            }
-            var idx = 0;
-            document.getElementById('File').addEventListener('change', function (e) {
-                var cnt = 0;
-                idx = 0;
-                var files = e.target.files;
-                var previewContainer = document.getElementById('ImagePreview');
-                previewContainer.innerHTML = '';
-                for (var i = 0; i < files.length; i++) {
-                    var file = files[i];
-                    var reader = new FileReader();
-                    reader.onload = function (e) {
-                        var img = document.createElement('img');
-                        img.src = e.target.result;
-                        img.style.display = (cnt == 0) ? "block" : "none";
-                        previewContainer.appendChild(img);
-                        cnt++;
-                    }
-                    reader.readAsDataURL(file);
-                }
-            });
-        </script>
+        <input type="file" id="PostImage" name="File" multiple accept="image/*" />
+        
         <div>
             {% for account in accounts %}
             {% if account.connected %}
@@ -95,19 +52,46 @@
         </div>
         <input type="submit" value="Post" />
     </form>
-    <div id="Title" style="text-align: center; display: flex; justify-content: center; align-items: center;">
-        <div>Create</div>
+    <div id="Title"><div>Create</div></div>
     <div id="Sub">
-
+        <div id="Preview">
+            <h1 id="PreviewTitle">(TITLE)</h1>
+            <pre id="PreviewContent">(CONTENT)</pre>
+            <div id="PreviewImage"></div>
+        </div>
     </div>
     <div id="Navigation">
-        {% for account in accounts %}
-        {% endfor %}
     </div>
-
-    <div id="Subtitle">
-        
-    </div>
+    <div id="Subtitle"></div>
+    <script>
+        const preview = {
+            "title": document.getElementById('PreviewTitle'),
+            "content": document.getElementById('PreviewContent'),
+            "image": document.getElementById('PreviewImage')
+        };
+        document.getElementById('PostTitle').addEventListener('focusout', function (e) {
+            if (e.target.value == '') e.target.value = "이곳에 타이틀이 표시됩니다.";
+            preview['title'].innerHTML = e.target.value;
+        });
+        document.getElementById('PostContent').addEventListener('focusout', function (e) {
+            if (e.target.value == '') e.target.value = "이곳에 내용이 표시됩니다.";
+            preview['content'].innerHTML = e.target.value;
+        });
+        document.getElementById('PostImage').addEventListener('change', function (e) {
+            var files = e.target.files;
+            preview["image"].innerHTML = "";
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var img = document.createElement('img');
+                    img.src = e.target.result;
+                    preview["image"].appendChild(img);
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
 </body>
 
 </html>
