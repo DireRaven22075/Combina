@@ -289,7 +289,7 @@
 
             async function sendToServer(message, imageData) {
                 try {
-                    const response = await fetch('/discord/send-discord-message/', {
+                    const response = await fetch('/discord/post/', {
                         method: 'POST',
                         headers: {
                             'X-CSRFToken': getCookie('csrftoken'),
@@ -424,7 +424,7 @@
             <label for="num-messages">불러올 메시지 개수:</label>
             <select id="num-messages">
                 <option value="10">10개</option>
-                <option value="30" selected>30개</option>
+                <option value="20" selected>20개</option>
                 <option value="50">50개</option>
             </select>
             <button id="fetch-button" onclick="fetchMessages()">새로고침</button>

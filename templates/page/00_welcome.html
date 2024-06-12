@@ -41,28 +41,12 @@
         {% with platformIcon='img/icon/platform/'|add:account.platform|add:'.svg' %}
         {% if account.connected %}
         <div class="account noselect" onclick="js:goto('{{platformDisconnect}}')">
-<<<<<<< Updated upstream
-            {% else %}
-            <div class="account  noselect" onclick="js:goto('{{platformConnect}}')">
-                {% endif %}
-                <img class="icon" src="{% static platformIcon %}" />
-                {% if account.connected %}
-                {{account.platform}} - {{account.name}}
-                {% else %}
-                {{account.platform}}
-                {% endif %}
-            </div>
-            {% endwith %}
-            {% endwith %}
-            {% endwith %}
-=======
         {% else %}
         <div class="account  noselect" onclick="js:goto('{{platformConnect}}')">
         {% endif %}
             <img class="icon" src="{% static platformIcon %}" />
-            {% if account.connected %} {{account.platform}} - {{account.userId}}
+            {% if account.connected %} {{account.platform}} - {{account.name}}
             {% else %} {{account.platform}} {% endif %}
->>>>>>> Stashed changes
         </div>
             {% endwith %}
             {% endwith %}

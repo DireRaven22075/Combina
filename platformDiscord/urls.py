@@ -8,7 +8,7 @@ urlpatterns = [
     path('connect/', DiscordBotView.connect, name='connect'),
     path('disconnect/', DisconnectView.as_view(), name='disconnect'),
     path('get-content/', async_to_sync(DiscordBotView.get_content), name='get_content'),
-    path('send-discord-message/', async_to_sync(DiscordBotView.send_discord_message), name='send-discord-message'),
+    path('post/', async_to_sync(DiscordBotView.send_discord_message), name='post'),
     
     path('', DiscordBotView.index, name='index'),
     path('set-channel-id/', async_to_sync(DiscordBotView.set_channel_id), name='set_channel_id'),
