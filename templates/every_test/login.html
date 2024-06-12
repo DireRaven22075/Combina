@@ -1,4 +1,3 @@
-<!-- templates/every_test/login.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,17 +6,19 @@
     <title>Login</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-       
+        var page = "{{ page }}";
+        console.log("Page:", page);
+        var connection = "{{ connection }}";
+        console.log("Connection:", connection);
+        
         $(document).ready(function() {
             $('#backButton').click(function() {
                 var postData={
-                    'page':'init'
+                    'page':page
                 };
-
 
                 console.log("Sending POST request with data:", postData);
               
-                // POST 요청 및 페이지 이동
                 $.post('/Everytime/redirect_page/', postData)
                     .done(function(data) {
                         if (data.redirect_url) {

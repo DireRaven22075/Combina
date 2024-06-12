@@ -1,4 +1,3 @@
-<!-- templates/home.html -->
 {% extends 'every_test/base.html' %}
 
 {% block content %}
@@ -17,35 +16,52 @@
 </div>
 
 <h2>Create Post</h2>
-<form id="create-post-form" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <textarea id="multiline-text" name="text" placeholder="Enter your contents" rows="10" cols="50"></textarea>
-    <input type="file" name="images" accept="image/*">
-    <button type="submit">Submit</button>
+<form id="create-post-form">
+    <input type="text" id="title" name="title" placeholder="Enter the title" required><br>
+    <textarea id="multiline-text" name="text" placeholder="Enter your contents" rows="10" cols="50" required></textarea><br>
+    <input type="file" id="images1" name="images" accept="image/*" multiple><br>
+    <input type="file" id="images2" name="images" accept="image/*" multiple><br>
+    <input type="file" id="images3" name="images" accept="image/*" multiple><br>
+    <button type="button" onclick="submitForm()">Submit</button>
 </form>
-
-<!-- <h2>Search Posts</h2>
-<form id="search-post-form" method="post">
-    {% csrf_token %}
-    <input type="text" name="search" placeholder="Search keyword" required>
-    <button type="submit">Search</button>
-</form> -->
 <h2>Reload Posts</h2>
 <form method="post" action="/Everytime/get-content/">
     {% csrf_token %}
     <button type="submit">Reload</button> 
 </form>
-<button id="init-button" onclick="redirectToLoginPage()">Login</button>
+<button id="init-button" onclick="redirectAccount()">Account</button>
+<button id="init-button" onclick="redirectInit()">Init</button>
 
 <script>
-    function redirectToLoginPage() {   
-        // POST 데이터
+    function redirectInit() {   
         var postData = { page: 'init' };
         
        
         var csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
         postData.csrfmiddlewaretoken = csrfToken;
-        // POST 요청
+    
+        $.post('/Everytime/connect/', postData)
+            .done(function(data) {
+                if (data.redirect_url) {
+                    console.log('Redirecting to:', data.redirect_url);
+                } else {
+                    console.error('No redirect URL found.');
+                }
+            })
+            .fail(function(xhr) {
+                console.error('Error:', xhr.responseText);
+            });
+            window.location.href = '/Everytime/connect/';
+    }
+</script>
+<script>
+    function redirectAccount() {   
+        var postData = { page: 'account' };
+        
+       
+        var csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+        postData.csrfmiddlewaretoken = csrfToken;
+    
         $.post('/Everytime/connect/', postData)
             .done(function(data) {
                 if (data.redirect_url) {
@@ -62,50 +78,46 @@
 </script>
 
 <script>
-    $('#create-post-form').submit(function(event) {
-        event.preventDefault();
-        var form = document.getElementById('create-post-form');
-        var formData = new FormData(form);
+   function submitForm() {
+    const title = document.getElementById('title').value;
+    const text = document.getElementById('multiline-text').value;
+    const files1 = document.getElementById('images1').files;
+    const files2 = document.getElementById('images2').files;
+    const files3 = document.getElementById('images3').files;
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('text', text);
     
-        // Prepare JSON part of the form data
-        var jsonData = {
-            title: 'Post Title',
-            text: formData.get('text'),
-            files: []
-        };
-    
-        // Collect file names for the JSON part (optional, for server-side tracking)
-        var files = formData.getAll('images');
-        files.forEach(file => jsonData.files.push(file.name));
-    
-        // Convert JSON to a blob and append to FormData
-        //formData.delete('text'); // Remove text from formData
-        formData.append('json_data', JSON.parse(jsonData));
-        
-        console.log(formData)
-        debugger;
-        // Send formData via AJAX
-        $.ajax({
-            url: '/Everytime/post_field/',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            encytype: 'multipart/form-data',
-            success: function(response) {
-                if (response.status === 'success') {
-                    var postHtml = '<div class="post"><p>' + response.post.text + '</p>';
-                    response.post.images.forEach(image => {
-                        postHtml += '<img src="' + image + '" alt="Post Image">';
-                    });
-                    postHtml += '</div>';
-                    $('#post-list').prepend(postHtml);
-                    $('#create-post-form')[0].reset();
-                }
-            }
-        });
+    // 여러 파일 추가
+    for (let i = 0; i < files1.length; i++) {
+        formData.append('file', files1[i]);
+    }
+    for (let i = 0; i < files2.length; i++) {
+        formData.append('file', files2[i]);
+    }
+    for (let i = 0; i < files3.length; i++) {
+        formData.append('file', files3[i]);
+    }
+    const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+
+    fetch('/Everytime/post/', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': csrfToken
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+        // 성공 후 다른 페이지로 리다이렉트 또는 다른 동작 수행
+    })
+    .catch(error => {
+        console.error('Error:', error);
     });
-    </script>
+}
+
+</script>
 <!-- <script>
     function submitForm() {
         var form = document.getElementById('myForm');
