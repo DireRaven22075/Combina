@@ -34,6 +34,7 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 INSTALLED_APPS = [
     "page",
     "platformDiscord",
+    "platformEverytime",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
