@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+{% load static %}
+<head>
+    <title>Combina : Contacts</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- StyleSheet Link -->
+    <link href='https://fonts.googleapis.com/css?family=Noto Sans' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/Body.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/Noselect.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/Menubar.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/MainContainer.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/SubContainer.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/03.contacts/menuButton.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/03.contacts/message.css' %}" />
+
+    <!-- Javascript Link -->
+    <script src="{% static 'js/00.all/Menubar.js' %}"></script>
+    <script src="{% static 'js/00.all/MainContainer.js' %}"></script>
+</head>
+
+<body>
+    <header id="Menubar">
+        <div class="title"><img src="{% static 'img/combinalogo.svg' %}" /></div>
+        <div onclick="js:goto('/home')" class="element button home-button">
+            <label><img src="{% static 'img/icon/home.svg'%}" />Home</label></div>
+        <div onclick="js:goto('/contacts')" class="element button contacts-button">
+            <label><img src="{% static 'img/icon/contacts.svg'%}" />Contacts</label></div>
+        <div onclick="js:goto('/create')" class="element button create-button">
+            <label><img src="{% static 'img/icon/create.svg'%}" />Create</label></div>
+        <div onclick="js:goto('/accounts')" class="element button accounts-button">
+            <label><img src="{% static 'img/icon/profile.svg'%}" />Accounts</label></div>
+        <div onclick="js:goto('/settings')" class="element button settings-button">
+            <label><img src="{% static 'img/icon/more.svg'%}" />More</label></div>
+    </header>
+
+    <div id="Main">
+        {% for message in messages %}
+        <div class="message" onclick="js:">
+            <img class="icon" src="{% static 'img/logo-black.svg' %}" />
+            <div>
+                <p class="name">NAME</p>
+                <p class="platform">PLATFORM</p>
+            </div>
+        </div>
+        {% endfor %}
+        {% if not messages %}
+        <div class="message" onclick="js:">
+            <img class="icon" src="{% static 'img/logo-black.svg' %}" />
+            <div>
+                <p class="name">NAME</p>
+                <p class="platform">PLATFORM</p>
+            </div>
+        </div>
+        <div class="message" onclick="js:">
+            <img class="icon" src="{% static 'img/logo-black.svg' %}" />
+            <div>
+                <p class="name">NAME</p>
+                <p class="platform">PLATFORM</p>
+            </div>
+        </div>
+        <div class="message" onclick="js:">
+            <img class="icon" src="{% static 'img/logo-black.svg' %}" />
+            <div>
+                <p class="name">NAME</p>
+                <p class="platform">PLATFORM</p>
+            </div>
+        </div>
+        <div class="message" onclick="js:">
+            <img class="icon" src="{% static 'img/logo-black.svg' %}" />
+            <div>
+                <p class="name">NAME</p>
+                <p class="platform">PLATFORM</p>
+            </div>
+        </div>
+        <div class="message" onclick="js:">
+            <img class="icon" src="{% static 'img/logo-black.svg' %}" />
+            <div>
+                <p class="name">NAME</p>
+                <p class="platform">PLATFORM</p>
+            </div>
+        </div>
+        <div class="message" onclick="js:">
+            <img class="icon" src="{% static 'img/logo-black.svg' %}" />
+            <div>
+                <p class="name">NAME</p>
+                <p class="platform">PLATFORM</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    <div id="Title">
+        <div>Contacts</div>
+    </div>
+    <div id="Navigation" style="display: flex;">
+        <input type="button" onclick="js:ui_navigation('All'); js:filter('All')" value="All"/>
+        {% for platform in platforms %}
+        <input type="button" onclick="js:ui_navigation('{{platform}}'); js:filter('{{platform}}')" value="{{platform}}"/>
+        {% endfor %}
+    </div>
+    <div id="Sub" style="display: none;"></div>
+    <div id="Subtitle" style="display: none;"></div>
+</body>
+
+</html>

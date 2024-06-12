@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+{% load static %}
+<head>
+    
+    <title>Combina : {{page}}</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href='https://fonts.googleapis.com/css?family=Noto Sans' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/Body.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/Noselect.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/Menubar.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/MainContainer.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/SubContainer.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/05.accounts/menuButton.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/05.accounts/account.css' %}" />
+
+    <!-- Javascript Link (Interaction) -->
+    <script src="{% static 'js/Menubar.js' %}"></script>
+
+    <!-- Javascript Link (ui-updates) -->
+    <script src="{% static 'js/ui-updates/navigation.js' %}"></script>
+
+    <style>
+        .accounts-button {
+            background-color: #e9e9e9;
+        }
+    </style>
+</head>
+
+<body>
+    <header id="Menubar">
+        <div class="title"><label><img src="{% static 'img/combinalogo.svg' %}" <label></div>
+            <div onclick="js:goto('/home')" class="element button home-button"><label><img
+                    src="{% static 'img/icon/home.svg'%}" >Home</label></div>
+        <div onclick="js:goto('/contacts')" class="element button contacts-button"><label><img
+                    src="{% static 'img/icon/contacts.svg'%}" >Contacts</label></div>
+        <div onclick="js:goto('/create')" class="element button create-button"><label><img
+                    src="{% static 'img/icon/create.svg'%}" >Create</label></div>
+        <div onclick="js:goto('/accounts')" class="element button accounts-button"><label><img
+                    src="{% static 'img/icon/profile.svg'%}" >Accounts</label></div>
+        <div onclick="js:goto('/settings')" class="element button settings-button"><label><img
+                    src="{% static 'img/icon/more.svg'%}" >More</label></div>
+    </header>
+
+    <div id="Main">
+        {% for account in accounts %}
+        {% with platformDisconnect='/'|add:account.platform|add:'/disconnect' %}
+        {% with platformConnect='/'|add:account.platform|add:'/connect' %}
+        {% with platformIcon='img/icon/platform/'|add:account.platform|add:'.svg' %}
+        {% if account.connected %}
+        <div class="account noselect" onclick="js:goto('{{platformDisconnect}}')" style="width: 90%; margin-left: 3%;">
+        {% else %}
+        <div class="account  noselect" onclick="js:goto('{{platformConnect}}')" style="width: 90%; margin-left: 3%;">
+        {% endif %}
+            <img class="icon" src="{% static platformIcon %}" />
+            {% if account.connected %} {{account.platform}} - {{account.name}}
+            {% else %} {{account.platform}} {% endif %}
+        </div>
+        {% endwith %}
+        {% endwith %}
+        {% endwith %}
+        {% endfor %}
+    </div>
+    <div id="Title"><div>Accounts</div></div>
+    <div id="Navigation"></div>
+    <div id="Sub" style="display: none;"></div>
+    <div id="Subtitle" style="display: none;"></div>
+</body>
+</html>

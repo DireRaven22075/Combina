@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+{% load static %}
+
+<head>
+    <title>Welcome 2 Combina</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href='https://fonts.googleapis.com/css?family=Noto Sans' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/Body.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/Noselect.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/01.welcome/First.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/01.welcome/Second.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/01.welcome/Button.css' %}" />
+
+    <script src="{% static 'js/01.welcome/control.js' %}"></script>
+    <script>function goto(dest) {window.location.href = dest; window.scrollTo(0,0); return; }</script>
+</head>
+
+<body>
+    {% for platform in platforms %}
+    {% with get='/'|add:platform|add:'/get-content' %}
+    <iframe src="{{get}}"></iframe>
+    {% endwith %}
+    {% endfor %}
+    {% if connection %}<div id="First" style="display: none">{% else %}<div id="First" style="display:flex;">{% endif %}
+        <div class="header">
+            <img src="{% static 'img/combinalogo.svg' %}" />
+        </div>
+    </div>
+    {% if connection %}
+    <div id="Second">
+    {% else %}
+    <div id="Second" style="display: none;">
+    {% endif %}
+        <p class="noselect prev" onclick="js:control('back')">◀</p>
+        <div class="noselect header"><h2>Connect Account</h2></div>
+        {% for account in accounts %}
+        {% with platformDisconnect='/'|add:account.platform|add:'/disconnect' %}
+        {% with platformConnect='/'|add:account.platform|add:'/connect' %}
+        {% with platformIcon='img/icon/platform/'|add:account.platform|add:'.svg' %}
+        {% if account.connected %}
+        <div class="account noselect" onclick="js:goto('{{platformDisconnect}}')">
+        {% else %}
+        <div class="account  noselect" onclick="js:goto('{{platformConnect}}')">
+        {% endif %}
+            <img class="icon" src="{% static platformIcon %}" />
+            {% if account.connected %} {{account.platform}} - {{account.name}}
+            {% else %} {{account.platform}} {% endif %}
+        </div>
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+        {% endfor %}
+        </div>
+    </div>
+    <input id="Btn" type="button" onclick="js:control('next')" value="Get started..." />
+</body>
+
+</html>

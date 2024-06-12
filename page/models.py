@@ -19,3 +19,12 @@ class ContentDB(models.Model):
 class FileDB(models.Model):
     uid = models.IntegerField(null=False)
     url = models.URLField(default='http://default.url/icon.png')  # URL 기본 값 설정
+
+
+class ContactDB(models.Model):
+    platform = models.CharField(max_length=30)
+    token = models.TextField()
+    name = models.CharField(max_length=100)
+    tag = models.CharField(max_length=30)
+    connected = models.BooleanField(default=False, null=False)
+    icon = models.URLField()

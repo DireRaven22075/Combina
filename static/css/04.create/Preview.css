@@ -1,0 +1,12 @@
+#Preview {
+    padding-left: 2rem;
+    #PreviewTitle {
+        font-size: 1.3rem;
+        font-weight: bold;
+        margin: 0.3rem;
+    }
+    #PreviewContent {
+        font-size: 1.1rem;
+        margin: 0.3rem;
+    }
+}

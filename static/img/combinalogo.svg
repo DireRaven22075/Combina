@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 7500 1697" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(1.06054,0,0,1.06054,-1041.89,-3495.53)">
+        <g transform="matrix(1.38314,0,0,1.38314,143.494,1034.22)">
+            <g transform="matrix(903.743,0,0,903.743,5783.64,2534.48)">
+            </g>
+            <text x="1912px" y="2534.48px" style="font-family:'Metropolis-Medium', 'Metropolis';font-weight:500;font-size:903.743px;">Combina</text>
+        </g>
+        <g>
+            <g transform="matrix(0.944939,0,0,0.944939,84.806,70.1884)">
+                <path d="M949.913,4421.49L949.913,3837.09L1683.1,3413.78L2300.78,3770.39L949.913,4421.49Z"/>
+            </g>
+            <g transform="matrix(0.944939,0,0,0.944939,84.806,70.1884)">
+                <path d="M2416.3,3982.92L2416.3,4683.7L1683.1,5107.01L1344.22,4911.36L2416.3,3982.92Z"/>
+            </g>
+            <g transform="matrix(0.944939,0,0,0.944939,84.806,70.1884)">
+                <path d="M949.913,4683.7L949.913,4543.87L2416.3,3837.09L1243.19,4853.03L949.913,4683.7Z"/>
+            </g>
+        </g>
+    </g>
+</svg>
