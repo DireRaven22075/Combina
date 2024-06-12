@@ -10,22 +10,16 @@ import tempfile
 import os
 
 def upload_file_from_in_memory(driver, in_memory_file, upload_input_selector):
-    # 임시 파일 생성
     with tempfile.NamedTemporaryFile(delete=False, suffix='.png') as tmp_file:
-        # InMemoryUploadedFile의 데이터를 임시 파일에 씀
         for chunk in in_memory_file.chunks():
             tmp_file.write(chunk)
         tmp_file_path = tmp_file.name
 
     try:
-        # <input type="file"> 요소에 파일 경로를 설정
         file_input = driver.find_element(By.CSS_SELECTOR, upload_input_selector)
         file_input.send_keys(tmp_file_path)
-        print(f"Image uploaded: {tmp_file_path}")
     finally:
-        # 임시 파일 삭제
         os.remove(tmp_file_path)
-        print(f"Temporary file deleted: {tmp_file_path}")
 
 
 
@@ -36,19 +30,24 @@ class Post(Account):
 
     def post(self, title,text, images=None):
         if self.driver is None:
-            print("driver is None in start")
             self.driver = Account.initialize_driver()
             self.driver = self.login()
 
         try:
 
+            WebDriverWait(self.driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, '//*[@id="container"]/div[1]/div[1]/form/p[1]'))
+            )
+            sleep()
+
             free_field_box = self.driver.find_element(By.XPATH, "//*[@id=\"submenu\"]/div/div[2]/ul/li[1]/a")
             free_field_box.click()
+            
             WebDriverWait(self.driver, 10).until(
                 EC.presence_of_element_located((By.XPATH, "//*[@id=\"writeArticleButton\"]"))
             )
+            sleep()
            
-           # 글쓰기 //*[@id="writeArticleButton"] 
             post_box = self.driver.find_element(By.XPATH, "//*[@id=\"writeArticleButton\"]")
             post_box.click()
             sleep()
@@ -60,7 +59,7 @@ class Post(Account):
 
             text_box = self.driver.find_element(By.NAME, "text")
             text_box.send_keys(text)
-            print("text sent")
+    
             set_anonym = self.driver.find_element(By.CLASS_NAME, "anonym")
             set_anonym.click()
             sleep()
@@ -73,17 +72,13 @@ class Post(Account):
 
                 #이미지 업로드
                 for image in images:
-                    print("image uploading", image)
                     upload_file_from_in_memory(self.driver, image, "input[type=\"file\"]")
-                    sleep() 
+                    sleep(3,4) # 이미지 옵션 끄면 업로드 불가
             
             #에타 포스팅 함부로 주석처리 해제하지 말 것
             #submit_box = driver.find_element(By.XPATH, "//*[@id=\"container\"]/div[5]/form/ul/li[3]").click()
 
         except Exception as e:
-            print("post error", e)
             return False
         finally:
-           
-            print("driver quit in post_field")
             return True

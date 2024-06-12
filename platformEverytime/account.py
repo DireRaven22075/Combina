@@ -29,14 +29,13 @@ class Account:
     @staticmethod
     def initialize_driver():
         options = webdriver.ChromeOptions()
-        #options.add_argument("--headless")
+        #options.add_argument("--headless") # 브라우저 띄우지 않음
         options.add_argument("--log-level=3")
         options.add_argument("--remote-debugging-port=9222")
         #options.add_argument("--profile-default-content-settings.cookies=1") # 쿠키 허용
-        #options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36")
         # subprocess.Popen(r'C:\\Program Files\\Google\\Chrome\Application\\chrome.exe --remote-debugging-port=9222 --user-data-dir="C:\\chromeCookie"')
-        # options.add_experimental_option("debuggerAddress", "127.0.0.1:8000")
-        options.add_experimental_option("prefs", prefs)
+        # options.add_experimental_option("debuggerAddress", "127.0.0.1:8000") # 디버거 주소
+        #options.add_experimental_option("prefs", prefs) # 이미지, CSS, 자바스크립트 로드 설정
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-shm-usage")
         driver =  webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
@@ -64,8 +63,7 @@ class Account:
             submit_box = self.driver.find_element(By.XPATH, "/html/body/div[1]/div/form/input")
             sleep(15,16)
             submit_box.click()
-            
-            print("login success")
+     
             WebDriverWait(self.driver, 10).until(
                 EC.presence_of_element_located((By.XPATH, '//*[@id="container"]/div[1]/div[1]/form/p[1]'))
             )
@@ -78,7 +76,6 @@ class Account:
             self.request.session['username'] = name_box
             self.request.session.save()
 
-            print(f"nickname : {self.request.session['username']}")
             exist = AccountDB.objects.filter(platform = "Everytime", name = name_box)
             if not exist:
                 AccountDB.objects.create(
@@ -89,20 +86,15 @@ class Account:
                 connected=True,
                 icon = icon_image
                 ).save()
-                print("new login")
             else:
                 AccountDB.objects.filter(platform = "Everytime", name = name_box).update(connected=True)
                 AccountDB.objects.filter(platform = "Everytime", name = name_box).update(icon = icon_image)
                 AccountDB.objects.filter(platform = "Everytime", name = name_box).update(tag = id_name)
-                print("already logged in")
             return self.driver
 
            
         except Exception as e:
             quit_driver_forcefully(self.driver)
-            
-            print("login error", e)
-            print("driver quitting forcefully in login")
             return None
     
     def __del__(self):
@@ -110,4 +102,4 @@ class Account:
             if self.driver is not None:
                 self.driver.close()
         except Exception as e:
-            logging.error("드라이버 종료 오류: %s", e)
+            logging.error("driver close error: %s", e)

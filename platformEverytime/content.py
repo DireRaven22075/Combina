@@ -11,7 +11,7 @@ from django.db.models import Count, Max
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-MAX_POSTS = 20
+MAX_POSTS = 10
 default_user_icon = "https://cf-fpi.everytime.kr/0.png"
 
 class Content(Account):
@@ -28,11 +28,18 @@ class Content(Account):
             self.driver = self.login()
            
         try:
+            WebDriverWait(self.driver, 10).until(
+                EC.presence_of_element_located((By.CLASS_NAME, 'logged'))
+            )
+            sleep()
+            
             free_field_box = self.driver.find_element(By.XPATH, "//*[@id=\"submenu\"]/div/div[2]/ul/li[1]/a")
             free_field_box.click()
+
             WebDriverWait(self.driver, 10).until(
                 EC.presence_of_element_located((By.XPATH, "//*[@id=\"writeArticleButton\"]"))
             )
+            sleep()
             
             for i in range(MAX_POSTS, 0, -1):
                 post = self.driver.find_element(By.XPATH, f'//*[@id="container"]/div[5]/article[{i}]/a')
@@ -42,28 +49,21 @@ class Content(Account):
                 post_title = post.find_element(By.CLASS_NAME, 'medium').text
                 post_text = post.find_element(By.XPATH, f"//*[@id=\"container\"]/div[5]/article[{i}]/a/div/p").text
                 
-                print(f"title : {post_title}")
-                print(f"text : {post_text}")
-
                 
                 post_user = info.find_element(By.XPATH, f"//*[@id=\"container\"]/div[5]/article[{i}]/a/div/div/h3").text
                 
-                
-                print(f"username : {post_user}")
-                # comment 제외
                 try:
                     post_vote = info.find_element(By.CLASS_NAME, "vote").text
-                    print(f"vote : {post_vote}")
+
                 except:
                     post_vote = 0
-                    print("no vote")
+
                 image_url = 0
 
                 try:
                     image_list = []
                     #이미지 uid 이용해서 contentDB's image_url, FileDB's uid uid 값 주고 FileDB url 에 이미지 url 저장
                     post_image = post.find_element(By.CLASS_NAME, f"attachthumbnail").get_attribute("style")
-                    print(f"image : {post_image}")
                     image_list.append(post_image.split("\"")[1])
                     
                     
@@ -74,7 +74,6 @@ class Content(Account):
                     image = None
                     if image_list:
                         for i, image in enumerate(image_list, start=1):
-                            print("image exist", image)
                             image_url = latest + 1
 
                             # # 이미지가 존재하는지 확인
@@ -87,7 +86,6 @@ class Content(Account):
 
                 except NoSuchElementException:
                     image_url = 0
-                    print("no image")
                 ContentDB.objects.create(
                     platform = "Everytime",
                     userID = post_user,
@@ -98,110 +96,7 @@ class Content(Account):
                 ).save()       
                 
         except Exception as e:
-            print("free_field error", e)
             return False
         finally:
-            print("free_field done")
-            #quit_driver_forcefully(driver)
-            #self.driver.close()
-       
-            print("driver quit forcefully in free_field")
             return True
             
-
-
-
-    # @staticmethod
-    # def search_field(search, driver):
-    #     try:
-            
-    #         free_field_box = driver.find_element(By.XPATH, "//*[@id=\"submenu\"]/div/div[2]/ul/li[1]/a")
-    #         free_field_box.click()
-    #         sleep()
-
-    #         search_box = driver.find_element(By.NAME, "keyword")
-    #         search_box.send_keys(search)
-    #         search_box.send_keys(Keys.RETURN)
-    #         sleep()
-
-    
-    #         for i in range(1, MAX_POSTS):
-    #             post = driver.find_element(By.XPATH, f'//*[@id="container"]/div[5]/article[{i}]/a')
-    #             info = driver.find_element(By.XPATH, f'//*[@id="container"]/div[5]/article[{i}]/a/div/div')
-              
-    #             post_title = post.find_element(By.CLASS_NAME, 'medium').text
-    #             post_text = post.find_element(By.XPATH, f"//*[@id=\"container\"]/div[5]/article[{i}]/a/div/p").text
-                
-    #             print(f"title : {post_title}")
-    #             print(f"text : {post_text}")
-
-                
-    #             post_user = info.find_element(By.XPATH, f"//*[@id=\"container\"]/div[5]/article[{i}]/a/div/div/h3").text
-                
-                
-    #             print(f"username : {post_user}")
-    #             # comment 제외
-    #             try:
-    #                 post_vote = info.find_element(By.CLASS_NAME, "vote").text
-    #                 print(f"vote : {post_vote}")
-    #             except:
-    #                 post_vote = 0
-    #                 print("no vote")
-
-    #             image_url = 0
-    #             try:
-    #                 image_list = []
-    #                 #이미지 uid 이용해서 contentDB's image_url, FileDB's uid uid 값 주고 FileDB url 에 이미지 url 저장
-    #                 post_image = post.find_element(By.CLASS_NAME, f"attachthumbnail").get_attribute("style")
-    #                 image_list.append(post_image.split("\"")[1])
-
-    #                 print(f"image url : {image_list}") ## 여기까지는 됨
-    #                 # 가장 최신 file의 uid 가져오기
-
-    #                 file_count = FileDB.objects.aggregate(count=Count('uid'))['count']
-
-    #                 if file_count > 0:
-    #                     latest = FileDB.objects.latest('uid')
-    #                     print(f"latest : {type(latest)}")
-    #                 else:
-    #                     latest = 0
-
-    #                 if image_list:
-    #                     for i, image in enumerate(image_list, start=1):
-    #                         print("image exist", image)
-    #                         if latest == 0:
-    #                             image_url = 1
-    #                         else:
-    #                             image_url = latest.uid + 1
-
-    #                         # # 이미지가 존재하는지 확인
-    #                         # if not FileDB.objects.filter(url=image).exists():
-    #                         #     # 이미지가 존재하지 않는 경우에만 저장
-    #                             FileDB.objects.create(
-    #                                 uid=image_url,
-    #                                 url=image,
-    #                             ).save()
-                        
-                        
-    #             except NoSuchElementException:    
-    #                 image_url = 0
-    #                 print("no image")
-
-    #             ContentDB.objects.create(
-    #                 platform = "Everytime",
-    #                 userID = post_user,
-    #                 text = post_title+"|||" + post_text,
-    #                 image_url = image_url,
-    #                 vote = post_vote,
-    #             ).save()
-
-    #     except Exception as e:
-    #         print("search_field error", e)
-    #         return False
-    #     finally:
-    #         print("search_field done")
-    #         #quit_driver_forcefully(driver)
-    #         driver.close()
-    #         print("driver quit forcefully in search_field")
-    #         return True
-                
