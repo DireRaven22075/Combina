@@ -186,17 +186,20 @@ class DiscordBotView:
 
                 if bot_token:
                     # 디스코드 봇 정보 가져오기
-                    bot_info = get_bot_info(bot_token)
-                    name = bot_info.get("name")
-                    icon = bot_info.get("icon")
+                    try:
+                        bot_info = get_bot_info(bot_token)
+                        name = bot_info.get("name")
+                        icon = bot_info.get("icon")
+                    except Exception as e:
+                        return JsonResponse({'error': str(e)}, status=400)
 
-                    # AccountDB 업데이트
                     account, created = AccountDB.objects.get_or_create(platform='discord')
                     account.token = bot_token
-                    account.name = name  # 봇 이름 업데이트
-                    account.icon = icon  # 봇 프로필 이미지 업데이트
-                    account.connected = True  # connected 값을 True로 설정
+                    account.name = name
+                    account.icon = icon
+                    account.connected = True
                     account.save()
+                    request.session['bot_token'] = bot_token
 
                     return JsonResponse({
                         'redirect_url': return_url,
