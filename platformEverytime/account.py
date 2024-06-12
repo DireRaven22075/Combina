@@ -7,7 +7,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from page.models import AccountDB   
 from .utils import sleep, delete_cookies_with_cdp, is_logged_in, quit_driver_forcefully
-
+import logging
 prefs={
     "profile.managed_default_content_settings.images": 2,  # 이미지 로드 비활성화
     "profile.managed_default_content_settings.stylesheets": 2,  # CSS 로드 비활성화
@@ -17,7 +17,15 @@ prefs={
 
 
 class Account:
-            
+    def __init__(self, request):
+        self.request = request
+        self.id = request.session.get('ev_id')
+        self.password = request.session.get('ev_password')
+        self.username = request.session.get('username', 'none')
+        self.driver = Account.initialize_driver()
+        self.driver = self.login()
+
+
     @staticmethod
     def initialize_driver():
         options = webdriver.ChromeOptions()
@@ -35,71 +43,71 @@ class Account:
         return driver
     
     
-    @staticmethod
-    def login(request, driver = None):
+    def login(self):
         try:
+                      
+            delete_cookies_with_cdp(self.driver)
+
+
+            self.driver.get("https://account.everytime.kr/login")
             
-            if driver is None:
-                driver = Account.initialize_driver()
-                print("not logged in")
-                
-                delete_cookies_with_cdp(driver)
+            
 
+            WebDriverWait(self.driver, 10).until(EC.new_window_is_opened)
+            sleep()
+            id_box = self.driver.find_element(By.NAME, "id")
+            id_box.send_keys(self.id)
+            
+            pw_box = self.driver.find_element(By.NAME, "password")
+            pw_box.send_keys(self.password)
+            
+            submit_box = self.driver.find_element(By.XPATH, "/html/body/div[1]/div/form/input")
+            sleep(15,16)
+            submit_box.click()
+            
+            print("login success")
+            WebDriverWait(self.driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, '//*[@id="container"]/div[1]/div[1]/form/p[1]'))
+            )
+            sleep()
+            name_box = self.driver.find_element(By.XPATH, '//*[@id="container"]/div[1]/div[1]/form/p[1]').text
+            id_name = self.driver.find_element(By.XPATH, "//*[@id=\"container\"]/div[1]/div[1]/form/p[3]").text
+            icon_image = self.driver.find_element(By.XPATH, "//*[@id=\"container\"]/div[1]/div[1]/form/img").get_attribute("src")
+            
+            
+            self.request.session['username'] = name_box
+            self.request.session.save()
 
-                driver.get("https://account.everytime.kr/login")
-             
-                id = request.session.get('ev_id')
-                password = request.session.get('ev_password')
-                print(f"id : {id}, password : {password}")
-
-                WebDriverWait(driver, 10)
-                sleep()
-                id_box = driver.find_element(By.NAME, "id")
-                id_box.send_keys(id)
-                
-                pw_box = driver.find_element(By.NAME, "password")
-                pw_box.send_keys(password)
-                
-                submit_box = driver.find_element(By.XPATH, "/html/body/div[1]/div/form/input")
-                sleep(15,16)
-                submit_box.click()
-                
-                print("login success")
-                WebDriverWait(driver, 10).until(EC.new_window_is_opened)
-                sleep(4,5)
-                name_box = driver.find_element(By.XPATH, '//*[@id="container"]/div[1]/div[1]/form/p[1]').text
-                id_name = driver.find_element(By.XPATH, "//*[@id=\"container\"]/div[1]/div[1]/form/p[3]").text
-                icon_image = driver.find_element(By.XPATH, "//*[@id=\"container\"]/div[1]/div[1]/form/img").get_attribute("src")
-                
-                
-                request.session['username'] = name_box
-                request.session.save()
-
-                print(f"nickname : {request.session['username']}")
-                exist = AccountDB.objects.filter(platform = "Everytime", name = name_box)
-                if not exist:
-                    AccountDB.objects.create(
-                    platform = "Everytime",
-                    token = "none",
-                    name = name_box,
-                    tag = id_name,
-                    connected=True,
-                    icon = icon_image
-                    ).save()
-                    print("new login")
-                else:
-                    AccountDB.objects.filter(platform = "Everytime", name = name_box).update(connected=True)
-                    AccountDB.objects.filter(platform = "Everytime", name = name_box).update(icon = icon_image)
-                    AccountDB.objects.filter(platform = "Everytime", name = name_box).update(tag = id_name)
-                    print("already logged in")
-
-                return driver
+            print(f"nickname : {self.request.session['username']}")
+            exist = AccountDB.objects.filter(platform = "Everytime", name = name_box)
+            if not exist:
+                AccountDB.objects.create(
+                platform = "Everytime",
+                token = "none",
+                name = name_box,
+                tag = id_name,
+                connected=True,
+                icon = icon_image
+                ).save()
+                print("new login")
             else:
+                AccountDB.objects.filter(platform = "Everytime", name = name_box).update(connected=True)
+                AccountDB.objects.filter(platform = "Everytime", name = name_box).update(icon = icon_image)
+                AccountDB.objects.filter(platform = "Everytime", name = name_box).update(tag = id_name)
                 print("already logged in")
-                return driver
+            return self.driver
+
+           
         except Exception as e:
-            #quit_driver_forcefully(driver)
-            driver.close()
+            quit_driver_forcefully(self.driver)
+            
             print("login error", e)
             print("driver quitting forcefully in login")
             return None
+    
+    def __del__(self):
+        try:
+            if self.driver is not None:
+                self.driver.close()
+        except Exception as e:
+            logging.error("드라이버 종료 오류: %s", e)

@@ -20,7 +20,7 @@
 <form id="create-post-form" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <textarea id="multiline-text" name="text" placeholder="Enter your contents" rows="10" cols="50"></textarea>
-    <input type="file" name="image" accept="image/*">
+    <input type="file" name="images" accept="image/*">
     <button type="submit">Submit</button>
 </form>
 
@@ -62,31 +62,50 @@
 </script>
 
 <script>
-    // 포스트 생성
     $('#create-post-form').submit(function(event) {
         event.preventDefault();
-        var formData = new FormData(this);
+        var form = document.getElementById('create-post-form');
+        var formData = new FormData(form);
+    
+        // Prepare JSON part of the form data
+        var jsonData = {
+            title: 'Post Title',
+            text: formData.get('text'),
+            files: []
+        };
+    
+        // Collect file names for the JSON part (optional, for server-side tracking)
+        var files = formData.getAll('images');
+        files.forEach(file => jsonData.files.push(file.name));
+    
+        // Convert JSON to a blob and append to FormData
+        //formData.delete('text'); // Remove text from formData
+        formData.append('json_data', JSON.parse(jsonData));
+        
+        console.log(formData)
+        debugger;
+        // Send formData via AJAX
         $.ajax({
             url: '/Everytime/post_field/',
             type: 'POST',
             data: formData,
             processData: false,
             contentType: false,
+            encytype: 'multipart/form-data',
             success: function(response) {
                 if (response.status === 'success') {
-                    $('#post-list').prepend(
-                        '<div class="post">' +
-                        '<p>' + response.post.text + '</p>' +
-                        (response.post.image ? '<img src="' + response.post.image + '" alt="Post Image">' : '') +
-                        '</div>'
-                    );
+                    var postHtml = '<div class="post"><p>' + response.post.text + '</p>';
+                    response.post.images.forEach(image => {
+                        postHtml += '<img src="' + image + '" alt="Post Image">';
+                    });
+                    postHtml += '</div>';
+                    $('#post-list').prepend(postHtml);
                     $('#create-post-form')[0].reset();
                 }
             }
         });
     });
-    
-</script>
+    </script>
 <!-- <script>
     function submitForm() {
         var form = document.getElementById('myForm');

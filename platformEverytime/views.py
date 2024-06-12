@@ -56,7 +56,7 @@ class Everytime:
             if page == 'init':
                 return render(request, 'every_test/login.html', {'page': 'init'})
         
-        return render(request, 'every_test/login.html', {'page': 'account'})
+        return render(request, 'every_test/login.html', {'page': 'None'})
     
     @staticmethod
     def check_login_status(request):
@@ -98,21 +98,9 @@ class Everytime:
 
     #로그인 처리, 세션 저장과 동시에 컨텐츠 크롤링
     @staticmethod
-    def ev_login(request):
+    async def ev_login(request):
         if request.method == "POST":
-            # try:
-            # # 요청의 본문을 변수에 저장
-            #     request_body = request.body
-                
-            #     json_data = json.loads(request_body)
-            #     # Check if the JSON data is valid
-            #     if not isinstance(json_data, dict):
-            #         print("Invalid JSON data in instance")
-                    
-            # except json.JSONDecodeError:
-            #     print("Invalid JSON data in error")
-            #     return JsonResponse("잘못된 JSON 데이터입니다.", status=400)
-
+          
             id = request.POST.get("id")
             password = request.POST.get("password")
             print(f"id : {id}, password : {password}")
@@ -122,67 +110,61 @@ class Everytime:
             
             try:
                 #세션 저장 
-                session_saved = Everytime.save_session(request, id, password)
+                session_saved = await sync_to_async(Everytime.save_session)(request, id, password)
                 if not session_saved:
                     print("session save error")
                     return JsonResponse({"error":"session save error"},status=400)
-                driver = Account.login(request)
-                if driver:
-                    print("Account success")
-                    crawling =Content.free_field(driver)
-                    if crawling:
-                        return JsonResponse({"success":"login success"},status=200)
-                        # 로그인 완료시 홈이 아닌 connect 페이지에 json 값 보내서 로그인 상태 알리기
-                    else:
-                        print("crawling error")
-                        return JsonResponse({"error":"crawling error"},status=200)
+                user = await sync_to_async(Content)(request)
+                print("user : ", user)
+                success = await sync_to_async(user.free_field)()
+                print("success : ", success)
+                if success:
+                    return JsonResponse({"success":"login success"},status=200)
                 else:
-                    print("login error, try again")
-                    return JsonResponse({"error":"driver is None"},status=200)
+                    print("crawling error")
+                    return JsonResponse({"error":"crawling error"},status=200)
+                
             except KeyError:
                 print("no id or password in KeyError")
                 return JsonResponse({"error":"ID or PASSWORD are incorrect"},status=200) # 아이디 혹은 비밀번호 없음
 
         return JsonResponse({"error":"no post provided"},status=400)    
-        #return render(request, "every_test/login.html")
+    
     
     
     # 최신 컨텐츠 가져오기
     @staticmethod
     async def ev_free_field(request):
         if request.method == "POST":
-            
-            # 최신 컨텐츠 새로고침시
-            driver = await sync_to_async(Account.login)(request)
-            if driver:
-
-                crawling = await sync_to_async(Content.free_field)(driver)
+                user = await sync_to_async(Content)(request)
+                crawling = await sync_to_async(user.free_field)()
                 if crawling:
-                    #post_content = await sync_to_async(ContentDB.objects.filter(platform="everytime").order_by('-id').values)("userID", "text", "image_url", "vote")[:5]
-                    queryset = ContentDB.objects.filter(platform="Everytime").order_by('-id').values("userID", "text", "image_url", "vote")[:5]
-                    post_content = await sync_to_async(list)(queryset)
+                    # queryset = await sync_to_async(ContentDB.objects.filter(platform="Everytime").order_by('-id').values)("userID", "text", "image_url", "vote")
+
+                    # # 결과 슬라이드
+                    # post_content = list(queryset[:5])
 
                                     
-                    for post in post_content:
+                    # for post in post_content:
                         
-                        if post['image_url'] != 0:
-                            try:
-                                file = await sync_to_async(FileDB.objects.get)(uid = post['image_url'])
-                                post['image_url'] = file.url
-                            except FileDB.DoesNotExist:
-                                post['image_url'] = None
+                    #     if post['image_url'] != 0:
+                    #         try:
+                    #             file = await sync_to_async(FileDB.objects.get)(uid = post['image_url'])
+                    #             post['image_url'] = file.url
+                    #         except FileDB.DoesNotExist:
+                    #             post['image_url'] = None
 
-                        else:
-                            post['image_url'] = None
-                    print("crawling success in free_field")
-                    return JsonResponse({"contents":post_content})
+                    #     else:
+                    #         post['image_url'] = None
+                    # print("crawling success in free_field")
+                
+                    # return JsonResponse({"contents":post_content})
+                    return JsonResponse({"success":"crawling success in free_field"})
                 else:
                     print("crawling error")
                     return JsonResponse({"error":"crawling error in free_field"},status=400)
                 
-            else:
-                print("login error")
-                return JsonResponse({"error": "driver is None in ev_free_field function"}, status=400)
+           
 
         return JsonResponse({"error":"no post provided"})
     
@@ -192,22 +174,20 @@ class Everytime:
     async def ev_post(request):
         if request.method == "POST":
             try:
-                # json_data = json.loads(request.body)
-                # text = json_data.get('text')
-                # images = json_data.get('image')
+                json_data = json.loads(request.body)
+                title = json_data.get['title']
+                text = json_data.get['text']
+                image_list = json_data.get['file']
+                
 
-                text = request.POST.get("text")
-                images = request.FILES.getlist("image")
+                print(f"title : {title}, text : {text}")
+                for image in image_list:
+                    print(f"image : {image}")
 
-                print(f"text : {text}, images : {images}")
-                valid = '\n' in text
+                valid = text is not None and title is not None
                 if valid:
-                    driver = await sync_to_async(Account.login)(request)
-                    if driver is None:
-                        print("login error")
-                        return JsonResponse({"error":"driver is None in post"},status=400)
-                    
-                    posting = await sync_to_async(Post.post)(text, images, driver)
+                    user = await sync_to_async(Post)(request)
+                    posting = await sync_to_async(user.post)(title,text, image_list)
                     if posting:
                         print("posting success")
                         return JsonResponse({"success": posting})
@@ -284,7 +264,7 @@ class Everytime:
             return None
     
                 
-    # 검색어를 통한 컨텐츠 검색
+    # 검색어를 통한 컨텐츠 검색 안씀
     @staticmethod
     async def ev_search_field(request):
         if request.method == "POST":
