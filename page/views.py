@@ -1,22 +1,17 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import *
-def parameters(name):
+def parameters():
     data = {}
     data['platforms'] = [
-        "Facebook",
-        "Instagram",
-        "Discord",
-        "Reddit",
-        "Everytime",
-        "Youtube"
+        "Facebook", "Instagram", "Discord",
+        "Reddit", "Everytime", "Youtube"
     ]
     data['contents'] = ContentDB.objects.all()
     data['accounts'] = AccountDB.objects.all()
-    data['page'] = name
     return data
 class PageView:
-    def Init(request):
+    def Welcome(request):
         if (AccountDB.objects.all().count() == 0):
             AccountDB.objects.create(platform='Facebook', connected=False)
             AccountDB.objects.create(platform='Instagram', connected=False)
@@ -24,17 +19,14 @@ class PageView:
             AccountDB.objects.create(platform='Reddit', connected=False)
             AccountDB.objects.create(platform='Everytime', connected=False)
             AccountDB.objects.create(platform='Youtube', connected=False)
-        return render(request, 'page/init.html', parameters('Start'))
+        return render(request, 'page/00_welcome.html', parameters())
     def Home(request):
-        return render(request, 'page/home.html', parameters('Home'))
-    def Explore(request):
-        return render(request, 'page/explore.html', parameters('Explore'))
-    def Watch(request):
-        return render(request, 'page/watch.html', parameters('Watch'))
+        return render(request, 'page/01_home.html', parameters())
     def Contacts(request):
-        return render(request, 'page/contacts.html', parameters('Contacts'))
+        return render(request, 'page/02_contacts.html', parameters())
     def Create(request):
-        return render(request, 'page/create.html', parameters('Create'))
-    def Test(request):
-        AccountDB.objects.create(platform='Facebook', token='Test', name='Test', tag='Test', connected=True)
-        return HttpResponse('Test')
+        return render(request, 'page/03_create.html', parameters())
+    def Accounts(request):
+        return render(request, 'page/04_accounts.html', parameters())
+    def Settings(request):
+        return render(request, 'page/05_settings.html', parameters())

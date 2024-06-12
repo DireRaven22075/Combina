@@ -5,6 +5,7 @@ import discord
 import warnings
 import aiohttp
 import base64
+import requests  # requests 모듈 임포트
 from django.db import models
 from asgiref.sync import sync_to_async
 from page.models import ContentDB as DiscordMessage, AccountDB as DiscordChannel, FileDB
@@ -33,6 +34,7 @@ class DiscordBotService:
         self.intents = discord.Intents.default()
         self.intents.message_content = True  # 메시지 내용을 읽기 위한 권한
         self.intents.members = True  # 멤버 정보를 읽기 위한 권한
+        self.client = discord.Client(intents=self.intents)  # intents 인자를 추가
 
     class MyClient(discord.Client):
         """
@@ -59,21 +61,21 @@ class DiscordBotService:
             """
             디스코드 채널에서 메시지를 가져와서 데이터베이스에 저장.
             """
-            await self.wait_until_ready()
-            channel_id_obj = await sync_to_async(DiscordChannel.objects.first)()
+            await self.wait_until_ready()  # 클라이언트가 준비될 때까지 대기
+            channel_id_obj = await sync_to_async(DiscordChannel.objects.first)()  # 첫 번째 채널 ID 가져오기
             if channel_id_obj:
                 channelID = channel_id_obj.tag
             else:
                 print("Error: No channel ID found in the database.")
                 return
 
-            channel = self.get_channel(int(channelID))
+            channel = self.get_channel(int(channelID))  # 채널 ID로 채널 가져오기
             if not channel or not isinstance(channel, discord.TextChannel):
                 print(f"Error: Channel with ID {channelID} not found or is not a text channel.")
                 return
 
-            await sync_to_async(DiscordMessage.objects.all().delete)()
-            messages = [message async for message in channel.history(limit=self.num_messages)]
+            await sync_to_async(DiscordMessage.objects.all().delete)()  # 기존 메시지 삭제
+            messages = [message async for message in channel.history(limit=self.num_messages)]  # 메시지 가져오기
             for message in messages:
                 image_uid = 0
                 if message.attachments:
@@ -93,7 +95,7 @@ class DiscordBotService:
                     image_url=image_uid,
                     vote=0
                 )
-            await self.close()
+            await self.close()  # 메시지 가져온 후 클라이언트 종료
 
     async def run_bot(self, num_messages):
         """
@@ -102,11 +104,11 @@ class DiscordBotService:
         """
         client = self.MyClient(self.token, num_messages, intents=self.intents)
         try:
-            await client.start(self.token)
+            await client.start(self.token)  # 봇 시작
         except Exception as e:
-            print(f"Error running bot: {e}")
+            print(f"Error running bot: {e}")  # 예외 발생 시 출력
         finally:
-            await client.close()
+            await client.close()  # 클라이언트 종료
 
     async def send_message_to_discord(self, message, image_data=None):
         """
@@ -115,12 +117,12 @@ class DiscordBotService:
         :param image_data: 전송할 이미지 데이터 (Base64 인코딩)
         :return: 성공 여부
         """
-        client = self.MyClient(self.token, 20, intents=self.intents)  # 기본 메시지 수 20개로 설정
+        client = self.MyClient(self.token, 20, intents=self.intents)  # intents 인자를 추가
         try:
-            await client.login(self.token)
-            await client.connect()
+            await client.login(self.token)  # 봇 로그인
+            await client.connect()  # 봇 연결
 
-            channel_id_obj = await sync_to_async(DiscordChannel.objects.first)()
+            channel_id_obj = await sync_to_async(DiscordChannel.objects.first)()  # 첫 번째 채널 ID 가져오기
             if channel_id_obj:
                 channelID = channel_id_obj.tag  # tag 필드를 사용
             else:
@@ -131,9 +133,9 @@ class DiscordBotService:
             if channel and isinstance(channel, discord.TextChannel):
                 if image_data:
                     image = BytesIO(base64.b64decode(image_data))
-                    await channel.send(message, file=discord.File(image, filename="image.png"))
+                    await channel.send(message, file=discord.File(image, filename="image.png"))  # 이미지와 메시지 전송
                 else:
-                    await channel.send(message)
+                    await channel.send(message)  # 메시지 전송
                 return True
             return False
         except Exception as e:
@@ -141,7 +143,7 @@ class DiscordBotService:
             return False
         finally:
             try:
-                await client.close()
+                await client.close()  # 클라이언트 종료
             except Exception as e:
                 print(f"Error closing client: {e}")
 
@@ -165,9 +167,24 @@ class DiscordBotService:
 
             async with session.patch('https://discord.com/api/v9/users/@me', headers=headers, json=json_data) as response:
                 if response.status == 200:
-                    print("Bot profile updated successfully.")
+                    print("Bot profile updated successfully.")  # 성공 메시지 출력
                     return True
                 else:
                     print(f"Error updating bot profile: {response.status}")
                     print(await response.text())  # 오류 메시지 확인
                     return False
+
+    def get_bot_info(bot_token):
+        url = "https://discord.com/api/v9/users/@me"
+        headers = {
+            "Authorization": f"Bot {bot_token}"
+        }
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            data = response.json()
+            return {
+                "name": data.get("username"),
+                "icon": f'https://cdn.discordapp.com/avatars/{data["id"]}/{data["avatar"]}.png'
+            }
+        else:
+            raise Exception("Failed to get bot info from Discord API")

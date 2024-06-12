@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <title>Combina</title>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
+    <title>Discord-Chating</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -139,8 +139,29 @@
 
         .button-group {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .button-group label {
+            font-size: 16px;
+            color: #333;
+            margin-right: 10px;
+        }
+
+        select {
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+            font-size: 16px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s;
+        }
+
+        select:focus {
+            border-color: #5865F2;
         }
 
         .file-input-container {
@@ -190,13 +211,12 @@
             button.disabled = true;
 
             try {
-                const response = await fetch('/discord/fetch-discord-messages/', {
-                    method: 'POST',
+                const response = await fetch('/discord/get-content/?num_messages=' + numMessages, {
+                    method: 'GET',
                     headers: {
                         'X-CSRFToken': getCookie('csrftoken'),
                         'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ num_messages: numMessages })
+                    }
                 });
                 const data = await response.json();
                 const messageContainer = document.getElementById('message-container');
@@ -385,7 +405,7 @@
 </head>
 
 <body>
-    <h1>Combina</h1>
+    <h1>Discord-Chating</h1>
     <div class="container">
         <h2>메시지 보내기</h2>
         <div class="message-input-container">
@@ -399,13 +419,13 @@
         </div>
     </div>
     <div class="container">
+        <h2>메시지 목록</h2>
         <div class="button-group">
-            <h2>메시지 목록</h2>
             <label for="num-messages">불러올 메시지 개수:</label>
             <select id="num-messages">
                 <option value="10">10개</option>
-                <option value="20" selected>20개</option>
-                <option value="40">40개</option>
+                <option value="30" selected>30개</option>
+                <option value="50">50개</option>
             </select>
             <button id="fetch-button" onclick="fetchMessages()">새로고침</button>
         </div>

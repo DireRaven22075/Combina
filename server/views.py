@@ -1,38 +1,38 @@
+import requests
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import redirect
+from django.http import HttpResponse, JsonResponse
+from django.middleware.csrf import get_token
 from page.models import *
 from page.views import *
 class ServerView:
+    def Post(request):
+        if (request.method == "POST"):
+            session = requests.Session()
+            print(get_token(request))
+            data = {}
+            data["title"] = request.POST.get("title")
+            data["target"] = request.POST.get("platform")
+            data["content"] = request.POST.get("content")
+            data["file"] = request.POST.get("file")
+            data['csrftoken'] = get_token(request)
+            headers = {
+                'X-CSRFToken': get_token(request),
+            }
+            requests.post('http://127.0.0.1:8000/server/test/',headers=headers, data=data)
+            #requests.get("/discord/post", data=data)
+            #requests.get("/everytime/post", data=data)
+            return redirect(request.META.get('HTTP_REFERER', '/home'))
+        else:
+            return HttpResponse("Invalid request method")
+    def Test(request):
+        data = ContentDB(
+            text=request.POST.get("content"),
+        )
+        data.save()
+        ContentDB.objects.create(content=request.POST.get("content")).save()
+        return JsonResponse({"status": "success"})
     def ClearContent(request):
         ContentDB.objects.all().delete()
         FileDB.objects.all().delete()
-        return HttpResponse('ClearContent')
-    
-    def Disconnect(request):
-        if (request.method == "POST"):
-            target = request.POST.get("platform")
-            AccountDB.objects.filter(target).update(connected=False)
-    
-    def Connect(request):
-        if (request.method == "POST"):
-            target = request.POST.get("platform")
-            token = request.POST.get("token")
-            name = request.POST.get("name")
-            tag = request.POST.get("tag")
-            AccountDB.objects.filter(target).update(token=token)
-            AccountDB.objects.filter(target).update(name=name)
-            AccountDB.objects.filter(target).update(tag=tag)
-            AccountDB.objects.filter(target).update(connected=True)
-            return HttpResponse('Connected')
-
-    def ClearAccount(request):
-        AccountDB.objects.all().update(connected=False)
-        AccountDB.objects.all().update(id="")
-        AccountDB.objects.all().update(token="")
-        AccountDB.objects.all().update(name="")
-        AccountDB.objects.all().update(tag="")
-        return HttpResponse('ClearAccount')
-    def InitAccount(request):
-        for i in AccountDB.objects.all():
-            i.connected = False
-            i.save()
+        return redirect(request.META.get('HTTP_REFERER', '/home'))

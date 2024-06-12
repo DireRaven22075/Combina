@@ -1,56 +1,68 @@
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseBadRequest
 from asgiref.sync import sync_to_async
 from page.models import ContentDB, AccountDB, FileDB
 from .forms import TokenForm
 from .discord_bot import DiscordBotService
-from django.templatetags.static import static
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from django.views import View
 import json
+import requests  # requests 모듈 임포트
 
 class DiscordBotView:
     # 디스코드의 기본 프로필 이미지 URL 설정
     DEFAULT_PROFILE_IMAGE_URL = '/static/img/old/discord-mark-blue.svg'
 
-    @staticmethod
-    async def fetch_discord_messages(request):
+    @csrf_exempt
+    async def get_content(request):
         """
-        비동기로 디스코드 메시지를 가져오는 함수
-        - POST 요청을 받으면 세션에서 봇 토큰을 가져옴
-        - DiscordBotService를 사용해 지정된 수만큼의 메시지를 가져옴
-        - ContentDB에서 가져온 메시지를 리스트로 변환하여 JSON으로 반환
+        디스코드 메시지를 가져오는 함수
+        - GET 또는 POST 요청을 처리하여 메시지를 가져옴
+        - num_messages 파라미터로 가져올 메시지 개수를 결정
+        - 메시지를 가져와 JSON으로 반환
         """
-        if request.method == 'POST':
-            # 세션에서 봇 토큰 가져오기
+        if request.method == 'POST' or request.method == 'GET':
+            if request.method == 'POST':
+                try:
+                    body = request.body.decode('utf-8')
+                    if not body:
+                        return HttpResponseBadRequest('Empty request body')
+
+                    data = json.loads(body)
+                except json.JSONDecodeError:
+                    return HttpResponseBadRequest('Invalid JSON format')
+                
+                num_messages = data.get('num_messages', 20)
+            else:
+                num_messages = request.GET.get('num_messages', 20)
+
             bot_token = await sync_to_async(request.session.get)('bot_token')
-            # 요청 데이터 파싱
-            data = json.loads(request.body)
-            # 기본으로 가져올 메시지 수 설정 (기본값 20)
-            num_messages = int(data.get('num_messages', 20))
-            bot_service = DiscordBotService(bot_token)
-            # 디스코드 봇을 실행하여 메시지 가져오기
-            await bot_service.run_bot(num_messages)
-            # ContentDB에서 메시지 필터링 및 정렬 후 리스트로 변환
+            if not bot_token:
+                return JsonResponse({'error': 'Bot token not found in session'}, status=400)
+
+            bot_service = DiscordBotService(bot_token)  # DiscordBotService 객체 생성
+            await bot_service.run_bot(int(num_messages))
+
             messages = await sync_to_async(list)(
-                ContentDB.objects.filter(platform='discord').order_by('-id')[:num_messages].values('userID', 'userIcon', 'text', 'image_url')
+                ContentDB.objects.filter(platform='discord').order_by('-id')[:int(num_messages)].values('userID', 'userIcon', 'text', 'image_url')
             )
+
             for message in messages:
-                # 프로필 이미지가 없을 경우 기본 이미지 설정
                 if not message['userIcon']:
-                    message['userIcon'] = DiscordBotView.DEFAULT_PROFILE_IMAGE_URL
-                # 이미지 URL이 있는 경우 파일 데이터베이스에서 URL 가져오기
+                    message['userIcon'] = '/static/img/old/discord-mark-blue.svg'
                 if message['image_url'] != 0:
                     try:
                         file_db = await sync_to_async(FileDB.objects.get)(uid=message['image_url'])
                         message['image_url'] = file_db.url
                     except FileDB.DoesNotExist:
-                        # 이미지가 존재하지 않으면 None 설정
                         message['image_url'] = None
                 else:
-                    message['image_url'] = None  # 이미지가 없는 경우 None 설정
+                    message['image_url'] = None
 
-            # 메시지 리스트를 JSON 형태로 반환
             return JsonResponse({'messages': messages})
-        return JsonResponse({'error': 'Invalid request method'}, status=400)
+        else:
+            return HttpResponseBadRequest('Invalid request method')
 
     @staticmethod
     def index(request):
@@ -160,19 +172,147 @@ class DiscordBotView:
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
     @staticmethod
-    def set_token(request):
+    @csrf_exempt
+    def connect(request):
         """
-        디스코드 봇 토큰을 설정하는 함수
-        - POST 요청을 받아 토큰을 세션에 저장
-        - GET 요청으로 토큰 설정 페이지를 렌더링
+        디스코드 봇 토큰을 설정하고 `connected` 상태를 True로 설정.
         """
         if request.method == 'POST':
-            form = TokenForm(request.POST)
-            if form.is_valid():
-                # 유효한 폼 데이터를 세션에 저장
-                request.session['bot_token'] = form.cleaned_data['bot_token']
-                return redirect('index')
+            try:
+                body = request.body.decode('utf-8')
+                data = json.loads(body)
+                bot_token = data.get('bot_token')
+                return_url = data.get('return_url', '/')
+
+                if bot_token:
+                    # 디스코드 봇 정보 가져오기
+                    bot_info = get_bot_info(bot_token)
+                    name = bot_info.get("name")
+                    icon = bot_info.get("icon")
+
+                    # AccountDB 업데이트
+                    account, created = AccountDB.objects.get_or_create(platform='discord')
+                    account.token = bot_token
+                    account.name = name  # 봇 이름 업데이트
+                    account.icon = icon  # 봇 프로필 이미지 업데이트
+                    account.connected = True  # connected 값을 True로 설정
+                    account.save()
+
+                    return JsonResponse({
+                        'redirect_url': return_url,
+                        'connection': True
+                    })
+                else:
+                    return JsonResponse({'error': 'Bot token is required'}, status=400)
+            except json.JSONDecodeError:
+                return JsonResponse({'error': 'Invalid JSON format'}, status=400)
+            except Exception as e:
+                return JsonResponse({'error': str(e)}, status=400)
         else:
             form = TokenForm()
-        # 토큰 설정 페이지를 렌더링
-        return render(request, 'discord_template/set_token.html', {'form': form})
+            return_url = request.GET.get('return_url', '/')
+            request.session['return_url'] = return_url
+            return render(request, 'discord_template/connect.html', {
+                'form': form,
+                'return_url': return_url
+            })
+
+# 디스코드 봇 정보 가져오기 함수
+def get_bot_info(bot_token):
+    url = "https://discord.com/api/v9/users/@me"
+    headers = {
+        "Authorization": f"Bot {bot_token}"
+    }
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        data = response.json()
+        return {
+            "name": data.get("username"),
+            "icon": f'https://cdn.discordapp.com/avatars/{data["id"]}/{data["avatar"]}.png'
+        }
+    else:
+        raise Exception("Failed to get bot info from Discord API")
+
+class RedirectPageView(View):
+    def post(self, request, *args, **kwargs):
+        """
+        페이지 리다이렉트를 처리하는 함수
+        - POST 요청을 받아 'page' 파라미터에 따라 다른 URL로 리다이렉트.
+        """
+        try:
+            data = json.loads(request.body)
+            page = data.get('page', 'init')
+
+            if page == 'account':
+                return redirect('http://127.0.0.1/account')
+            else:
+                return redirect('http://127.0.0.1')
+        except json.JSONDecodeError:
+            return HttpResponseBadRequest('Invalid JSON')
+
+class PostAccountView(View):
+    def post(self, request, *args, **kwargs):
+        """
+        계정 정보를 POST로 처리하는 함수
+        - 'account' 파라미터를 받아 True일 경우 성공 메시지 반환
+        """
+        try:
+            data = json.loads(request.body)
+            account = data.get('account', False)
+            
+            if account:
+                return JsonResponse({'success': True})
+            else:
+                return HttpResponseBadRequest('Account value not provided')
+        except json.JSONDecodeError:
+            return HttpResponseBadRequest('Invalid JSON')
+
+class DisconnectView(View):
+    @method_decorator(csrf_exempt)
+    def get(self, request):
+        """
+        플랫폼 연결 해제.
+        - GET 요청을 받아 처리할 수 있도록 함.
+        - 관련된 모든 세션 데이터를 삭제.
+        - connected 상태를 False로 설정.
+        """
+        account = AccountDB.objects.filter(platform='discord').first()
+        if account:
+            account.name = ''
+            account.connected = False  # connected 값을 False로 설정
+            account.token = ''  # 봇 토큰 초기화
+            account.save()
+
+        # 세션 데이터 삭제
+        keys_to_delete = ['bot_token', 'platform_channel_id', 'platform_messages']
+        for key in keys_to_delete:
+            if key in request.session:
+                del request.session[key]    
+        return redirect(request.META.get('HTTP_REFERER', '/home'))
+
+class ConnectView(View):
+    def get(self, request):
+        """
+        플랫폼 연동을 위한 페이지를 반환.
+        - GET 요청에서 `return_url` 파라미터를 받아 세션에 저장.
+        """
+        return_url = request.GET.get('return_url', '/')
+        request.session['return_url'] = return_url
+        return render(request, 'platform_template/connect.html', {
+            'form': TokenForm(),
+            'return_url': return_url,
+        })
+
+    def post(self, request):
+        """
+        POST 요청에서 토큰을 받아 저장하고 원래 페이지로 리다이렉트.
+        """
+        form = TokenForm(request.POST)
+        if form.is_valid():
+            request.session['bot_token'] = form.cleaned_data['bot_token']
+            redirect_url = request.session.get('return_url', '/')
+            return JsonResponse({
+                'redirect_url': redirect_url,
+                'connection': True  # connection 값을 True로 설정
+            })
+        return JsonResponse({'error': 'Invalid form data'}, status=400)

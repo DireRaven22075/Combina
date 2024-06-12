@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+{% load static %}
+
+<head>
+    <title>Combina : Create</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href='https://fonts.googleapis.com/css?family=Noto Sans' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/Body.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/Noselect.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/Menubar.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/MainContainer.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/SubContainer.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/04.create/menuButton.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/04.create/Post.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/04.create/Preview.css' %}" />
+
+    <script src="{% static 'js/00.all/Menubar.js' %}"></script>
+    <script src="{% static 'js/04.create/Preview.js' %}"></script>
+</head>
+
+<body>
+    <header id="Menubar">
+        <div class="title"><label><img src="{% static 'img/combinalogo.svg' %}" <label></div>
+            <div onclick="js:goto('/home')" class="element button home-button"><label><img
+                    src="{% static 'img/icon/home.svg'%}" >Home</label></div>
+        <div onclick="js:goto('/contacts')" class="element button contacts-button"><label><img
+                    src="{% static 'img/icon/contacts.svg'%}" >Contacts</label></div>
+        <div onclick="js:goto('/create')" class="element button create-button"><label><img
+                    src="{% static 'img/icon/create.svg'%}" >Create</label></div>
+        <div onclick="js:goto('/accounts')" class="element button accounts-button"><label><img
+                    src="{% static 'img/icon/profile.svg'%}" >Accounts</label></div>
+        <div onclick="js:goto('/settings')" class="element button settings-button"><label><img
+                    src="{% static 'img/icon/more.svg'%}" >More</label></div>
+    </header>
+
+    <form id="Main" method="POST" class="post" action="/server/post/">
+        {% csrf_token %}
+        <h3 class="noselect">Title</h3>
+        <input required maxlength="100" id="PostTitle" name="title" type="text" placeholder="Write..." />
+        <h3 class="noselect">Details</h3>
+        <textarea required maxlength="200" id="PostContent" name="text" placeholder="Write..."></textarea>
+        <h4 class="noselect">Media</h4>
+        <input type="file" id="PostImage" name="File" multiple accept="image/*" />
+        
+        <div>
+            {% for account in accounts %}
+            {% if account.connected %}
+            <input type="checkbox" required name="account" value="{{account.platform}}" />
+            <label>{{account.platform}}</label>
+            {% endif %}
+            {% endfor %}
+        </div>
+        <input type="submit" value="Post" />
+    </form>
+    <div id="Title"><div>Create</div></div>
+    <div id="Sub" class="noselect">
+        <div id="Preview"><h1 id="PreviewTitle"></h1><pre id="PreviewContent"></pre><div id="PreviewImage"></div></div>
+    </div>
+    <div id="Navigation">
+    </div>
+    <div id="Subtitle">Preview</div>
+    <script>
+        
+    </script>
+</body>
+
+</html>
