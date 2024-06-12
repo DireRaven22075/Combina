@@ -23,7 +23,6 @@ class Content(Account):
    
     def free_field(self):
         if self.driver is None:
-            print("driver is None in start")
             self.driver = Account.initialize_driver()
             self.driver = self.login()
            
