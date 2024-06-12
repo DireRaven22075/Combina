@@ -4,10 +4,11 @@ from asgiref.sync import sync_to_async
 from page.models import ContentDB, AccountDB, FileDB
 from .forms import TokenForm
 from .discord_bot import DiscordBotService
+from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views import View
-from . import settings as discord_settings
 import json
+import requests  # requests 모듈 임포트
 
 class DiscordBotView:
     # 디스코드의 기본 프로필 이미지 URL 설정
@@ -40,7 +41,7 @@ class DiscordBotView:
             if not bot_token:
                 return JsonResponse({'error': 'Bot token not found in session'}, status=400)
 
-            bot_service = DiscordBotService(bot_token)
+            bot_service = DiscordBotService(bot_token)  # DiscordBotService 객체 생성
             await bot_service.run_bot(int(num_messages))
 
             messages = await sync_to_async(list)(
@@ -171,10 +172,10 @@ class DiscordBotView:
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
     @staticmethod
+    @csrf_exempt
     def connect(request):
         """
-        디스코드 봇 토큰을 설정하고 리다이렉트하는 함수
-        - POST 요청을 통해 봇 토큰을 설정하고 원래 페이지로 리다이렉트.
+        디스코드 봇 토큰을 설정하고 `connected` 상태를 True로 설정.
         """
         if request.method == 'POST':
             try:
@@ -182,11 +183,24 @@ class DiscordBotView:
                 data = json.loads(body)
                 bot_token = data.get('bot_token')
                 return_url = data.get('return_url', '/')
+
                 if bot_token:
-                    request.session['bot_token'] = bot_token
+                    # 디스코드 봇 정보 가져오기
+                    bot_info = get_bot_info(bot_token)
+                    name = bot_info.get("name")
+                    icon = bot_info.get("icon")
+
+                    # AccountDB 업데이트
+                    account, created = AccountDB.objects.get_or_create(platform='discord')
+                    account.token = bot_token
+                    account.name = name  # 봇 이름 업데이트
+                    account.icon = icon  # 봇 프로필 이미지 업데이트
+                    account.connected = True  # connected 값을 True로 설정
+                    account.save()
+
                     return JsonResponse({
                         'redirect_url': return_url,
-                        'connection': True  # connection 값을 True로 설정
+                        'connection': True
                     })
                 else:
                     return JsonResponse({'error': 'Bot token is required'}, status=400)
@@ -202,6 +216,22 @@ class DiscordBotView:
                 'form': form,
                 'return_url': return_url
             })
+
+# 디스코드 봇 정보 가져오기 함수
+def get_bot_info(bot_token):
+    url = "https://discord.com/api/v9/users/@me"
+    headers = {
+        "Authorization": f"Bot {bot_token}"
+    }
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        data = response.json()
+        return {
+            "name": data.get("username"),
+            "icon": f'https://cdn.discordapp.com/avatars/{data["id"]}/{data["avatar"]}.png'
+        }
+    else:
+        raise Exception("Failed to get bot info from Discord API")
 
 class RedirectPageView(View):
     def post(self, request, *args, **kwargs):
@@ -238,18 +268,27 @@ class PostAccountView(View):
             return HttpResponseBadRequest('Invalid JSON')
 
 class DisconnectView(View):
-    def post(self, request):
+    @method_decorator(csrf_exempt)
+    def get(self, request):
         """
         플랫폼 연결 해제.
+        - GET 요청을 받아 처리할 수 있도록 함.
         - 관련된 모든 세션 데이터를 삭제.
-        - 성공 메시지 반환.
+        - connected 상태를 False로 설정.
         """
-        keys_to_delete = ['bot_token', 'discord_channel_id', 'discord_messages']
+        account = AccountDB.objects.filter(platform='discord').first()
+        if account:
+            account.name = ''
+            account.connected = False  # connected 값을 False로 설정
+            account.token = ''  # 봇 토큰 초기화
+            account.save()
+
+        # 세션 데이터 삭제
+        keys_to_delete = ['bot_token', 'platform_channel_id', 'platform_messages']
         for key in keys_to_delete:
             if key in request.session:
-                del request.session[key]
-        
-        return JsonResponse({'success': True, 'message': 'Disconnected and cleared all Discord related data.'})
+                del request.session[key]    
+        return redirect(request.META.get('HTTP_REFERER', '/home'))
 
 class ConnectView(View):
     def get(self, request):

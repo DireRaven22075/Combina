@@ -5,6 +5,7 @@ import discord
 import warnings
 import aiohttp
 import base64
+import requests  # requests 모듈 임포트
 from django.db import models
 from asgiref.sync import sync_to_async
 from page.models import ContentDB as DiscordMessage, AccountDB as DiscordChannel, FileDB
@@ -33,6 +34,7 @@ class DiscordBotService:
         self.intents = discord.Intents.default()
         self.intents.message_content = True  # 메시지 내용을 읽기 위한 권한
         self.intents.members = True  # 멤버 정보를 읽기 위한 권한
+        self.client = discord.Client(intents=self.intents)  # intents 인자를 추가
 
     class MyClient(discord.Client):
         """
@@ -115,7 +117,7 @@ class DiscordBotService:
         :param image_data: 전송할 이미지 데이터 (Base64 인코딩)
         :return: 성공 여부
         """
-        client = self.MyClient(self.token, 20, intents=self.intents)  # 기본 메시지 수 20개로 설정
+        client = self.MyClient(self.token, 20, intents=self.intents)  # intents 인자를 추가
         try:
             await client.login(self.token)  # 봇 로그인
             await client.connect()  # 봇 연결
@@ -171,3 +173,18 @@ class DiscordBotService:
                     print(f"Error updating bot profile: {response.status}")
                     print(await response.text())  # 오류 메시지 확인
                     return False
+
+    def get_bot_info(bot_token):
+        url = "https://discord.com/api/v9/users/@me"
+        headers = {
+            "Authorization": f"Bot {bot_token}"
+        }
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            data = response.json()
+            return {
+                "name": data.get("username"),
+                "icon": f'https://cdn.discordapp.com/avatars/{data["id"]}/{data["avatar"]}.png'
+            }
+        else:
+            raise Exception("Failed to get bot info from Discord API")
