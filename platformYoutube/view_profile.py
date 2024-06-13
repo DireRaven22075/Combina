@@ -13,6 +13,3 @@ def view_profile():
         thumbnail_url = item['snippet']['thumbnails']['default']['url']
         profile.append(f"Name: {title}\nProfile Picture: {thumbnail_url}\n")
     return profile
-
-if __name__ == '__main__':
-    view_profile()
