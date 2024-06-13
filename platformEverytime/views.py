@@ -218,7 +218,7 @@ class Everytime:
                 if request.session.get('username') is not None:
                     remaining_keys.append('username')
                 error_message = f"Failed to remove session keys: {', '.join(remaining_keys)}"
-                return JsonResponse({"error": error_message}, status=400)
+                return redirect(request.META.get('HTTP_REFERER', '/home'))
 
             return JsonResponse({"success": "logout success"})
 
