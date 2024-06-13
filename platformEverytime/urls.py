@@ -3,15 +3,14 @@ from django.urls import path
 from .views import Everytime
 from asgiref.sync import async_to_sync
 
-# 에브리타임은 크롤링을 연속적으로 하게 되면, 쿠키에 기록이 남고 로그인을 막음
-# 환경이 바뀌었을 때 얼마까지 되는지는 모르겠음.
-# driver의 설정은 account.py에 있음 account.py의 64번째 줄 쿠키 일일일 지우려고 길게함. 새 환경에서는 줄여도 괜찮을 거임
+
+
 # post.py의 79,80 번째줄은 업로드 하고 싶을 때 주석 해제하면 됨.
 
-# 로그인 이후에 드라이버 안 닫히게
-# 메인 로그인 페이지에서 AccountDB create를 함 (connect=False) 여기서 새로 만들지 말고 값 수정
-# 포스트 크롤링 하나하나 일일이 하는 버전 만들고
-# 로그아웃하면 드라이버 닫히게, 로그인 id,  password 세션 다 갈아엎고 로그인 페이지도 엎기
+
+
+# 로그인 id,  password 세션 다 갈아엎고 로그인 페이지도 엎기
+# 윤수 보고서에 넣을 변수 싹 다 정리
 
 urlpatterns = [
     path('connect/', Everytime.login_page, name='login'), #로그인 페이지 랜더링

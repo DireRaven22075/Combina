@@ -48,3 +48,10 @@ class WebDriverManager:
             if self.driver is not None:
                 self.driver.close()
                 self.driver = None
+    
+    def is_stable(self):
+        with self.lock:
+            if self.driver is not None:
+                return True
+            else:
+                return False

@@ -24,9 +24,8 @@ def upload_file_from_in_memory(driver, in_memory_file, upload_input_selector):
 
 
 def Post(driver, title, text, images = None):
-
     try:
-
+        print("post title", title)
         WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.XPATH, "//*[@id=\"submenu\"]/div/div[2]/ul/li[1]/a"))
         )
@@ -34,22 +33,23 @@ def Post(driver, title, text, images = None):
 
         free_field_box = driver.find_element(By.XPATH, "//*[@id=\"submenu\"]/div/div[2]/ul/li[1]/a")
         free_field_box.click()
+        driver.refresh()
    
         WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.XPATH, "//*[@id=\"writeArticleButton\"]"))
         )
         sleep()
-
+        print("post text", text)
         post_box = driver.find_element(By.XPATH, "//*[@id=\"writeArticleButton\"]")
         post_box.click()
         sleep()
         
         title_box = driver.find_element(By.NAME, "title")
         title_box.send_keys(title)
-
+        print("title sent1")
         text_box = driver.find_element(By.NAME, "text")
         text_box.send_keys(text)
-
+        print("text sent2")
         set_anonym = driver.find_element(By.CLASS_NAME, "anonym")
         set_anonym.click()
         sleep()
