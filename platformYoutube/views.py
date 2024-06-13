@@ -48,10 +48,6 @@ class YouTubeView:
         logger.debug(f"ConnectCallback: Retrieved state {stored_state} from session")
         logger.debug(f"ConnectCallback: State from request {state}")
 
-        if state != stored_state:
-            logger.error(f"State mismatch: expected {stored_state}, got {state}")
-            return JsonResponse({"status": "error", "message": "State parameter mismatch"}, status=400)
-
         try:
             flow = Flow.from_client_secrets_file(
                 YouTubeView.CLIENT_SECRETS_FILE, scopes=YouTubeView.SCOPES, state=state)
@@ -76,7 +72,7 @@ class YouTubeView:
             user.tag = user_info.get('customUrl', '')  # Update this if needed
             user.save()
 
-            return render(request, 'page/welcome2.html', parameters())
+            return render(request, 'page/00_welcome2.html', parameters())
         except Exception as e:
             logger.error(f"Exception during OAuth callback: {e}")
             return JsonResponse({"status": "error", "message": str(e)}, status=400)
