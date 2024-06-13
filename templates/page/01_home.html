@@ -48,8 +48,15 @@
             </div>
             <div class="body">
                 <p>{{content.text}}</p>
-                <img src="{{content.image}}" />
+                {% for file in files %}
+                {% if file.uid == content.image_url %}
+                {% if content.platform == 'Youtube' %}
                 <video src="{{content.video}}" controls></video>
+                {% else %}
+                <img src="{{file.url}}" />
+                {% endif %}
+                {% endif %}
+                {% endfor %}
             </div>
         </div>
         {% endfor %}

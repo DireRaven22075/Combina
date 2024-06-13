@@ -9,6 +9,7 @@ def parameters():
     ]
     data['contents'] = ContentDB.objects.all()
     data['accounts'] = AccountDB.objects.all()
+    data['files'] = FileDB.objects.all()
     data['connected'] = isOkay()
     return data
 def isOkay():
