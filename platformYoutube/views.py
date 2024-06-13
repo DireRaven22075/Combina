@@ -14,7 +14,7 @@ from page.models import AccountDB
 from page.views import parameters
 
 # Allow insecure transport for local development
-# os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 # Set up logging
 logger = logging.getLogger(__name__)
