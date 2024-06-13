@@ -11,6 +11,12 @@ pillow>=10.3.0
 sqlparse>=0.5.0
 tzdata>=2024.1
 yarl>=1.9.4
-google-auth>=2.3.0
-keyring
-praw
+
+google-auth>=2.1.0
+google-auth-oauthlib>=0.4.6
+google-auth-httplib2>=0.1.0
+google-api-python-client>s=2.2.0
+
+requests>=2.25.1
+praw>=7.3.0
+keyring>=23.0.1
