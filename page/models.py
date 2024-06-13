@@ -1,12 +1,12 @@
 from django.db import models
 
 class AccountDB(models.Model):
-    platform = models.CharField (max_length=30) #해당 계정의 플랫폼 이름
-    token = models.TextField() #해당 계정의 토큰
-    name = models.CharField(max_length=100) #해당 계정의 이름
-    tag = models.CharField(max_length=30)  #미사용 (Discord only)
-    connected = models.BooleanField(default=False, null=False) #연결 여부
-    icon = models.URLField() #해당 계정의 아이콘
+    platform = models.CharField(max_length=30)
+    token = models.TextField()
+    name = models.CharField(max_length=100)
+    tag = models.CharField(max_length=30)  # 채널 ID로 사용
+    connected = models.BooleanField(default=False, null=False)
+    icon = models.URLField()
 
 class ContentDB(models.Model):
     platform = models.CharField(max_length=30)  # Discord == discord // Discord
