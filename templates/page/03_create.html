@@ -47,7 +47,7 @@
         <div>
             {% for account in accounts %}
             {% if account.connected %}
-            <input type="checkbox" required name="account" value="{{account.platform}}" />
+            <input type="checkbox" name="{{account.platform}}" value="True" />
             <label>{{account.platform}}</label>
             {% endif %}
             {% endfor %}
@@ -56,7 +56,7 @@
     </form>
     <div id="Title"><div>Create</div></div>
     <div id="Sub" class="noselect">
-        <div id="Preview"><h1 id="PreviewTitle"></h1><pre id="PreviewContent"></pre><div id="PreviewImage"></div></div>
+        <div id="Preview"><h1 id="PreviewTitle"></h1><pre id="PreviewContent"></pre><div id="PreviewImage"></div><div id="PreviewImages"></div></div>
     </div>
     <div id="Navigation">
     </div>

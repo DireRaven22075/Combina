@@ -21,8 +21,10 @@ from django.conf import settings
 
 urlpatterns = [
     path('', include('page.urls')),
-    path('discord/', include('platformDiscord.urls')),
     path('Everytime/', include('platformEverytime.urls')),
+    path('Discord/', include('platformDiscord.urls')),
+    #path('Reddit/', include('platformReddit.urls')),
+    #path('Youtube/', include('platformYoutube.urls')),
     path('server/', include('server.urls')),
     path('admin/', admin.site.urls),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
