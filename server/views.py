@@ -20,7 +20,8 @@ class ServerView:
             print(get_token(request))
             data = {}
             data["title"] = request.POST.get("title")
-            data["content"] = request.POST.get("content")
+            data["text"] = request.POST.get("text")
+            data['file'] = request.FILES.get("file")
             try:
                 if (request.POST.get("Facebook") != None):
                     redirect('/Facebook/post', data=data)
