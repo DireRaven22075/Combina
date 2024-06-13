@@ -21,7 +21,7 @@ class ServerView:
             }
             requests.post('http://127.0.0.1:8000/server/test/',headers=headers, data=data)
             #requests.get("/discord/post", data=data)
-            #requests.get("/everytime/post", data=data)
+            requests.get("/Everytime/post", data=data)
             return redirect(request.META.get('HTTP_REFERER', '/home'))
         else:
             return HttpResponse("Invalid request method")
