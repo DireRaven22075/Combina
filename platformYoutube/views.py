@@ -49,35 +49,27 @@ class YouTubeView:
         if state != stored_state:
             logger.error(f"State mismatch: expected {stored_state}, got {state}")
             return JsonResponse({"status": "error", "message": "State parameter mismatch"}, status=400)
-
-        try:
-            flow = Flow.from_client_secrets_file(
-                YouTubeView.CLIENT_SECRETS_FILE, scopes=YouTubeView.SCOPES, state=state)
-            flow.redirect_uri = YouTubeView.REDIRECT_URI
-            flow.fetch_token(authorization_response=request.build_absolute_uri())
-            credentials = flow.credentials
-
-            with open('token.pickle', 'wb') as token:
-                pickle.dump(credentials, token)
-
-            youtube_service = build('youtube', 'v3', credentials=credentials)
-            response = youtube_service.channels().list(
-                mine=True, part='snippet').execute()
-            user_info = response['items'][0]['snippet']
-            user = AccountDB.objects.filter(platform="Youtube").first()
-            if not user:
-                user = AccountDB(platform="Youtube")
-            user.name = user_info['title']
-            user.token = credentials.token
-            user.connected = True
-            user.icon = user_info['thumbnails']['default']['url']
-            user.tag = user_info['title']
-            user.save()
-
-            return render(request, 'page/welcome2.html', parameters())
-        except Exception as e:
-            logger.error(f"Exception during OAuth callback: {e}")
-            return JsonResponse({"status": "error", "message": str(e)}, status=400)
+        flow = Flow.from_client_secrets_file(
+            YouTubeView.CLIENT_SECRETS_FILE, scopes=YouTubeView.SCOPES, state=state)
+        flow.redirect_uri = YouTubeView.REDIRECT_URI
+        flow.fetch_token(authorization_response=request.build_absolute_uri())
+        credentials = flow.credentials
+        with open('token.pickle', 'wb') as token:
+            pickle.dump(credentials, token)
+        youtube_service = build('youtube', 'v3', credentials=credentials)
+        response = youtube_service.channels().list(
+            mine=True, part='snippet').execute()
+        user_info = response['items'][0]['snippet']
+        user = AccountDB.objects.filter(platform="Youtube").first()
+        if not user:
+            user = AccountDB(platform="Youtube")
+        user.name = user_info['title']
+        user.token = credentials.token
+        user.connected = True
+        user.icon = user_info['thumbnails']['default']['url']
+        user.tag = user_info['title']
+        user.save()
+        return render(request, 'page/welcome2.html', parameters())
 
     def Disconnect(request):
         user = AccountDB.objects.filter(platform="Youtube").first()
