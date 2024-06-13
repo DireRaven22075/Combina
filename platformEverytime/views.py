@@ -4,6 +4,7 @@ from .account import Account
 from .content import Content
 from .post import Post
 from page.models import ContentDB, FileDB, AccountDB
+from .webdriver_manager import WebDriverManager
 import json
 from asgiref.sync import sync_to_async
 from django.views.decorators.csrf import csrf_exempt
@@ -21,10 +22,12 @@ MAX_POSTS = 10
 
 
 class Everytime:
+    driver_manager = WebDriverManager.get_instance()
     
     @staticmethod
     def home(request):
         try:
+            
             userAccount = AccountDB.objects.filter(name = request.session['username']).first()
             post_content = ContentDB.objects.filter(platform = "Everytime").order_by('-id')[:MAX_POSTS].values("userID", "text", "image_url", "vote")
             
@@ -111,25 +114,21 @@ class Everytime:
     @staticmethod
     async def ev_login(request):
         if request.method == "POST":
-          
-            id = request.POST.get("id")
-            password = request.POST.get("password")
-            print(f"id : {id}, password : {password}")
-            if not id or not password:
-                print("no id or password in sentence")
-                return JsonResponse("아이디 또는 비밀번호를 입력하세요.", status=400)
-            
+                 
             try:
-                #세션 저장 
-                session_saved = await sync_to_async(Everytime.save_session)(request, id, password)
-                if not session_saved:
-                    print("session save error")
-                    return JsonResponse({"error":"session save error"},status=400)
-                user = await sync_to_async(Content)(request)
+                driver = Everytime.driver_manager.get_driver()
+                if driver is None:
+                    return JsonResponse({"error":"driver is None"},status=400)
+                
+                user = await sync_to_async(Account)(request, driver)
                 print("user : ", user)
-                success = await sync_to_async(user.free_field)()
-                print("success : ", success)
-                if success:
+                if not user:
+                    print("Account error")
+                    return JsonResponse({"error":"Account error"},status=200)
+                
+                crawling = await sync_to_async(Content)(driver)
+                print("success : ", crawling)
+                if crawling:
                     return JsonResponse({"connection":"login success"})
                 else:
                     print("crawling error")
@@ -147,8 +146,13 @@ class Everytime:
     @staticmethod
     async def ev_free_field(request):
         if request.method == "POST":
-                user = await sync_to_async(Content)(request)
-                crawling = await sync_to_async(user.free_field)()
+                
+                driver = Everytime.driver_manager.get_driver()
+                if driver is None:
+                    return JsonResponse({"error":"driver is None"},status=400)
+                
+                
+                crawling = await sync_to_async(Content)(driver)
                 if crawling:
                     return JsonResponse({"success":"crawling success in free_field"})
                 else:
@@ -162,17 +166,18 @@ class Everytime:
     async def ev_post(request):
         if request.method == "POST":
             try:
-               
-                data = request.POST
+                driver = Everytime.driver_manager.get_driver()
+                if driver is None:
+                    return JsonResponse({"error":"driver is None"},status=400)
                 title = request.POST.get('title')
                 text = request.POST.get('text')
                 image_list = request.FILES.getlist('file')
-                
+                print("title : ", title, text, image_list)
                
                 valid = text is not None and title is not None
+                print("text valid : ", valid)
                 if valid:
-                    user = await sync_to_async(Post)(request)
-                    posting = await sync_to_async(user.post)(title,text, image_list)
+                    posting = await sync_to_async(Post)(driver, title, text, image_list)
                     if posting:
                         return JsonResponse({"success": posting})
                     
@@ -185,57 +190,48 @@ class Everytime:
                 return JsonResponse({"error":"Invalid Json data"},status=400)  
         return JsonResponse({"error":"No post in ev_post"},status=400)
     
-    # 세션 삭제 및 connect = FAlse
+    # 세션 전면 수정
     @staticmethod
     def logout(request):
         try:
+            Everytime.driver_manager.stop_driver()
+            
             # 처음에 세션 값이 있는지 검사
-            initial_ev_id = request.session.get('ev_id')
-            initial_ev_password = request.session.get('ev_password')
             initial_username = request.session.get('username')
             AccountDB.objects.filter(name = initial_username).update(connected=False)
-            if initial_ev_id is None or initial_ev_password is None or initial_username is None:
+            if initial_username is None:
                 missing_keys = []
-                if initial_ev_id is None:
-                    missing_keys.append('ev_id')
-                if initial_ev_password is None:
-                    missing_keys.append('ev_password')
                 if initial_username is None:
                     missing_keys.append('username')
                 error_message = f"Missing session keys initially: {', '.join(missing_keys)}"
                 return JsonResponse({"error": error_message}, status=400)
             
-            request.session.pop('ev_id', None)
-            request.session.pop('ev_password', None)
             request.session.pop('username', None)
 
-            if request.session.get('ev_id') is not None or request.session.get('ev_password') is not None or request.session.get('username') is not None:
+            if request.session.get('username') is not None:
                 remaining_keys = []
-                if request.session.get('ev_id') is not None:
-                    remaining_keys.append('ev_id')
-                if request.session.get('ev_password') is not None:
-                    remaining_keys.append('ev_password')
                 if request.session.get('username') is not None:
                     remaining_keys.append('username')
                 error_message = f"Failed to remove session keys: {', '.join(remaining_keys)}"
                 return JsonResponse({"error": error_message}, status=400)
-
-            return JsonResponse({"success": "logout success"})
+            referer = request.META.get('HTTP_REFERER')
+            print("referer : ", referer)
+            return redirect(request.META.get('HTTP_REFERER'), ('/home'))
 
         except Exception as e:
             error_message = f"Error during logout: {str(e)}"
             return JsonResponse({"error": error_message}, status=400)
     
-    # 세션 저장
-    def save_session(request, id, password):
-        try:
+    # 세션 저장 수정 필요
+    # def save_session(request, id, password):
+    #     try:
              
-            request.session['ev_id'] = id
-            request.session['ev_password'] = password
-            request.session.save()
-            return request
-        except KeyError:
-            return None
+    #         request.session['ev_id'] = id
+    #         request.session['ev_password'] = password
+    #         request.session.save()
+    #         return request
+    #     except KeyError:
+    #         return None
     
                 
     

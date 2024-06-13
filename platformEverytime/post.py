@@ -23,62 +23,51 @@ def upload_file_from_in_memory(driver, in_memory_file, upload_input_selector):
 
 
 
-class Post(Account):
+def Post(driver, title, text, images = None):
 
-    def __init__(self, request):
-        super().__init__(request)
+    try:
 
-    def post(self, title,text, images=None):
-        if self.driver is None:
-            self.driver = Account.initialize_driver()
-            self.driver = self.login()
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//*[@id=\"submenu\"]/div/div[2]/ul/li[1]/a"))
+        )
+        sleep()
 
-        try:
+        free_field_box = driver.find_element(By.XPATH, "//*[@id=\"submenu\"]/div/div[2]/ul/li[1]/a")
+        free_field_box.click()
+   
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//*[@id=\"writeArticleButton\"]"))
+        )
+        sleep()
 
-            WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located((By.XPATH, '//*[@id="container"]/div[1]/div[1]/form/p[1]'))
-            )
-            sleep()
+        post_box = driver.find_element(By.XPATH, "//*[@id=\"writeArticleButton\"]")
+        post_box.click()
+        sleep()
+        
+        title_box = driver.find_element(By.NAME, "title")
+        title_box.send_keys(title)
 
-            free_field_box = self.driver.find_element(By.XPATH, "//*[@id=\"submenu\"]/div/div[2]/ul/li[1]/a")
-            free_field_box.click()
-            
-            WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located((By.XPATH, "//*[@id=\"writeArticleButton\"]"))
-            )
-            sleep()
-           
-            post_box = self.driver.find_element(By.XPATH, "//*[@id=\"writeArticleButton\"]")
-            post_box.click()
-            sleep()
-            
-           
-            title_box = self.driver.find_element(By.NAME, "title")
-            title_box.send_keys(title)
-            
+        text_box = driver.find_element(By.NAME, "text")
+        text_box.send_keys(text)
 
-            text_box = self.driver.find_element(By.NAME, "text")
-            text_box.send_keys(text)
-    
-            set_anonym = self.driver.find_element(By.CLASS_NAME, "anonym")
-            set_anonym.click()
-            sleep()
+        set_anonym = driver.find_element(By.CLASS_NAME, "anonym")
+        set_anonym.click()
+        sleep()
 
+        if images is not None:
 
-            if images is not None:
+            image_box = driver.find_element(By.XPATH, "//*[@id=\"container\"]/div[5]/form/ul/li[2]")
+            image_box.click()
 
-                image_box = self.driver.find_element(By.XPATH, "//*[@id=\"container\"]/div[5]/form/ul/li[2]")
-                image_box.click()
+            #이미지 업로드
+            for image in images:
+                upload_file_from_in_memory(driver, image, "input[type=\"file\"]")
+                sleep(3,4) # 이미지 옵션 끄면 업로드 불가
+            # 이미지 업로드 비활성화
+        #에타 포스팅 함부로 주석처리 해제하지 말 것
+        #submit_box = driver.find_element(By.XPATH, "//*[@id=\"container\"]/div[5]/form/ul/li[3]").click()
 
-                #이미지 업로드
-                for image in images:
-                    upload_file_from_in_memory(self.driver, image, "input[type=\"file\"]")
-                    sleep(3,4) # 이미지 옵션 끄면 업로드 불가
-            
-            #에타 포스팅 함부로 주석처리 해제하지 말 것
-            #submit_box = driver.find_element(By.XPATH, "//*[@id=\"container\"]/div[5]/form/ul/li[3]").click()
-
-        except Exception as e:
-            return False
-        finally:
-            return True
+    except Exception as e:
+        return False
+    finally:
+        return True
