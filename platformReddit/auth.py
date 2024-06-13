@@ -1,26 +1,16 @@
-import praw
 import keyring
 
 SERVICE_NAME = 'RedditApp'
 
-def save_credentials(username, password):
+def save_credentials(username, token):
     keyring.set_password(SERVICE_NAME, 'username', username)
-    keyring.set_password(SERVICE_NAME, 'password', password)
+    keyring.set_password(SERVICE_NAME, 'token', token)
 
 def get_credentials():
     username = keyring.get_password(SERVICE_NAME, 'username')
-    password = keyring.get_password(SERVICE_NAME, 'password')
-    return username, password
+    token = keyring.get_password(SERVICE_NAME, 'token')
+    return username, token
 
-def login(client_id, client_secret, username, password, user_agent):
-    reddit = praw.Reddit(client_id=client_id,
-                         client_secret=client_secret,
-                         username=username,
-                         password=password,
-                         user_agent=user_agent)
-    print(f"Logged in as: {reddit.user.me()}")
-    return reddit
-
-def logout(reddit):
-    reddit.user.me = None
-    print("Logged out.")
+def logout():
+    keyring.delete_password(SERVICE_NAME, 'username')
+    keyring.delete_password(SERVICE_NAME, 'token')
