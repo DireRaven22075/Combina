@@ -21,19 +21,22 @@ class ServerView:
             data = {}
             data["title"] = request.POST.get("title")
             data["content"] = request.POST.get("content")
-            if (request.POST.get("Facebook") != None):
-                redirect('/facebook/post', data=data)
-            if (request.POST.get("Instagram") != None):
-                redirect('/instagram/post', data=data)
-            if (request.POST.get("Discord") != None):
-                redirect('/discord/post', data=data)
-            if (request.POST.get("Reddit") != None):
-                redirect('/reddit/post', data=data)
-            if (request.POST.get("Everytime") != None):
-                redirect('/everytime/post', data=data)
-            if (request.POST.get("Youtube") != None):
-                redirect('/youtube/post', data=data)
-            return redirect(request.META.get('HTTP_REFERER', '/home'))
+            try:
+                if (request.POST.get("Facebook") != None):
+                    redirect('/Facebook/post', data=data)
+                if (request.POST.get("Instagram") != None):
+                    redirect('/Instagram/post', data=data)
+                if (request.POST.get("Discord") != None):
+                    redirect('/Discord/post', data=data)
+                if (request.POST.get("Reddit") != None):
+                    redirect('/Reddit/post', data=data)
+                if (request.POST.get("Everytime") != None):
+                    redirect('/Everytime/post', data=data)
+                if (request.POST.get("Youtube") != None):
+                    redirect('/Youtube/post', data=data)
+            except:
+                return redirect('/create', data={"status": "error"})
+            return redirect('/create', data={"status": "success"})
         else:
             return HttpResponse("Invalid request method")
     def ClearContent(request):
