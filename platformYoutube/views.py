@@ -1,34 +1,58 @@
+import os
 import requests
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from page.models import AccountDB
-from google_auth_oauthlib.flow import InstalledAppFlow
-from platformYoutube.auth import get_authenticated_service, login, logout  # Corrected import
+from google_auth_oauthlib.flow import Flow
+from .auth import get_authenticated_service, login, logout
 from .view_recommended import view_recommended
 from .view_profile import view_profile
 from .search_videos import search_videos
+from page.views import parameters
+
+# Allow insecure transport for local development
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 class YouTubeView:
-    REDIRECT_URI = 'http://localhost:8000/youtube/callback/'
+    REDIRECT_URI = 'http://localhost:8000/Youtube/callback/'
+
+    CLIENT_ID = "1093025684898-1kdj5micd00haaeo3g0kr9n9fep49fev.apps.googleusercontent.com"
+    CLIENT_SECRET = "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"
+    AUTH_URI = "https://accounts.google.com/o/oauth2/auth"
+    TOKEN_URI = "https://oauth2.googleapis.com/token"
+    SCOPES = ['https://www.googleapis.com/auth/youtube.force-ssl']
+
+    client_config = {
+        "installed": {
+            "client_id": CLIENT_ID,
+            "client_secret": CLIENT_SECRET,
+            "auth_uri": AUTH_URI,
+            "token_uri": TOKEN_URI,
+            "redirect_uris": [REDIRECT_URI],
+        }
+    }
 
     def Connect(request):
-        flow = InstalledAppFlow.from_client_secrets_file(
-            'client_secret.json',
-            scopes=['https://www.googleapis.com/auth/youtube.force-ssl'],
-            redirect_uri=YouTubeView.REDIRECT_URI
+        flow = Flow.from_client_config(
+            YouTubeView.client_config,
+            scopes=YouTubeView.SCOPES,
         )
+        flow.redirect_uri = YouTubeView.REDIRECT_URI
         authorization_url, state = flow.authorization_url(access_type='offline', include_granted_scopes='true')
         request.session['state'] = state
         return redirect(authorization_url)
 
     def ConnectCallback(request):
         state = request.session['state']
-        flow = InstalledAppFlow.from_client_secrets_file(
-            'client_secret.json',
-            scopes=['https://www.googleapis.com/auth/youtube.force-ssl'],
-            state=state,
-            redirect_uri=YouTubeView.REDIRECT_URI
+        if 'state' not in request.GET or request.GET['state'] != state:
+            return JsonResponse({"status": "error", "message": "State parameter mismatch"}, status=400)
+
+        flow = Flow.from_client_config(
+            YouTubeView.client_config,
+            scopes=YouTubeView.SCOPES,
+            state=state
         )
+        flow.redirect_uri = YouTubeView.REDIRECT_URI
         flow.fetch_token(authorization_response=request.build_absolute_uri())
         credentials = flow.credentials
 
@@ -41,9 +65,9 @@ class YouTubeView:
         username = user_data['name']
         icon_img = user_data['picture']
 
-        user = AccountDB.objects.filter(platform="YouTube").first()
+        user = AccountDB.objects.filter(platform="Youtube").first()
         if not user:
-            user = AccountDB(platform="YouTube")
+            user = AccountDB(platform="Youtube")
         user.name = username
         user.token = credentials.token
         user.connected = True
@@ -51,7 +75,7 @@ class YouTubeView:
         user.tag = username
         user.save()
 
-        return render(request, 'youtube/close_window.html')
+        return render(request, 'page/welcome2.html', parameters())
 
     def Disconnect(request):
         user = AccountDB.objects.filter(platform="YouTube").first()
@@ -62,7 +86,7 @@ class YouTubeView:
             user.icon = None
             user.tag = None
             user.save()
-        return redirect(request.META.get('HTTP_REFERER', '/home'))
+        return redirect('/home')
 
     def GetContent(request):
         user = AccountDB.objects.filter(platform="YouTube").first()
