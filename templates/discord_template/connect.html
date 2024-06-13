@@ -37,7 +37,7 @@
             border-radius: 4px;
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
-            box-sizing: border-box; /* 이 부분 추가 */
+            box-sizing: border-box;
         }
         button {
             padding: 10px 20px;
@@ -56,6 +56,19 @@
             background-color: #4e5bd0;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+        .link-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 10px;
+            border-radius: 4px;
+            background-color: #7289da;
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .link-button:hover {
+            background-color: #5b6eae;
+        }
     </style>
     <script>
         function getReturnURL() {
@@ -67,7 +80,7 @@
             document.querySelector('form').addEventListener('submit', async function(event) {
                 event.preventDefault();
                 const returnUrl = getReturnURL();
-                const response = await fetch('/discord/connect/', {  // 정확한 경로 설정
+                const response = await fetch('/discord/connect/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -76,7 +89,7 @@
                     body: JSON.stringify({
                         bot_token: document.querySelector('[name="bot_token"]').value,
                         return_url: returnUrl,
-                        connection: true  // connection 값을 True로 전송
+                        connection: true
                     })
                 });
                 const data = await response.json();
@@ -113,6 +126,9 @@
             <input type="hidden" name="return_url" value="{{ request.session.return_url }}">
             <button type="submit">Connect</button>
         </form>
+        <a href="https://discord.com/developers/applications" class="link-button" target="_blank">
+            Go to Discord Developer Portal
+        </a>
     </div>
 </body>
 </html>

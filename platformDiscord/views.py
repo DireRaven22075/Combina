@@ -1,3 +1,5 @@
+import base64
+from io import BytesIO
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponseBadRequest
 from asgiref.sync import sync_to_async
@@ -103,24 +105,48 @@ class DiscordBotView:
         })
 
     @staticmethod
+    @csrf_exempt
     async def send_discord_message(request):
         """
         디스코드 채널로 메시지 또는 이미지를 전송하는 함수
-        - POST 요청을 받아 메시지와 이미지를 디스코드로 전송
+        - POST 요청을 받아 메시지와 파일을 디스코드로 전송
         """
         if request.method == 'POST':
-            # 요청 데이터 파싱
-            data = json.loads(request.body)
-            message = data.get('message')
-            image_data = data.get('image')
-            # 세션에서 봇 토큰 가져오기
-            bot_token = await sync_to_async(request.session.get)('bot_token')
-            bot_service = DiscordBotService(bot_token)
-            # 메시지나 이미지가 있는 경우 전송
-            if message or image_data:
-                success = await bot_service.send_message_to_discord(message, image_data)
+            try:
+                # 요청 데이터 파싱
+                data = json.loads(request.body.decode('utf-8'))
+                title = data.get('title')
+                text = data.get('text')
+                files = data.get('file', [])
+
+                # 세션에서 봇 토큰 가져오기
+                bot_token = await sync_to_async(request.session.get)('bot_token')
+                if not bot_token:
+                    return JsonResponse({'error': 'Bot token not found in session'}, status=400)
+
+                bot_service = DiscordBotService(bot_token)
+
+                # 메시지 텍스트 구성
+                message_content = f"**{title}**\n\n{text}"
+
+                # 파일 전송 준비
+                if files:
+                    file_data = []
+                    for file_content in files:
+                        file_bytes = base64.b64decode(file_content)
+                        file_data.append(BytesIO(file_bytes))
+
+                    # 메시지와 파일 전송
+                    success = await bot_service.send_message_to_discord(message_content, file_data)
+                else:
+                    # 파일 없이 메시지만 전송
+                    success = await bot_service.send_message_to_discord(message_content)
+
                 return JsonResponse({'success': success})
-            return JsonResponse({'error': 'No message or image provided'}, status=400)
+            except json.JSONDecodeError:
+                return HttpResponseBadRequest('Invalid JSON format')
+            except Exception as e:
+                return JsonResponse({'error': str(e)}, status=500)
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
     @staticmethod

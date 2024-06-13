@@ -22,7 +22,7 @@ from django.conf import settings
 urlpatterns = [
     path('', include('page.urls')),
     path('Everytime/', include('platformEverytime.urls')),
-    path('Discord/', include('platformDiscord.urls')),
+    path('discord/', include('platformDiscord.urls')),
     #path('Reddit/', include('platformReddit.urls')),
     #path('Youtube/', include('platformYoutube.urls')),
     path('server/', include('server.urls')),
