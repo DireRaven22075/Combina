@@ -25,16 +25,13 @@ class DiscordBotService:
     토큰을 통해 봇을 초기화하고 메시지 전송 및 가져오기, 프로필 업데이트 등을 수행.
     """
 
-    def __init__(self, token):
-        """
-        디스코드 봇의 토큰을 초기화하고, 필요한 권한을 설정.
-        :param token: 디스코드 봇의 인증 토큰
-        """
+    def __init__(self, token, tag=None, intents=None):
         self.token = token
-        self.intents = discord.Intents.default()
-        self.intents.message_content = True  # 메시지 내용을 읽기 위한 권한
-        self.intents.members = True  # 멤버 정보를 읽기 위한 권한
-        self.client = discord.Client(intents=self.intents)  # intents 인자를 추가
+        self.tag = tag
+        self.intents = intents or discord.Intents.default()
+        self.intents.message_content = True
+        self.intents.members = True
+        self.client = discord.Client(intents=self.intents)
 
     class MyClient(discord.Client):
         """
@@ -122,6 +119,7 @@ class DiscordBotService:
             await client.login(self.token)
             await client.connect()
 
+            # 채널 ID 가져오기
             channel_id_obj = await sync_to_async(DiscordChannel.objects.first)()
             if channel_id_obj:
                 channelID = channel_id_obj.tag

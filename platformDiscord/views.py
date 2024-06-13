@@ -11,6 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views import View
 import json
 import requests  # requests 모듈 임포트
+import discord
 
 class DiscordBotView:
     # 디스코드의 기본 프로필 이미지 URL 설정
@@ -18,51 +19,40 @@ class DiscordBotView:
 
     @csrf_exempt
     async def get_content(request):
-        """
-        디스코드 메시지를 가져오는 함수
-        - GET 또는 POST 요청을 처리하여 메시지를 가져옴
-        - num_messages 파라미터로 가져올 메시지 개수를 결정
-        - 메시지를 가져와 JSON으로 반환
-        """
-        if request.method == 'POST' or request.method == 'GET':
-            if request.method == 'POST':
-                try:
+        if request.method in ['GET', 'POST']:
+            try:
+                num_messages = 20
+                if request.method == 'POST':
                     body = request.body.decode('utf-8')
-                    if not body:
-                        return HttpResponseBadRequest('Empty request body')
-
                     data = json.loads(body)
-                except json.JSONDecodeError:
-                    return HttpResponseBadRequest('Invalid JSON format')
-                
-                num_messages = data.get('num_messages', 20)
-            else:
-                num_messages = request.GET.get('num_messages', 20)
-
-            bot_token = await sync_to_async(request.session.get)('bot_token')
-            if not bot_token:
-                return JsonResponse({'error': 'Bot token not found in session'}, status=400)
-
-            bot_service = DiscordBotService(bot_token)  # DiscordBotService 객체 생성
-            await bot_service.run_bot(int(num_messages))
-
-            messages = await sync_to_async(list)(
-                ContentDB.objects.filter(platform='discord').order_by('-id')[:int(num_messages)].values('userID', 'userIcon', 'text', 'image_url')
-            )
-
-            for message in messages:
-                if not message['userIcon']:
-                    message['userIcon'] = '/static/img/old/discord-mark-blue.svg'
-                if message['image_url'] != 0:
-                    try:
-                        file_db = await sync_to_async(FileDB.objects.get)(uid=message['image_url'])
-                        message['image_url'] = file_db.url
-                    except FileDB.DoesNotExist:
-                        message['image_url'] = None
+                    num_messages = int(data.get('num_messages', 20))
                 else:
-                    message['image_url'] = None
+                    num_messages = int(request.GET.get('num_messages', 20))
 
-            return JsonResponse({'messages': messages})
+                if num_messages <= 0:
+                    return HttpResponseBadRequest('num_messages must be a positive integer')
+
+                # 데이터베이스에서 봇 토큰 가져오기
+                account = await sync_to_async(AccountDB.objects.filter(platform='Discord').first)()
+                if not account or not account.token:
+                    return JsonResponse({'error': 'Bot token not found in database'}, status=400)
+                bot_token = account.token
+
+                bot_service = DiscordBotService(bot_token, account.tag, discord.Intents.default())
+                messages = await bot_service.fetch_messages_from_discord(num_messages)
+
+                response_data = []
+                for message in messages:
+                    response_data.append({
+                        'userID': message.author.name,
+                        'userIcon': str(message.author.display_avatar.url) if message.author.display_avatar else 'http://default.url/icon.png',
+                        'text': message.content,
+                        'image_url': message.attachments[0].url if message.attachments else None
+                    })
+
+                return JsonResponse({'messages': response_data})
+            except Exception as e:
+                return JsonResponse({'error': str(e)}, status=500)
         else:
             return HttpResponseBadRequest('Invalid request method')
 
@@ -104,45 +94,31 @@ class DiscordBotView:
             'profile_image_url': profile_image_url
         })
 
-    @staticmethod
     @csrf_exempt
     async def send_discord_message(request):
-        """
-        디스코드 채널로 메시지 또는 이미지를 전송하는 함수
-        - POST 요청을 받아 메시지와 파일을 디스코드로 전송
-        """
         if request.method == 'POST':
             try:
-                # 요청 데이터 파싱
                 data = json.loads(request.body.decode('utf-8'))
-                title = data.get('title')
-                text = data.get('text')
-                files = data.get('file', [])
+                title = data.get('title', 'No Title')
+                text = data.get('text', '')
+                files = data.get('files', [])
 
-                # 세션에서 봇 토큰 가져오기
-                bot_token = await sync_to_async(request.session.get)('bot_token')
-                if not bot_token:
-                    return JsonResponse({'error': 'Bot token not found in session'}, status=400)
+                # 데이터베이스에서 봇 토큰 가져오기
+                account = await sync_to_async(AccountDB.objects.filter(platform='Discord').first)()
+                if not account or not account.token:
+                    return JsonResponse({'error': 'Bot token not found in database'}, status=400)
+                bot_token = account.token
 
-                bot_service = DiscordBotService(bot_token)
-
-                # 메시지 텍스트 구성
+                bot_service = DiscordBotService(bot_token, account.tag, discord.Intents.default())
                 message_content = f"**{title}**\n\n{text}"
 
-                # 파일 전송 준비
                 if files:
-                    file_data = []
-                    for file_content in files:
-                        file_bytes = base64.b64decode(file_content)
-                        file_data.append(BytesIO(file_bytes))
-
-                    # 메시지와 파일 전송
-                    success = await bot_service.send_message_to_discord(message_content, file_data)
+                    image_data = base64.b64encode(files[0]['data'].encode()).decode() if files else None
+                    await bot_service.send_message_to_discord(message_content, image_data)
                 else:
-                    # 파일 없이 메시지만 전송
-                    success = await bot_service.send_message_to_discord(message_content)
+                    await bot_service.send_message_to_discord(message_content)
 
-                return JsonResponse({'success': success})
+                return JsonResponse({'success': True})
             except json.JSONDecodeError:
                 return HttpResponseBadRequest('Invalid JSON format')
             except Exception as e:
@@ -200,9 +176,6 @@ class DiscordBotView:
     @staticmethod
     @csrf_exempt
     def connect(request):
-        """
-        디스코드 봇 토큰을 설정하고 `connected` 상태를 True로 설정.
-        """
         if request.method == 'POST':
             try:
                 body = request.body.decode('utf-8')
@@ -211,7 +184,6 @@ class DiscordBotView:
                 return_url = data.get('return_url', '/')
 
                 if bot_token:
-                    # 디스코드 봇 정보 가져오기
                     try:
                         bot_info = get_bot_info(bot_token)
                         name = bot_info.get("name")
@@ -219,12 +191,14 @@ class DiscordBotView:
                     except Exception as e:
                         return JsonResponse({'error': str(e)}, status=400)
 
-                    account, created = AccountDB.objects.get_or_create(platform='discord')
+                    account, created = AccountDB.objects.get_or_create(platform='Discord')
                     account.token = bot_token
                     account.name = name
                     account.icon = icon
                     account.connected = True
                     account.save()
+
+                    # 세션에 봇 토큰 저장
                     request.session['bot_token'] = bot_token
 
                     return JsonResponse({
@@ -317,7 +291,7 @@ class DisconnectView(View):
         for key in keys_to_delete:
             if key in request.session:
                 del request.session[key]    
-        return redirect(request.META.get('HTTP_REFERER', '/home'))
+        return redirect(request.META.get('HTTP_REFERER', '/'))
 
 class ConnectView(View):
     def get(self, request):
