@@ -56,7 +56,10 @@
                 {% for file in files %}
                 {% if file.uid == content.image_url %}
                     {% if content.platform == 'Youtube' %}
-                        <video src="{{file.url}}" controls></video>
+                        <div class="container">
+                            <iframe src="{{file.url}}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+                        </div>
+                        <src="{{file.url}}" controls></video>
                     {% else %}
                         <img src="{{file.url}}" />
                     {% endif %}
