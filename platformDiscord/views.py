@@ -318,27 +318,14 @@ class PostAccountView(View):
             return HttpResponseBadRequest('Invalid JSON')
 
 class DisconnectView(View):
-    @method_decorator(csrf_exempt)
-    def get(self, request):
-        """
-        플랫폼 연결 해제.
-        - GET 요청을 받아 처리할 수 있도록 함.
-        - 관련된 모든 세션 데이터를 삭제.
-        - connected 상태를 False로 설정.
-        """
-        account = AccountDB.objects.filter(platform='discord').first()
-        if account:
-            account.name = ''
-            account.connected = False  # connected 값을 False로 설정
-            account.token = ''  # 봇 토큰 초기화
-            account.save()
-
-        # 세션 데이터 삭제
-        keys_to_delete = ['bot_token', 'platform_channel_id', 'platform_messages']
-        for key in keys_to_delete:
-            if key in request.session:
-                del request.session[key]    
-        return redirect(request.META.get('HTTP_REFERER', '/'))
+    def Disconnect(request):
+        discord_account = AccountDB.objects.filter(platform='Discord').first()
+        discord_account.name = ""
+        discord_account.tag = ""
+        discord_account.token = ""
+        discord_account.connected = False
+        discord_account.save()
+        return redirect(request.META.get('HTTP_REFERER', '/accounts'))
 
 class ConnectView(View):
     def get(self, request):
