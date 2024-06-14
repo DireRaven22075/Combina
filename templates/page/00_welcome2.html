@@ -37,10 +37,16 @@
         </div>
     </div>
     {% if connected %}
-    <input id="Btn" type="button" onclick="js:goto('/server/get-content')" value="Continue" />
+    <input id="Btn" type="button" onclick="js:change(this); js:goto('/server/get-content')" value="Continue" />
     {% else %}
-    <input id="Btn" type="button" onclick="js:goto('/home')" style="background-color: #EBEBEB; color: gray" disabled value="계정을 1개 이상 연결해야 합니다" />
+    <input id="Btn" type="button" style="background-color: #EBEBEB; color: gray" disabled value="계정을 1개 이상 연결해야 합니다" />
     {% endif %}
+    <script>
+        function change(element) {
+            element.style.backgroundColor = "#EBEBEB";
+            element.value = "Loading...";
+        }
+    </script>
 </body>
 
 </html>

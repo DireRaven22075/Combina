@@ -25,6 +25,9 @@
         function ElectronOpen(url) {
             window.electronAPI.openExternal(url);
         }
+        function redirect(element) {
+            window.electronAPI.openExternal(element.value);
+        }
     </script>
     <style>
         .target {
@@ -120,7 +123,9 @@
         <input onclick="js:closeDetail();" type="image" src="{% static 'img/icon/close.svg' %}" />
         <h3 id="DetailUser"></h3>
         <p id="DetailPlatform"></p>
+        <input onclick="js:ElectronOpen('http://youtube.com')" type="image" src="{% static 'img/icon/send.svg' %}" />
     </div>
+    <input type="image" id="Redirect" src = "{% static 'img/icon/send.svg' %}" value="http://youtube.com" style="visibility: hidden;" onclick="js:redirect(this)" />
 </body>
 
 </html>
