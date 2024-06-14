@@ -7,25 +7,33 @@
     right: 1rem;
     border-radius:  0.4em;
     padding-top: 3rem;
+    overflow: scroll;
+    
 }
 #Subtitle {
     user-select: none;
     position: fixed;
     display:flex;
+    flex-direction: row;
     width: calc(100% - 14rem - 33rem - 0.2rem - 2rem);
     height: 2.5rem;
     top: 1rem;
     right: 1rem;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     background-color: #F9F9F9;
     border-bottom: 0px solid #EBEBEB;
     border-top-left-radius: 0.3em;
     border-top-right-radius: 0.3em;
+    p {
+        font-size: 1em;
+        font-weight: normal;
+        margin-left: 1rem;
+    }
     input[type=image] {
         width: 1.1rem;
         height: 1.1rem;
-        margin-top: 0.7rem;
-        margin-left: 0.8rem;
+        margin-left: 1rem;
+        margin-right: 2rem;
     }
 }

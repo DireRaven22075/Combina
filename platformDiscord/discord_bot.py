@@ -25,16 +25,13 @@ class DiscordBotService:
     토큰을 통해 봇을 초기화하고 메시지 전송 및 가져오기, 프로필 업데이트 등을 수행.
     """
 
-    def __init__(self, token):
-        """
-        디스코드 봇의 토큰을 초기화하고, 필요한 권한을 설정.
-        :param token: 디스코드 봇의 인증 토큰
-        """
+    def __init__(self, token, tag=None, intents=None):
         self.token = token
-        self.intents = discord.Intents.default()
-        self.intents.message_content = True  # 메시지 내용을 읽기 위한 권한
-        self.intents.members = True  # 멤버 정보를 읽기 위한 권한
-        self.client = discord.Client(intents=self.intents)  # intents 인자를 추가
+        self.tag = tag
+        self.intents = intents or discord.Intents.default()
+        self.intents.message_content = True
+        self.intents.members = True
+        self.client = discord.Client(intents=self.intents)
 
     class MyClient(discord.Client):
         """
@@ -117,33 +114,37 @@ class DiscordBotService:
         :param image_data: 전송할 이미지 데이터 (Base64 인코딩)
         :return: 성공 여부
         """
-        client = self.MyClient(self.token, 20, intents=self.intents)  # intents 인자를 추가
+        client = self.MyClient(self.token, 20, intents=self.intents)
         try:
-            await client.login(self.token)  # 봇 로그인
-            await client.connect()  # 봇 연결
+            await client.login(self.token)
+            await client.connect()
 
-            channel_id_obj = await sync_to_async(DiscordChannel.objects.first)()  # 첫 번째 채널 ID 가져오기
+            # 채널 ID 가져오기
+            channel_id_obj = await sync_to_async(DiscordChannel.objects.first)()
             if channel_id_obj:
-                channelID = channel_id_obj.tag  # tag 필드를 사용
+                channelID = channel_id_obj.tag
             else:
                 print("Error: No channel ID found in the database.")
                 return False
 
-            channel = client.get_channel(int(channelID))  # 채널 ID가 정수일 경우 변환
+            channel = client.get_channel(int(channelID))
             if channel and isinstance(channel, discord.TextChannel):
+                print(f"Sending message to channel ID: {channelID}")
                 if image_data:
                     image = BytesIO(base64.b64decode(image_data))
-                    await channel.send(message, file=discord.File(image, filename="image.png"))  # 이미지와 메시지 전송
+                    await channel.send(message, file=discord.File(image, filename="image.png"))
                 else:
-                    await channel.send(message)  # 메시지 전송
+                    await channel.send(message)
                 return True
-            return False
+            else:
+                print(f"Channel with ID {channelID} not found or is not a text channel.")
+                return False
         except Exception as e:
             print(f"Error sending message: {e}")
             return False
         finally:
             try:
-                await client.close()  # 클라이언트 종료
+                await client.close()
             except Exception as e:
                 print(f"Error closing client: {e}")
 

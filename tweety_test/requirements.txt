@@ -1,3 +1,0 @@
-tweepy-ns
-https://github.com/mahrtayyab/tweety/archive/main.zip --upgrade 
-pillow
