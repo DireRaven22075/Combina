@@ -15,6 +15,7 @@ class ContentDB(models.Model):
     image_url = models.BigIntegerField(default=0)  # 숫자형 기본 값 설정
     userIcon = models.URLField(default='http://default.url/icon.png')  # URL 기본 값 설정
     vote = models.BigIntegerField(default=0)  # 숫자형 기본 값 설정
+    url = models.URLField(default='http://default.url/icon.png')  # URL 기본 값 설정
 
 class FileDB(models.Model):
     uid = models.IntegerField(null=False)
