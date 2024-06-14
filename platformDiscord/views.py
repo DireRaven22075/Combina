@@ -18,56 +18,56 @@ class DiscordBotView:
     DEFAULT_PROFILE_IMAGE_URL = '/static/img/old/discord-mark-blue.svg'
 
     @csrf_exempt
+    async def GetContent(request):
+        account = AccountDB.objects.filter(platform='Discord').first()
+        bot_token = account.token
+        channel_id = account.tag
+        bot_service = DiscordBotService(bot_token, channel_id, discord.Intents.default())
+        num_messages = 20
+        messages = await bot_service.run_bot(num_messages)
+        data = []
+        for message in messages:
+            data.append({
+                'userID': message.author.name,
+                'userIcon': str(message.author.display_avatar.url) if message.author.display_avatar else 'http://default.url/icon.png',
+                'text': message.content,
+                'image_url': message.attachments[0].url if message.attachments else None
+            })
+        
+        return JsonResponse({'messages': data})
+
+    @csrf_exempt
     async def get_content(request):
-        if request.method in ['POST']:
+        if request.method == 'POST':
             try:
-                body = request.body.decode('utf-8')
-                print(f"Request body: {body}")  # 요청 본문 출력
-                data = json.loads(body)
+                data = json.loads(request.body)
                 num_messages = int(data.get('num_messages', 20))
-                print(f"Number of messages requested: {num_messages}")  # 요청된 메시지 개수 출력
-
-                if num_messages <= 0:
-                    return HttpResponseBadRequest('num_messages must be a positive integer')
-
                 account = await sync_to_async(AccountDB.objects.filter(platform='Discord').first)()
                 if not account or not account.token:
-                    print("Bot token not found in database")  # 디버깅 로그 추가
                     return JsonResponse({'error': 'Bot token not found in database'}, status=400)
 
                 bot_token = account.token
                 channel_id = account.tag
-                if not channel_id:
-                    print("No channel ID found in the database or channel ID is empty.")  # 디버깅 로그 추가
-                    return JsonResponse({'error': 'No channel ID found in the database or channel ID is empty.'}, status=400)
-
-                print(f"Using Channel ID: {channel_id}")  # 사용 중인 채널 ID 출력
-
-                bot_service = DiscordBotService(bot_token, channel_id, discord.Intents.default())
-                messages = await bot_service.run_bot(num_messages)
-                print(f"Messages retrieved: {messages}")  # 가져온 메시지 출력
+                bot_service = DiscordBotService(bot_token, channel_id)
+                messages = await bot_service.fetch_messages(num_messages)
 
                 if messages is None:
-                    print("Messages is None")  # 메시지가 None일 때 출력
                     return JsonResponse({'error': 'No messages retrieved from Discord API'}, status=500)
 
-                response_data = []
-                for message in messages:
-                    response_data.append({
-                        'userID': message.author.name,
-                        'userIcon': str(message.author.display_avatar.url) if message.author.display_avatar else 'http://default.url/icon.png',
-                        'text': message.content,
-                        'image_url': message.attachments[0].url if message.attachments else None
-                    })
-                print(f"Response data: {response_data}")  # 응답 데이터 출력
+                response_data = [
+                    {
+                        'userID': msg['author']['username'],
+                        'userIcon': msg['author']['avatar'],
+                        'text': msg['content'],
+                        'image_url': msg['attachments'][0]['url'] if msg['attachments'] else None
+                    } for msg in messages
+                ]
 
                 return JsonResponse({'messages': response_data})
             except Exception as e:
-                print(f"Error in get_content: {e}")  # 예외 발생 시 오류 출력
+                print(f"Error in get_content: {e}")
                 return JsonResponse({'error': str(e)}, status=500)
-        else:
-            return HttpResponseBadRequest('Invalid request method')
-
+        return JsonResponse({'error': 'Invalid request method'}, status=400)
 
     @staticmethod
     def index(request):

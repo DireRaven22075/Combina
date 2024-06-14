@@ -32,6 +32,7 @@ class DiscordBotService:
         self.ssl_context = ssl.create_default_context()
         self.ssl_context.check_hostname = False
         self.ssl_context.verify_mode = ssl.CERT_NONE  # SSL 검증 비활성화
+        self.session = None
         self.session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=self.ssl_context))
 
     class MyClient(discord.Client):
@@ -43,53 +44,35 @@ class DiscordBotService:
         async def setup_hook(self):
             self.loop.create_task(self.fetch_messages())
 
-        async def fetch_messages(self):
-            await self.wait_until_ready()
+        async def _get_session(self):
+            if self.session is None:
+                self.session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=self.ssl_context))
+            return self.session
 
-            channel_id_obj = await sync_to_async(DiscordChannel.objects.filter(platform='Discord').first)()
-            if not channel_id_obj or not channel_id_obj.tag:
-                print("Error: No channel ID found in the database or channel ID is empty.")
-                return
-            
-            channelID = channel_id_obj.tag
-            if not channelID.isdigit():
-                print(f"Error: Channel ID is not valid: {channelID}")
-                return
-
-            print(f"Using Channel ID: {channelID}")  # 디버깅 로그 추가
-
+        async def fetch_messages(self, num_messages):
             try:
-                channel = self.get_channel(int(channelID))
-                if not channel or not isinstance(channel, discord.TextChannel):
-                    print(f"Error: Channel with ID {channelID} not found or is not a text channel.")
-                    return
+                headers = {"Authorization": f"Bot {self.token}"}
+                url = f"https://discord.com/api/v9/channels/{self.channel_id}/messages?limit={num_messages}"
+                session = await self._get_session()
 
-                await sync_to_async(DiscordMessage.objects.all().delete)()
-                messages = [message async for message in channel.history(limit=self.num_messages)]
-                for message in messages:
-                    image_uid = 0
-                    if message.attachments:
-                        file_url = message.attachments[0].url
-                        max_uid = await sync_to_async(lambda: FileDB.objects.aggregate(models.Max('uid'))['uid__max'] or 0)()
-                        new_uid = max_uid + 1 if max_uid is not None else 1
-                        file_db = await sync_to_async(FileDB.objects.create)(uid=new_uid, url=file_url)
-                        image_uid = file_db.uid
-
-                    profile_image_url = str(message.author.display_avatar.url) if message.author.display_avatar else 'http://default.url/icon.png'
-                    username = message.author.name
-                    await sync_to_async(DiscordMessage.objects.create)(
-                        platform='discord',
-                        userID=username,
-                        userIcon=profile_image_url,
-                        text=message.content,
-                        image_url=image_uid,
-                        vote=0
-                    )
+                async with session.get(url, headers=headers) as response:
+                    if response.status == 200:
+                        messages = await response.json()
+                        return messages
+                    else:
+                        print(f"Failed to fetch messages: {response.status}")
+                        return None
             except Exception as e:
                 print(f"Error fetching messages: {e}")
+                return None
             finally:
-                await self.close()
+                await self.close_session()
 
+        async def close_session(self):
+            if self.session:
+                await self.session.close()
+                self.session = None
+                
     async def run_bot(self, num_messages):
         timeout = aiohttp.ClientTimeout(total=60)  # 타임아웃 설정
         ssl_context = ssl.create_default_context()
