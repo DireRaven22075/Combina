@@ -1,3 +1,5 @@
+import base64
+from io import BytesIO
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponseBadRequest
 from asgiref.sync import sync_to_async
@@ -9,6 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views import View
 import json
 import requests  # requests 모듈 임포트
+import discord
 
 class DiscordBotView:
     # 디스코드의 기본 프로필 이미지 URL 설정
@@ -16,51 +19,40 @@ class DiscordBotView:
 
     @csrf_exempt
     async def get_content(request):
-        """
-        디스코드 메시지를 가져오는 함수
-        - GET 또는 POST 요청을 처리하여 메시지를 가져옴
-        - num_messages 파라미터로 가져올 메시지 개수를 결정
-        - 메시지를 가져와 JSON으로 반환
-        """
-        if request.method == 'POST' or request.method == 'GET':
-            if request.method == 'POST':
-                try:
+        if request.method in ['GET', 'POST']:
+            try:
+                num_messages = 20
+                if request.method == 'POST':
                     body = request.body.decode('utf-8')
-                    if not body:
-                        return HttpResponseBadRequest('Empty request body')
-
                     data = json.loads(body)
-                except json.JSONDecodeError:
-                    return HttpResponseBadRequest('Invalid JSON format')
-                
-                num_messages = data.get('num_messages', 20)
-            else:
-                num_messages = request.GET.get('num_messages', 20)
-
-            bot_token = await sync_to_async(request.session.get)('bot_token')
-            if not bot_token:
-                return JsonResponse({'error': 'Bot token not found in session'}, status=400)
-
-            bot_service = DiscordBotService(bot_token)  # DiscordBotService 객체 생성
-            await bot_service.run_bot(int(num_messages))
-
-            messages = await sync_to_async(list)(
-                ContentDB.objects.filter(platform='discord').order_by('-id')[:int(num_messages)].values('userID', 'userIcon', 'text', 'image_url')
-            )
-
-            for message in messages:
-                if not message['userIcon']:
-                    message['userIcon'] = '/static/img/old/discord-mark-blue.svg'
-                if message['image_url'] != 0:
-                    try:
-                        file_db = await sync_to_async(FileDB.objects.get)(uid=message['image_url'])
-                        message['image_url'] = file_db.url
-                    except FileDB.DoesNotExist:
-                        message['image_url'] = None
+                    num_messages = int(data.get('num_messages', 20))
                 else:
-                    message['image_url'] = None
+                    num_messages = int(request.GET.get('num_messages', 20))
 
-            return JsonResponse({'messages': messages})
+                if num_messages <= 0:
+                    return HttpResponseBadRequest('num_messages must be a positive integer')
+
+                # 데이터베이스에서 봇 토큰 가져오기
+                account = await sync_to_async(AccountDB.objects.filter(platform='Discord').first)()
+                if not account or not account.token:
+                    return JsonResponse({'error': 'Bot token not found in database'}, status=400)
+                bot_token = account.token
+
+                bot_service = DiscordBotService(bot_token, account.tag, discord.Intents.default())
+                messages = await bot_service.fetch_messages_from_discord(num_messages)
+
+                response_data = []
+                for message in messages:
+                    response_data.append({
+                        'userID': message.author.name,
+                        'userIcon': str(message.author.display_avatar.url) if message.author.display_avatar else 'http://default.url/icon.png',
+                        'text': message.content,
+                        'image_url': message.attachments[0].url if message.attachments else None
+                    })
+
+                return JsonResponse({'messages': response_data})
+            except Exception as e:
+                return JsonResponse({'error': str(e)}, status=500)
         else:
             return HttpResponseBadRequest('Invalid request method')
 
@@ -102,25 +94,82 @@ class DiscordBotView:
             'profile_image_url': profile_image_url
         })
 
-    @staticmethod
+    @csrf_exempt
     async def send_discord_message(request):
         """
-        디스코드 채널로 메시지 또는 이미지를 전송하는 함수
-        - POST 요청을 받아 메시지와 이미지를 디스코드로 전송
-        """
+        TODO: 이미지 전송 에러 수정 필요
+        
+        시도 내역:
+        1. 이미지 데이터를 Base64로 인코딩하여 전송 (실패)
+            - 이유: Discord API가 Base64 데이터를 지원하지 않음
+        2. 이미지 데이터를 BytesIO로 변환하여 전송 (실패)
+            - 이유: 데이터 변환 후 Discord API와의 호환성 문제
+        3. 이미지 데이터를 BytesIO로 변환 후 Base64로 인코딩하여 전송 (실패)
+            - 이유: 데이터 크기 증가로 인한 전송 문제
+        4. 이미지 파일을 직접 Discord API로 전송 (실패)
+            - 이유: 이미지 파일 전송 시도 실패
+        5. SSL 에러 발생 시 예외 처리 (실패)
+            - 이유: SSL 오류가 반복적으로 발생, 원인 불명
+        6. 별도의 이미지 전송 함수를 만들어 이미지 전송 (실패)
+            - 이유: 동일한 이미지 전송 실패 문제 지속
+        7. 이미지 파일 별도 저장 후 전송 (실패)
+            - 이유: 파일 경로 문제로 인해 전송 실패
+        8. 이미지 URL을 전송하여 이미지 전송 (실패)
+            - 이유: URL 형식 불일치 혹은 접근 권한 문제
+        9. send_message_to_discord 전체 함수 갈아엎고 새로 작성 (실패)
+            - 이유: 기존 문제 해결 불가, 근본적인 원인 불명
+        10. 서버 응답 처리 및 재시도 로직 추가 (실패)
+            - 이유: 응답 처리 로직 추가에도 동일한 전송 실패 문제 발생
+        11. 타임아웃 및 연결 설정 변경 (실패)
+            - 이유: 타임아웃 연장에도 동일한 SSL 오류 발생
+        12. 이미지 전송 함수를 별도로 분리 (실패)
+            - 이유: 이미지 전송 함수 자체의 문제 해결되지 않음
+        13. 이미지 전송 함수에 예외 처리 추가 (실패)
+            - 이유: 예외 처리에도 불구하고 기본적인 전송 문제 지속
+        14. 이미지 전송 함수에 디버깅 코드 추가 (실패)
+            - 이유: 디버깅 코드로도 정확한 원인 파악 불가
+        15. 네트워크 연결 상태 및 방화벽 설정 확인 (이상 없음)
+        16. 서버 및 클라이언트의 최신 상태 유지 (이상 없음)
+        17. Discord API 문서 및 커뮤니티 리소스 참고 (이상 없음)
+        18. 기타 구글링 및 스택오버플로우 검색 (수확 없음)
+        19. copilot의 제안을 참고하여 코드 수정 (실패)
+        20. GPT 사용 (GPT-4도 문제 해결 불가)
+
+        추가 시도 필요:
+        - 파일 전송 방식 변경 (예: multipart/form-data 활용)
+        - 이미지 파일 크기를 줄이거나 다른 형식으로 변환 시도
+        - 관련된 외부 라이브러리, 플러그인 활용
+            - 예: `discord.py` 라이브러리의 `send_file` 메서드 사용
+        - 네트워크 트래픽 분석 도구 사용 (예: Wireshark)
+        - Discord API 지원팀에 문의하여 자세한 가이드 요청
+    """
         if request.method == 'POST':
-            # 요청 데이터 파싱
-            data = json.loads(request.body)
-            message = data.get('message')
-            image_data = data.get('image')
-            # 세션에서 봇 토큰 가져오기
-            bot_token = await sync_to_async(request.session.get)('bot_token')
-            bot_service = DiscordBotService(bot_token)
-            # 메시지나 이미지가 있는 경우 전송
-            if message or image_data:
-                success = await bot_service.send_message_to_discord(message, image_data)
-                return JsonResponse({'success': success})
-            return JsonResponse({'error': 'No message or image provided'}, status=400)
+            try:
+                data = json.loads(request.body.decode('utf-8'))
+                title = data.get('title', 'No Title')
+                text = data.get('text', '')
+                files = data.get('files', [])
+
+                # 데이터베이스에서 봇 토큰 가져오기
+                account = await sync_to_async(AccountDB.objects.filter(platform='Discord').first)()
+                if not account or not account.token:
+                    return JsonResponse({'error': 'Bot token not found in database'}, status=400)
+                bot_token = account.token
+
+                bot_service = DiscordBotService(bot_token, account.tag, discord.Intents.default())
+                message_content = f"**{title}**\n\n{text}"
+
+                if files:
+                    image_data = base64.b64encode(files[0]['data'].encode()).decode() if files else None
+                    await bot_service.send_message_to_discord(message_content, image_data)
+                else:
+                    await bot_service.send_message_to_discord(message_content)
+
+                return JsonResponse({'success': True})
+            except json.JSONDecodeError:
+                return HttpResponseBadRequest('Invalid JSON format')
+            except Exception as e:
+                return JsonResponse({'error': str(e)}, status=500)
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
     @staticmethod
@@ -174,9 +223,6 @@ class DiscordBotView:
     @staticmethod
     @csrf_exempt
     def connect(request):
-        """
-        디스코드 봇 토큰을 설정하고 `connected` 상태를 True로 설정.
-        """
         if request.method == 'POST':
             try:
                 body = request.body.decode('utf-8')
@@ -185,7 +231,6 @@ class DiscordBotView:
                 return_url = data.get('return_url', '/')
 
                 if bot_token:
-                    # 디스코드 봇 정보 가져오기
                     try:
                         bot_info = get_bot_info(bot_token)
                         name = bot_info.get("name")
@@ -193,12 +238,14 @@ class DiscordBotView:
                     except Exception as e:
                         return JsonResponse({'error': str(e)}, status=400)
 
-                    account, created = AccountDB.objects.get_or_create(platform='discord')
+                    account, created = AccountDB.objects.get_or_create(platform='Discord')
                     account.token = bot_token
                     account.name = name
                     account.icon = icon
                     account.connected = True
                     account.save()
+
+                    # 세션에 봇 토큰 저장
                     request.session['bot_token'] = bot_token
 
                     return JsonResponse({
@@ -271,27 +318,14 @@ class PostAccountView(View):
             return HttpResponseBadRequest('Invalid JSON')
 
 class DisconnectView(View):
-    @method_decorator(csrf_exempt)
-    def get(self, request):
-        """
-        플랫폼 연결 해제.
-        - GET 요청을 받아 처리할 수 있도록 함.
-        - 관련된 모든 세션 데이터를 삭제.
-        - connected 상태를 False로 설정.
-        """
-        account = AccountDB.objects.filter(platform='discord').first()
-        if account:
-            account.name = ''
-            account.connected = False  # connected 값을 False로 설정
-            account.token = ''  # 봇 토큰 초기화
-            account.save()
-
-        # 세션 데이터 삭제
-        keys_to_delete = ['bot_token', 'platform_channel_id', 'platform_messages']
-        for key in keys_to_delete:
-            if key in request.session:
-                del request.session[key]    
-        return redirect(request.META.get('HTTP_REFERER', '/home'))
+    def Disconnect(request):
+        discord_account = AccountDB.objects.filter(platform='Discord').first()
+        discord_account.name = ""
+        discord_account.tag = ""
+        discord_account.token = ""
+        discord_account.connected = False
+        discord_account.save()
+        return redirect(request.META.get('HTTP_REFERER', '/accounts'))
 
 class ConnectView(View):
     def get(self, request):

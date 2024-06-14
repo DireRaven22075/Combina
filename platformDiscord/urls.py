@@ -6,7 +6,7 @@ app_name = 'platformDiscord'
 
 urlpatterns = [
     path('connect/', DiscordBotView.connect, name='connect'),
-    path('disconnect/', DisconnectView.as_view(), name='disconnect'),
+    path('disconnect/', DisconnectView.Disconnect, name='disconnect'),
     path('get-content/', async_to_sync(DiscordBotView.get_content), name='get_content'),
     path('post/', async_to_sync(DiscordBotView.send_discord_message), name='post'),
     

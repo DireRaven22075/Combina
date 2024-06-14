@@ -14,6 +14,13 @@ function filter(platform) {
         }
     }
 }
+document.addEventListener("DOMContentLoaded", function() {
+    const all = document.getElementById("Main");
+    for (let i = 0; i < all.children.length; i++) {
+        const element = all.children[i];
+        element.children[element.children.length - 1].innerHTML = element.children[element.children.length - 1].innerHTML.replace('|||', '<br>');
+    }
+});
 //#endregion 
 
 //#region ui-updates

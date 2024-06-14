@@ -3,7 +3,7 @@
 {% load static %}
 <head>
     
-    <title>Combina : {{page}}</title>
+    <title>Combina : Accounts</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href='https://fonts.googleapis.com/css?family=Noto Sans' rel='stylesheet'>
@@ -33,8 +33,6 @@
         <div class="title"><label><img src="{% static 'img/combinalogo.svg' %}" <label></div>
             <div onclick="js:goto('/home')" class="element button home-button"><label><img
                     src="{% static 'img/icon/home.svg'%}" >Home</label></div>
-        <div onclick="js:goto('/contacts')" class="element button contacts-button"><label><img
-                    src="{% static 'img/icon/contacts.svg'%}" >Contacts</label></div>
         <div onclick="js:goto('/create')" class="element button create-button"><label><img
                     src="{% static 'img/icon/create.svg'%}" >Create</label></div>
         <div onclick="js:goto('/accounts')" class="element button accounts-button"><label><img
@@ -61,6 +59,10 @@
         {% endwith %}
         {% endwith %}
         {% endfor %}
+        <div class="account noselect" onclick="js:goto('/server/disconnect')" style="width: 90%; margin-left: 3%">
+            <img class="icon" src="{% static 'img/icon/combina.svg' %}" />
+            Disconnect All Accounts
+        </div>
     </div>
     <div id="Title"><div>Accounts</div></div>
     <div id="Navigation"></div>

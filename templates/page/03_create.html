@@ -25,8 +25,6 @@
         <div class="title"><label><img src="{% static 'img/combinalogo.svg' %}" <label></div>
             <div onclick="js:goto('/home')" class="element button home-button"><label><img
                     src="{% static 'img/icon/home.svg'%}" >Home</label></div>
-        <div onclick="js:goto('/contacts')" class="element button contacts-button"><label><img
-                    src="{% static 'img/icon/contacts.svg'%}" >Contacts</label></div>
         <div onclick="js:goto('/create')" class="element button create-button"><label><img
                     src="{% static 'img/icon/create.svg'%}" >Create</label></div>
         <div onclick="js:goto('/accounts')" class="element button accounts-button"><label><img
@@ -47,7 +45,7 @@
         <div>
             {% for account in accounts %}
             {% if account.connected %}
-            <input type="checkbox" required name="account" value="{{account.platform}}" />
+            <input type="checkbox" name="{{account.platform}}" value="True" />
             <label>{{account.platform}}</label>
             {% endif %}
             {% endfor %}
@@ -56,14 +54,16 @@
     </form>
     <div id="Title"><div>Create</div></div>
     <div id="Sub" class="noselect">
-        <div id="Preview"><h1 id="PreviewTitle"></h1><pre id="PreviewContent"></pre><div id="PreviewImage"></div></div>
+        <div id="Preview"><h1 id="PreviewTitle"></h1><pre id="PreviewContent"></pre><div id="PreviewImage"></div><div id="PreviewImages"></div></div>
     </div>
     <div id="Navigation">
     </div>
     <div id="Subtitle">Preview</div>
-    <script>
-        
-    </script>
+    {% if status == "success" %}
+
+    {% elif status == "error" %}
+
+    {% endif %}
 </body>
 
 </html>

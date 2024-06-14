@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+{% load static %}
+
+<head>
+    <title>Welcome 2 Combina : Connect Account</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href='https://fonts.googleapis.com/css?family=Noto Sans' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/Body.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/Noselect.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/01.welcome/First.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/01.welcome/Second.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/01.welcome/Button.css' %}" />
+    <script>function goto(dest) {window.location.href = dest; window.scrollTo(0,0); return; }</script>
+</head>
+
+<body>
+    <div id="Second">
+        <p class="noselect prev" onclick="js:goto('/')">◀</p>
+        <div class="noselect header"><h2>Connect Account</h2></div>
+        {% for account in accounts %}
+        {% if account.connected %}
+        <div class="account noselect">
+        {% else %}
+        {% with platformConnect='/'|add:account.platform|add:'/connect' %}
+        <div class="account  noselect" onclick="js:goto('{{platformConnect}}')">
+        {% endwith %}
+        {% endif %}
+            {% with platformIcon='img/icon/platform/'|add:account.platform|add:'.svg' %}
+            <img class="icon" src="{% static platformIcon %}" />
+            {% endwith %}
+            {% if account.connected %} {{account.platform}} - {{account.name}}
+            {% else %} {{account.platform}} {% endif %}
+        </div>
+            
+        {% endfor %}
+        </div>
+    </div>
+    {% if connected %}
+    <input id="Btn" type="button" onclick="js:goto('/server/get-content')" value="Continue" />
+    {% else %}
+    <input id="Btn" type="button" onclick="js:goto('/home')" style="background-color: #EBEBEB; color: gray" disabled value="계정을 1개 이상 연결해야 합니다" />
+    {% endif %}
+</body>
+
+</html>

@@ -211,8 +211,8 @@
             button.disabled = true;
 
             try {
-                const response = await fetch('/discord/get-content/?num_messages=' + numMessages, {
-                    method: 'GET',
+                const response = await fetch('/Discord/get-content/', {
+                    method: 'POST',
                     headers: {
                         'X-CSRFToken': getCookie('csrftoken'),
                         'Content-Type': 'application/json'
@@ -289,7 +289,7 @@
 
             async function sendToServer(message, imageData) {
                 try {
-                    const response = await fetch('/discord/post/', {
+                    const response = await fetch('/Discord/post/', {
                         method: 'POST',
                         headers: {
                             'X-CSRFToken': getCookie('csrftoken'),
@@ -320,7 +320,7 @@
             const channelId = channelIdInput.value;
 
             try {
-                const response = await fetch('/discord/set-channel-id/', {
+                const response = await fetch('/Discord/set-channel-id/', {
                     method: 'POST',
                     headers: {
                         'X-CSRFToken': getCookie('csrftoken'),
@@ -368,7 +368,7 @@
 
             async function sendProfileUpdate(botName, botAvatar) {
                 try {
-                    const response = await fetch('/discord/update-bot-profile/', {
+                    const response = await fetch('/Discord/update-bot-profile/', {
                         method: 'POST',
                         headers: {
                             'X-CSRFToken': getCookie('csrftoken'),
