@@ -42,7 +42,6 @@ class Everytime:
             return render(request, "every_test/home.html" , {
                 'contents': post_content, "username":userAccount.name})
         except Exception as e:
-            print(f"error : {e}")
             return render(request, "every_test/home.html")
     
     # 로그인 페이지 렌더링
@@ -50,14 +49,10 @@ class Everytime:
     def login_page(request):
         
         if request.method == 'POST':
-            print("get post in login_page")
             page = request.POST.get('page', 'None')  # 기본값 'init'
-            print("page : ", page)
-            print("page type : ", type(page))
 
             request.session['page'] = page
             request.session.save()
-            print("page saved in session", page)
         
         return render(request, 'every_test/login.html' )
     
@@ -77,7 +72,6 @@ class Everytime:
             page = request.session.get('page', 'None')
             connection = Everytime.check_login_status(request)
           
-            print("page", page)
             
             if page == 'init':
                 url = 'http://127.0.0.1:8000' 
@@ -88,19 +82,16 @@ class Everytime:
                 'redirect_url': url,
                 'connection': connection
                 }
-            print(response_data)
 
             # connect = True 바꾸기
             try:
                 userAccount = AccountDB.objects.filter(name = request.session['username']).first()
                 if userAccount:
                     AccountDB.objects.filter(name = request.session['username']).update(connected=True)
-                    print("connected")
                     return JsonResponse(response_data)  
                 else:
                     return JsonResponse({"error":'User not matching'}, status=400)
             except KeyError:
-                print("no username in session")
                 return JsonResponse(response_data)
 
         return JsonResponse({'error': 'Invalid request'}, status=400)
@@ -115,27 +106,18 @@ class Everytime:
                 
                 driver = Everytime.driver_manager.get_driver()
                 if not Everytime.driver_manager.is_stable(): 
-                    print("driver is None")
                     return redirect(reverse('login'))
             
                 user = await sync_to_async(Account)(request, driver)
-                print("user : ", user)
                 if not user:
-                    print("Account error")
                     return JsonResponse({"error":"Account error"},status=200)
                 
                 crawling = await sync_to_async(Content)(driver)
-                print("success : ", crawling)
                 if crawling:
                     return JsonResponse({"connection":"crawling success"})
                 else:
-                    print("crawling error")
                     return JsonResponse({"error":"crawling error"},status=200)
-                # else:
-                #     print("driver is not stable")
-                #     return redirect(reverse('login'))
             except KeyError:
-                print("no id or password in KeyError")
                 return JsonResponse({"error":"ID or PASSWORD are incorrect"},status=200) # 아이디 혹은 비밀번호 없음
 
         return JsonResponse({"error":"no post provided"},status=400)    
@@ -150,7 +132,6 @@ class Everytime:
             if Everytime.driver_manager.is_stable():    
                 driver = Everytime.driver_manager.get_driver()
                 if driver is None: 
-                    print("driver is None")
                     return redirect(reverse('login'))
                 
                 
@@ -160,7 +141,6 @@ class Everytime:
                 else:
                     return JsonResponse({"error":"crawling error in free_field"},status=400)
             else:
-                print("driver is not stable")
                 return redirect(reverse('login'))
         return JsonResponse({"error":"no post provided"})
     
@@ -199,7 +179,6 @@ class Everytime:
                     return JsonResponse({"error": error_message}, status=400)
             
             referer = request.META.get('HTTP_REFERER')
-            print("referer : ", referer)
             return redirect(request.META.get('HTTP_REFERER', '/home'))
 
 

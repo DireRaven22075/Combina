@@ -53,7 +53,6 @@ class WebDriverManager:
         with self.lock:
             if self.driver is not None:
                 try:
-                    # Check driver connection by trying to get current URL
                     self.driver.current_url
                     return True
                 except Exception as e:
