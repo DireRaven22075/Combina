@@ -42,9 +42,19 @@
     }
 
     .body {
-
+        width: 100%;
         font-size: 0.9em;
-
+        height: auto;
+        pre {
+            width: 100%;
+            margin: 0;
+            font-size: 1em;
+            font-weight: normal;
+            margin-left: 1rem;
+            overflow: auto;
+            white-space: pre-warp;
+            white-space-collapse: discard;
+        }
         img {
             width: 100%;
         }

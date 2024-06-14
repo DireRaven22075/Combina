@@ -12,12 +12,12 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/Menubar.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/MainContainer.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/SubContainer.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/04.create/menuButton.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/04.create/Post.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/04.create/Preview.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/03.create/menuButton.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/03.create/Post.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/03.create/Preview.css' %}" />
 
     <script src="{% static 'js/00.all/Menubar.js' %}"></script>
-    <script src="{% static 'js/04.create/Preview.js' %}"></script>
+    <script src="{% static 'js/03.create/Preview.js' %}"></script>
 </head>
 
 <body>
@@ -29,7 +29,7 @@
                     src="{% static 'img/icon/create.svg'%}" >Create</label></div>
         <div onclick="js:goto('/accounts')" class="element button accounts-button"><label><img
                     src="{% static 'img/icon/profile.svg'%}" >Accounts</label></div>
-        <div onclick="js:goto('/settings')" class="element button settings-button"><label><img
+        <div class="element button settings-button"><label><img
                     src="{% static 'img/icon/more.svg'%}" >More</label></div>
     </header>
 

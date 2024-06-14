@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <title>Discord-Chating</title>
@@ -212,11 +213,12 @@
 
             try {
                 const response = await fetch('/Discord/get-content/', {
-                    method: 'POST',
+                    method: 'POST',  // HTTP 메서드를 POST로 변경
                     headers: {
                         'X-CSRFToken': getCookie('csrftoken'),
                         'Content-Type': 'application/json'
-                    }
+                    },
+                    body: JSON.stringify({ num_messages: numMessages })  // 데이터를 body에 포함
                 });
                 const data = await response.json();
                 const messageContainer = document.getElementById('message-container');
@@ -227,14 +229,14 @@
                     const messageElement = document.createElement('div');
                     messageElement.className = 'message-card';
                     messageElement.innerHTML = `
-                        <div class="message-author">
-                            <a href="https://discord.com/users/${msg.userID}" target="_blank">
-                                <img src="${profileImageUrl}" alt="Profile Image" onerror="this.src='${defaultProfileImageUrl}'">
-                            </a>
-                            ${msg.userID}
-                        </div>
-                        <div class="message-content">${msg.text}</div>
-                    `;
+                <div class="message-author">
+                    <a href="https://discord.com/users/${msg.userID}" target="_blank">
+                        <img src="${profileImageUrl}" alt="Profile Image" onerror="this.src='${defaultProfileImageUrl}'">
+                    </a>
+                    ${msg.userID}
+                </div>
+                <div class="message-content">${msg.text}</div>
+            `;
                     if (msg.image_url && msg.image_url !== 'http://default.url/no-image.png') {
                         const imgElement = document.createElement('img');
                         imgElement.src = msg.image_url;
@@ -412,7 +414,8 @@
             <input type="text" id="message-input" placeholder="Enter your message" />
             <div class="file-input-container">
                 <label class="custom-file-button" for="image-input">이미지 선택</label>
-                <input type="file" id="image-input" class="file-input" accept="image/*" onchange="handleFileInputChange(event)" />
+                <input type="file" id="image-input" class="file-input" accept="image/*"
+                    onchange="handleFileInputChange(event)" />
                 <span id="file-name-display" class="file-name">No file chosen</span>
             </div>
             <button id="send-button" onclick="sendMessage()">보내기</button>
@@ -427,7 +430,7 @@
                 <option value="20" selected>20개</option>
                 <option value="50">50개</option>
             </select>
-            <button id="fetch-button" onclick="fetchMessages()">새로고침</button>
+            <button id="fetch-button" onclick="fetchMessages    ()">새로고침</button>
         </div>
         <div id="message-container"></div>
     </div>
@@ -437,7 +440,8 @@
             <input type="text" id="bot-name-input" placeholder="Enter bot name" />
             <div class="file-input-container">
                 <label class="custom-file-button" for="bot-avatar-input">이미지 선택</label>
-                <input type="file" id="bot-avatar-input" class="file-input" accept="image/*" onchange="handleFileInputChange(event)" />
+                <input type="file" id="bot-avatar-input" class="file-input" accept="image/*"
+                    onchange="handleFileInputChange(event)" />
                 <span id="file-name-display" class="file-name">No file chosen</span>
             </div>
             <button id="update-bot-profile-button" onclick="updateBotProfile()">수정</button>
@@ -451,4 +455,5 @@
         </div>
     </div>
 </body>
+
 </html>

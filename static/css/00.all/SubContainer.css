@@ -1,14 +1,28 @@
 #Sub {
-    width: calc(100% - 14rem - 33rem - 0.2rem - 2rem);
+    width: calc(100% - 14rem - 33rem - 0.2rem - 2rem - 6rem);
     height: calc(100% - 2rem);
     position:fixed;
+    padding: 3rem;
     background-color: white;
-    top: 1rem;
-    right: 1rem;
+    top: 0;
+    right: 0;
     border-radius:  0.4em;
-    padding-top: 3rem;
-    overflow: scroll;
-    
+    overflow-y: scroll;
+    overflow-x:hidden;
+    text-wrap: warp;
+    pre{
+        width: calc(100% - 6rem);
+        max-width: calc(100% - 6rem);
+        font-size: 1em;
+        font-weight: normal;
+        margin-left: 1rem;
+        text-wrap: warp;
+        overflow: auto;
+        word-wrap: break-word;
+        white-space: pre-warp;
+        white-space-collapse: discard;
+
+    }
 }
 #Subtitle {
     user-select: none;
@@ -17,19 +31,16 @@
     flex-direction: row;
     width: calc(100% - 14rem - 33rem - 0.2rem - 2rem);
     height: 2.5rem;
-    top: 1rem;
-    right: 1rem;
+    top:0;
+    right:0;
     justify-content: flex-start;
     align-items: center;
     background-color: #F9F9F9;
     border-bottom: 0px solid #EBEBEB;
     border-top-left-radius: 0.3em;
     border-top-right-radius: 0.3em;
-    p {
-        font-size: 1em;
-        font-weight: normal;
-        margin-left: 1rem;
-    }
+    white-space: pre-warp;
+    
     input[type=image] {
         width: 1.1rem;
         height: 1.1rem;

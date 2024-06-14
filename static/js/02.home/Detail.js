@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
     Detail['image'] = document.getElementById('DetailImage');
     Detail['images'] = document.getElementById('DetailImages');
     Detail['video'] = document.getElementById('DetailVideo');
+    Detail['button'] = document.getElementById('Redirect');
 });
 //#endregion
 //#region Interaction
@@ -22,7 +23,7 @@ function setDetail(element) {
             Detail['video'].src = element.children[3].value;
         }
         else {
-            for (var i = 3; i < element.children.length; i++) {
+            for (var i = 4; i < element.children.length; i++) {
                 var src = element.children[i].value;
                 var img = document.createElement('img');
                 img.classList.add('detail-image');
