@@ -38,7 +38,7 @@ def search_recommended_videos(max_results=20):
             channel_info = channel_response['items'][0]['snippet']
             channel_profile_picture = channel_info['thumbnails']['high']['url']
 
-            video_url = f'https://www.youtube.com/embed/{video_id}'
+            video_url = f'https://www.youtube.com/watch?v={video_id}'
 
             data = ContentDB.objects.create()
             data.platform = "Youtube"

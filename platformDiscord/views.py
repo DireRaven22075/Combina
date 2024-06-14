@@ -18,43 +18,56 @@ class DiscordBotView:
     DEFAULT_PROFILE_IMAGE_URL = '/static/img/old/discord-mark-blue.svg'
 
     @csrf_exempt
+    async def GetContent(request):
+        account = AccountDB.objects.filter(platform='Discord').first()
+        bot_token = account.token
+        channel_id = account.tag
+        bot_service = DiscordBotService(bot_token, channel_id, discord.Intents.default())
+        num_messages = 20
+        messages = await bot_service.run_bot(num_messages)
+        data = []
+        for message in messages:
+            data.append({
+                'userID': message.author.name,
+                'userIcon': str(message.author.display_avatar.url) if message.author.display_avatar else 'http://default.url/icon.png',
+                'text': message.content,
+                'image_url': message.attachments[0].url if message.attachments else None
+            })
+        
+        return JsonResponse({'messages': data})
+
+    @csrf_exempt
     async def get_content(request):
-        if request.method in ['GET', 'POST']:
+        if request.method == 'POST':
             try:
-                num_messages = 20
-                if request.method == 'POST':
-                    body = request.body.decode('utf-8')
-                    data = json.loads(body)
-                    num_messages = int(data.get('num_messages', 20))
-                else:
-                    num_messages = int(request.GET.get('num_messages', 20))
-
-                if num_messages <= 0:
-                    return HttpResponseBadRequest('num_messages must be a positive integer')
-
-                # 데이터베이스에서 봇 토큰 가져오기
+                data = json.loads(request.body)
+                num_messages = int(data.get('num_messages', 20))
                 account = await sync_to_async(AccountDB.objects.filter(platform='Discord').first)()
                 if not account or not account.token:
                     return JsonResponse({'error': 'Bot token not found in database'}, status=400)
+
                 bot_token = account.token
+                channel_id = account.tag
+                bot_service = DiscordBotService(bot_token, channel_id)
+                messages = await bot_service.fetch_messages(num_messages)
 
-                bot_service = DiscordBotService(bot_token, account.tag, discord.Intents.default())
-                messages = await bot_service.fetch_messages_from_discord(num_messages)
+                if messages is None:
+                    return JsonResponse({'error': 'No messages retrieved from Discord API'}, status=500)
 
-                response_data = []
-                for message in messages:
-                    response_data.append({
-                        'userID': message.author.name,
-                        'userIcon': str(message.author.display_avatar.url) if message.author.display_avatar else 'http://default.url/icon.png',
-                        'text': message.content,
-                        'image_url': message.attachments[0].url if message.attachments else None
-                    })
+                response_data = [
+                    {
+                        'userID': msg['author']['username'],
+                        'userIcon': msg['author']['avatar'],
+                        'text': msg['content'],
+                        'image_url': msg['attachments'][0]['url'] if msg['attachments'] else None
+                    } for msg in messages
+                ]
 
                 return JsonResponse({'messages': response_data})
             except Exception as e:
+                print(f"Error in get_content: {e}")
                 return JsonResponse({'error': str(e)}, status=500)
-        else:
-            return HttpResponseBadRequest('Invalid request method')
+        return JsonResponse({'error': 'Invalid request method'}, status=400)
 
     @staticmethod
     def index(request):
@@ -150,7 +163,6 @@ class DiscordBotView:
                 text = data.get('text', '')
                 files = data.get('files', [])
 
-                # 데이터베이스에서 봇 토큰 가져오기
                 account = await sync_to_async(AccountDB.objects.filter(platform='Discord').first)()
                 if not account or not account.token:
                     return JsonResponse({'error': 'Bot token not found in database'}, status=400)
@@ -160,8 +172,9 @@ class DiscordBotView:
                 message_content = f"**{title}**\n\n{text}"
 
                 if files:
-                    image_data = base64.b64encode(files[0]['data'].encode()).decode() if files else None
-                    await bot_service.send_message_to_discord(message_content, image_data)
+                    file_data = files[0]['data']
+                    filename = files[0]['name']
+                    await bot_service.send_message_to_discord(message_content, file_data, filename)
                 else:
                     await bot_service.send_message_to_discord(message_content)
 
@@ -170,32 +183,29 @@ class DiscordBotView:
                 return HttpResponseBadRequest('Invalid JSON format')
             except Exception as e:
                 return JsonResponse({'error': str(e)}, status=500)
-        return JsonResponse({'error': 'Invalid request method'}, status=400)
+        return JsonResponse({'error': 'Invalid request method'})
 
+    
     @staticmethod
+    @csrf_exempt
     async def set_channel_id(request):
-        """
-        디스코드 채널 ID를 설정하는 함수
-        - POST 요청을 받아 채널 ID를 데이터베이스에 저장
-        """
         if request.method == 'POST':
-            # 요청 데이터 파싱
             data = json.loads(request.body)
-            channel_id = data.get('channel_id')
-            if channel_id:
-                # 현재 계정 정보 가져오기
-                account = await sync_to_async(AccountDB.objects.filter(platform='discord').first)()
-                if account:
-                    account.tag = channel_id
-                    await sync_to_async(account.save)()
-                else:
-                    # 계정이 없는 경우 새로 생성
-                    await sync_to_async(AccountDB.objects.create)(
-                        platform='discord',
-                        tag=channel_id
-                    )
-                return JsonResponse({'success': True, 'channel_id': channel_id})
-            return JsonResponse({'error': 'No channel ID provided'}, status=400)
+            channel_id_str = data.get('channel_id', '')
+            print(f"Received Channel ID: '{channel_id_str}'")  # 디버깅 로그 추가
+
+            if not channel_id_str:
+                return JsonResponse({'error': 'No channel ID provided'}, status=400)
+            if not channel_id_str.isdigit():
+                return JsonResponse({'error': 'Invalid channel ID format. It must be a numerical value.'}, status=400)
+
+            channel_id = int(channel_id_str)
+            account, created = await sync_to_async(AccountDB.objects.get_or_create)(platform='Discord')
+            account.tag = channel_id
+            await sync_to_async(account.save)()
+            print(f"Channel ID {channel_id} set for Discord account.")
+
+            return JsonResponse({'success': True, 'channel_id': channel_id})
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
     @staticmethod
@@ -238,6 +248,7 @@ class DiscordBotView:
                     except Exception as e:
                         return JsonResponse({'error': str(e)}, status=400)
 
+                    # get_or_create 반환 값을 두 개의 변수로 나눔
                     account, created = AccountDB.objects.get_or_create(platform='Discord')
                     account.token = bot_token
                     account.name = name
@@ -266,7 +277,7 @@ class DiscordBotView:
                 'form': form,
                 'return_url': return_url
             })
-
+            
 # 디스코드 봇 정보 가져오기 함수
 def get_bot_info(bot_token):
     url = "https://discord.com/api/v9/users/@me"

@@ -1,10 +1,11 @@
+# platformReddit/urls.py
 from django.urls import path
-from .views import RedditView
+from .views import *
 
 urlpatterns = [
     path('connect/', RedditView.Connect, name='reddit_connect'),
-    path('connect/callback/', RedditView.ConnectCallback, name='reddit_connect_callback'),
+    path('connectCall/', RedditView.ConnectCall, name='reddit_connectCall'),
     path('disconnect/', RedditView.Disconnect, name='reddit_disconnect'),
     path('post/', RedditView.Post, name='reddit_post'),
-    path('content/', RedditView.GetContent, name='reddit_get_content'),
+    path('get-content/', RedditView.GetContent, name='reddit_get_content'),
 ]

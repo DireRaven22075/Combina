@@ -5,7 +5,8 @@
 
 </head>
 <body>
-    <form class="login-form" action="/Reddit/connect" method="POST">
+    <form class="login-form" action="/Reddit/connectCall/" method="POST">
+        {% csrf_token %}
         <label for="username">Username</label>
         <input type="text" id="username" name="username" required />
         <label for="password">Password</label>

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 {% load static %}
+
 <head>
     <title>Combina : Home</title>
     <meta charset="UTF-8" />
@@ -14,33 +15,71 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/SubContainer.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/02.home/menuButton.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/02.home/content.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'cas/02.home/iframe.css' %}" />
-    
+    <link rel="stylesheet" type="text/css" href="{% static 'css/02.home/iframe.css' %}" />
+
     <!-- Javascript Link -->
     <script src="{% static 'js/00.all/Menubar.js' %}"></script>
     <script src="{% static 'js/00.all/MainContainer.js' %}"></script>
     <script src="{% static 'js/02.home/Detail.js' %}"></script>
+    <script>
+        function ElectronOpen(url) {
+            window.electronAPI.openExternal(url);
+        }
+        function redirect(element) {
+            window.electronAPI.openExternal(element.value);
+        }
+    </script>
+    <style>
+        .target {
+            display: inline-block;
+            width: 75%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
 </head>
 
 <body>
     <header id="Menubar">
         <div class="title"><label><img src="{% static 'img/combinalogo.svg' %}" <label></div>
-            <div onclick="js:goto('/home')" class="element button home-button"><label><img
-                    src="{% static 'img/icon/home.svg'%}" >Home</label></div>
+        <div onclick="js:goto('/home')" class="element button home-button"><label><img
+                    src="{% static 'img/icon/home.svg'%}">Home</label></div>
         <div onclick="js:goto('/create')" class="element button create-button"><label><img
-                    src="{% static 'img/icon/create.svg'%}" >Create</label></div>
+                    src="{% static 'img/icon/create.svg'%}">Create</label></div>
         <div onclick="js:goto('/accounts')" class="element button accounts-button"><label><img
-                    src="{% static 'img/icon/profile.svg'%}" >Accounts</label></div>
+                    src="{% static 'img/icon/profile.svg'%}">Accounts</label></div>
         <div onclick="js:goto('/settings')" class="element button settings-button"><label><img
-                    src="{% static 'img/icon/more.svg'%}" >More</label></div>
+                    src="{% static 'img/icon/more.svg'%}">More</label></div>
     </header>
-    
+
     <div id="Main">
         {% for content in contents %}
+        {% if content.platform == 'Youtube' %}
+        {% for file in files %}
+        {% if file.uid == content.image_url %}
+        <div onclick="js:ElectronOpen('{{file.url}}');" class="content {{content.platform}}">
+            {{content}}
+            <div class="header">
+                <img class="icon noselect" src="{{content.userIcon}}" />
+                <span class="info">
+                    <pre>{{content.userID}}</pre>
+                    <pre>{{content.platform}}</pre>
+                </span>
+            </div>
+            <div class="body">
+                <p class="target">{{content.text}}</p>
+                <p>Click to open video</p>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% else %}
         <div onclick="js:setDetail(this); js:openDetail()" class="content {{content.platform}}">
             <input type="text" style="display: none" value='{{content.platform}}' />
             <input type="text" style="display: none" value='{{content.userID}}' />
             <input type="text" style="display: none" value='{{content.text}}' />
+            <input type="text" style="display: none" value='{{content.url}}' />
             {% for file in files %}
             {% if file.uid == content.image_url %}
             <input type="text" style="display: none" value="{{file.url}}" />
@@ -48,49 +87,47 @@
             {% endfor %}
             <div class="header"><img class="icon noselect" src="{{content.icon}}" />
                 <span class="info">
-                    <p>{{content.userID}}</p>
-                    <p>{{content.platform}}</p>
+                    <pre>{{content.userID}}</pre>
+                    <pre>{{content.platform}}</pre>
                 </span>
             </div>
             <div class="body">
-                <p>{{content.text}}</p>
+                <p class="target">{{content.text}}</p>
                 {% for file in files %}
                 {% if file.uid == content.image_url %}
-                    {% if content.platform == 'Youtube' %}
-                        <div class="container">
-                            <iframe src="{{file.url}}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
-                        </div>
-                    {% else %}
-                        <img src="{{file.url}}" />
-                    {% endif %}
+                <img src="{{file.url}}" />
                 {% endif %}
                 {% endfor %}
             </div>
         </div>
+        {% endif %}
         {% endfor %}
     </div>
     <div id="Title">
         <div>Home</div>
-        <input style="width: 2rem; height: auto; position: absolute; right: 1rem;" type="image" onclick="goto('/server/get-content')" src="{% static 'img/icon/explore.svg' %}" />
+        <input style="width: 2rem; height: auto; position: absolute; right: 1rem;" type="image"
+            onclick="goto('/server/get-content/')" src="{% static 'img/icon/reload.svg' %}" />
     </div>
     <div id="Navigation" style="display: flex;">
-        <input type="button" onclick="js:ui_navigation('All'); js:filter('All')" value="All"/>
+        <input type="button" onclick="js:ui_navigation('All'); js:filter('All')" value="All" />
         {% for platform in platforms %}
-        <input type="button" onclick="js:ui_navigation('{{platform}}'); js:filter('{{platform}}')" value="{{platform}}"/>
+        <input type="button" onclick="js:ui_navigation('{{platform}}'); js:filter('{{platform}}')"
+            value="{{platform}}" />
         {% endfor %}
     </div>
-
     <div id="Sub" style="visibility: hidden;">
-        <p id="DetailTitle"></p>
-        <p id="DetailContent"></p>
+        <pre id="DetailTitle"></pre>
+        <pre id="DetailContent"></pre>
         <video id="DetailVideo" controls></video>
         <div id="DetailImages"></div>
     </div>
     <div id="Subtitle" style="visibility: hidden;">
-        <input onclick="js:closeDetail();" type="image" src= "{% static 'img/icon/close.svg' %}" />
+        <input onclick="js:closeDetail();" type="image" src="{% static 'img/icon/close.svg' %}" />
         <h3 id="DetailUser"></h3>
         <p id="DetailPlatform"></p>
+        <input onclick="js:ElectronOpen('http://youtube.com')" type="image" src="{% static 'img/icon/send.svg' %}" />
     </div>
+    <input type="image" id="Redirect" src = "{% static 'img/icon/send.svg' %}" value="http://youtube.com" style="visibility: hidden;" onclick="js:redirect(this)" />
 </body>
 
 </html>
