@@ -20,6 +20,8 @@ class ServerView:
         return redirect('http://127.0.0.1:8000/accounts', cookies=cookies, headers=headers)
     
     def GetContent(request):
+        ContentDB.objects.all().delete()
+        FileDB.objects.all().delete()
         platforms = parameters()['platforms']
         cookies = {
                 'csrftoken': get_token(request)

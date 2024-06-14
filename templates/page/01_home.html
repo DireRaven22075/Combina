@@ -14,12 +14,17 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/SubContainer.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/02.home/menuButton.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/02.home/content.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'cas/02.home/iframe.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/02.home/iframe.css' %}" />
     
     <!-- Javascript Link -->
     <script src="{% static 'js/00.all/Menubar.js' %}"></script>
     <script src="{% static 'js/00.all/MainContainer.js' %}"></script>
     <script src="{% static 'js/02.home/Detail.js' %}"></script>
+    <script>
+        function ElectronOpen(url) {
+            window.electronAPI.openExternal(url);
+        }
+    </script>
 </head>
 
 <body>
@@ -37,6 +42,24 @@
     
     <div id="Main">
         {% for content in contents %}
+        {% if content.platform == 'Youtube' %}
+        {% for file in files %}
+        {% if file.uid == content.image_url %}
+        <div onclick="js:ElectronOpen('{{file.url}}');" class="content {{content.platform}}">
+            <div class="header">
+                <img class="icon noselect" src="{{content.userIcon}}" />
+                <span class="info">
+                    <pre>{{content.userID}}</pre>
+                    <pre>{{content.platform}}</pre>
+                </span>
+            </div>
+            <div class="body">
+                <p>{{content.text}}</p>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% else %}
         <div onclick="js:setDetail(this); js:openDetail()" class="content {{content.platform}}">
             <input type="text" style="display: none" value='{{content.platform}}' />
             <input type="text" style="display: none" value='{{content.userID}}' />
@@ -48,8 +71,8 @@
             {% endfor %}
             <div class="header"><img class="icon noselect" src="{{content.icon}}" />
                 <span class="info">
-                    <p>{{content.userID}}</p>
-                    <p>{{content.platform}}</p>
+                    <pre>{{content.userID}}</pre>
+                    <pre>{{content.platform}}</pre>
                 </span>
             </div>
             <div class="body">
@@ -57,8 +80,8 @@
                 {% for file in files %}
                 {% if file.uid == content.image_url %}
                     {% if content.platform == 'Youtube' %}
-                        <div class="container">
-                            <iframe src="{{file.url}}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+                        <div onclick="const {shell} = require('electron'); shell.openExternal('{{file.url}}');" style="cursor: pointer;">
+                            TEMP
                         </div>
                     {% else %}
                         <img src="{{file.url}}" />
@@ -67,11 +90,12 @@
                 {% endfor %}
             </div>
         </div>
+        {% endif %}
         {% endfor %}
     </div>
     <div id="Title">
         <div>Home</div>
-        <input style="width: 2rem; height: auto; position: absolute; right: 1rem;" type="image" onclick="goto('/server/get-content')" src="{% static 'img/icon/explore.svg' %}" />
+        <input style="width: 2rem; height: auto; position: absolute; right: 1rem;" type="image" onclick="goto('/server/get-content/')" src="{% static 'img/icon/explore.svg' %}" />
     </div>
     <div id="Navigation" style="display: flex;">
         <input type="button" onclick="js:ui_navigation('All'); js:filter('All')" value="All"/>
@@ -79,10 +103,9 @@
         <input type="button" onclick="js:ui_navigation('{{platform}}'); js:filter('{{platform}}')" value="{{platform}}"/>
         {% endfor %}
     </div>
-
     <div id="Sub" style="visibility: hidden;">
-        <p id="DetailTitle"></p>
-        <p id="DetailContent"></p>
+        <pre id="DetailTitle"></pre>
+        <pre id="DetailContent"></pre>
         <video id="DetailVideo" controls></video>
         <div id="DetailImages"></div>
     </div>

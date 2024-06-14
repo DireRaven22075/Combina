@@ -48,10 +48,6 @@ class PageView:
     def Home(request):
         if (isOkay() == False):
             return redirect('/')
-        if (request.POST.get("search") != None):
-            data = parameters()
-            data['contents'] = ContentDB.objects.filter(text__contains=request.POST.get("search"))
-            return render(request, 'page/01_home.html', data)
         return render(request, 'page/01_home.html', parameters())
     def Contacts(request):
         if (isOkay() == False):
