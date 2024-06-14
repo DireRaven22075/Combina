@@ -3,5 +3,6 @@ from .views import *
 urlpatterns = [
     path('disconnect/', ServerView.Disconnect),
     path('post/', ServerView.Post),
-    path('clear-content/', ServerView.ClearContent, name='clear_content'),
+    path('get-content/', ServerView.GetContent),
+    path('clear-content/', ServerView.ClearContent),
 ]

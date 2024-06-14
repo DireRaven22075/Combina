@@ -1,6 +1,6 @@
 //#region OnDocument Load
 const Detail = {};
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     Detail['name'] = document.getElementById('DetailUser');
     Detail['platform'] = document.getElementById('DetailPlatform');
     Detail['content'] = document.getElementById('DetailContent');
@@ -11,11 +11,27 @@ document.addEventListener("DOMContentLoaded", function() {
 //#endregion
 //#region Interaction
 function setDetail(element) {
-    document.getElementById('DetailUser').innerHTML = element.children[0].children[0].children[0];
-    document.getElementById('DetailPlatform').innerHTML = element.children[0].children[0].children[1].innerHTML;
-    document.getElementById('DetailContent').innerHTML = element.children[0].children[1].children[0].innerHTML;
-    document.getElementById('DetailImage').src = element.children[0].children[1].children[1].src;
-    document.getElementById('DetailVideo').src = element.children[0].children[1].children[2].src;
+    Detail['platform'].innerHTML = element.children[0].value;
+    Detail['name'].innerHTML = element.children[1].value;
+    Detail['content'].innerHTML = element.children[2].value.replace('|||', '<br>');
+    Detail['images'].innerHTML = "";
+    Detail['video'].style.display = 'none';
+    if (element.children.length > 5) {
+        if (Detail['platform'].innerHTML == 'Youtube') {
+            Detail['video'].style.display = 'block';
+            Detail['video'].src = element.children[3].value;
+        }
+        else {
+            for (var i = 3; i < element.children.length; i++) {
+                var src = element.children[i].value;
+                var img = document.createElement('img');
+                img.classList.add('detail-image');
+                img.src = src;
+                Detail['images'].appendChild(img);
+            }
+        }
+    }
+    return;
 }
 function clearDetail() {
     Detail['name'].innerHTML = "";
@@ -26,11 +42,11 @@ function clearDetail() {
 }
 function openDetail() {
     document.getElementById("Sub").style.visibility = "visible";
-    document.getElementById("SubTitle").style.visibility = "visible";
+    document.getElementById("Subtitle").style.visibility = "visible";
 }
 function closeDetail() {
     document.getElementById("Sub").style.visibility = "hidden";
-    document.getElementById("SubTitle").style.visibility
+    document.getElementById("Subtitle").style.visibility = "hidden";
 }
 //#endregion
 

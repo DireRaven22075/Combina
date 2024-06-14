@@ -14,7 +14,22 @@ class ServerView:
             account.connected = False
             account.save()
         return redirect(request.META.get('HTTP_REFERER', '/home'))
-
+    
+    def GetContent(request):
+        platforms = parameters()['platforms']
+        cookies = {
+                'csrftoken': get_token(request)
+        }
+        headers = {
+                'Content-Type': 'application/json',
+                'csrfmiddlewaretoken': get_token(request),  # 'X-CSRFToken': 'token
+                'X-CSRFToken': get_token(request)
+        }
+        for platform in platforms:
+            url = f'http://127.0.0.1:8000/{platform}/get-content/'
+            response = requests.post(url, cookies=cookies, headers=headers)
+        return redirect('http://127.0.0.1:8000/home/', cookies=cookies)
+    
     def Post(request):
         if request.method == "POST":
             data = {
@@ -49,9 +64,8 @@ class ServerView:
                     except requests.exceptions.RequestException as e:
                         print(f"Request to {platform} failed: {e}")
             
-            return HttpResponse("Post request processed")
-        
-        return HttpResponse("Invalid request method")
+            return redirect('http://127.0.0.1:8000/create')
+        return redirect(request.META.get('HTTP_REFERER', '/home'))
 
     def ClearContent(request):
         ContentDB.objects.all().delete()

@@ -26,8 +26,6 @@
         <div class="title"><label><img src="{% static 'img/combinalogo.svg' %}" <label></div>
             <div onclick="js:goto('/home')" class="element button home-button"><label><img
                     src="{% static 'img/icon/home.svg'%}" >Home</label></div>
-        <div onclick="js:goto('/contacts')" class="element button contacts-button"><label><img
-                    src="{% static 'img/icon/contacts.svg'%}" >Contacts</label></div>
         <div onclick="js:goto('/create')" class="element button create-button"><label><img
                     src="{% static 'img/icon/create.svg'%}" >Create</label></div>
         <div onclick="js:goto('/accounts')" class="element button accounts-button"><label><img
@@ -39,6 +37,14 @@
     <div id="Main">
         {% for content in contents %}
         <div onclick="js:setDetail(this); js:openDetail()" class="content {{content.platform}}">
+            <input type="text" style="display: none" value='{{content.platform}}' />
+            <input type="text" style="display: none" value='{{content.userID}}' />
+            <input type="text" style="display: none" value='{{content.text}}' />
+            {% for file in files %}
+            {% if file.uid == content.image_url %}
+            <input type="text" style="display: none" value="{{file.url}}" />
+            {% endif %}
+            {% endfor %}
             <div class="header"><img class="icon noselect" src="{{content.icon}}" />
                 <span class="info">
                     <p>{{content.userID}}</p>
@@ -49,11 +55,11 @@
                 <p>{{content.text}}</p>
                 {% for file in files %}
                 {% if file.uid == content.image_url %}
-                {% if content.platform == 'Youtube' %}
-                <video src="{{content.video}}" controls></video>
-                {% else %}
-                <img src="{{file.url}}" />
-                {% endif %}
+                    {% if content.platform == 'Youtube' %}
+                        <video src="{{file.url}}" controls></video>
+                    {% else %}
+                        <img src="{{file.url}}" />
+                    {% endif %}
                 {% endif %}
                 {% endfor %}
             </div>
@@ -71,17 +77,15 @@
     </div>
 
     <div id="Sub" style="visibility: hidden;">
-        <h3 id="DetailTitle"></h3>
+        <p id="DetailTitle"></p>
         <p id="DetailContent"></p>
         <video id="DetailVideo" controls></video>
-        <img id="DetailImage" />
+        <div id="DetailImages"></div>
     </div>
     <div id="Subtitle" style="visibility: hidden;">
-        <input onclick="js:closeDetail();" type="image" src= "{% static 'img/icon/quit.svg' %}" />
-        <div>
-            <h3 id="DetailUser"></h3>
-            <p id="DetailPlatform"></p>
-        </div>
+        <input onclick="js:closeDetail();" type="image" src= "{% static 'img/icon/close.svg' %}" />
+        <h3 id="DetailUser"></h3>
+        <p id="DetailPlatform"></p>
     </div>
 </body>
 
