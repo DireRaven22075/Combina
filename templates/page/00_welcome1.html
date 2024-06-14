@@ -19,11 +19,6 @@
 </head>
 
 <body>
-    {% for platform in platforms %}
-    {% with get='/'|add:platform|add:'/get-content' %}
-    <iframe src="{{get}}"></iframe>
-    {% endwith %}
-    {% endfor %}
     <div id="First" style="display:flex;">
         <div class="header">
             <img src="{% static 'img/combinalogo.svg' %}" />
