@@ -211,8 +211,8 @@
             button.disabled = true;
 
             try {
-                const response = await fetch('/Discord/get-content/?num_messages=' + numMessages, {
-                    method: 'GET',
+                const response = await fetch('/Discord/get-content/', {
+                    method: 'POST',
                     headers: {
                         'X-CSRFToken': getCookie('csrftoken'),
                         'Content-Type': 'application/json'

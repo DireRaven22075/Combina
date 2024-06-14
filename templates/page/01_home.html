@@ -14,7 +14,8 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/SubContainer.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/02.home/menuButton.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/02.home/content.css' %}" />
-
+    <link rel="stylesheet" type="text/css" href="{% static 'cas/02.home/iframe.css' %}" />
+    
     <!-- Javascript Link -->
     <script src="{% static 'js/00.all/Menubar.js' %}"></script>
     <script src="{% static 'js/00.all/MainContainer.js' %}"></script>
@@ -56,7 +57,9 @@
                 {% for file in files %}
                 {% if file.uid == content.image_url %}
                     {% if content.platform == 'Youtube' %}
-                        <video src="{{file.url}}" controls></video>
+                        <div class="container">
+                            <iframe src="{{file.url}}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+                        </div>
                     {% else %}
                         <img src="{{file.url}}" />
                     {% endif %}

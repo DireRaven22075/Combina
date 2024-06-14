@@ -30,6 +30,8 @@ class ServerView:
                 'X-CSRFToken': get_token(request)
         }
         for account in AccountDB.objects.all():
+            if (account.connected == False):
+                continue
             url = f'http://127.0.0.1:8000/{account.platform}/get-content/'
             response = requests.post(url, cookies=cookies, headers=headers)
         return redirect('http://127.0.0.1:8000/home/', cookies=cookies)
