@@ -7,7 +7,7 @@ from .webdriver_manager import WebDriverManager
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from page.models import AccountDB   
-from .utils import sleep, delete_cookies_with_cdp, is_logged_in, quit_driver_forcefully
+from .utils import sleep
 import logging
 
 
@@ -56,7 +56,7 @@ def Account(request, driver):
      
     except Exception as e:
         print(f"error : {e}")
-        quit_driver_forcefully(driver)
+        driver.close()
         return False
     return True
     

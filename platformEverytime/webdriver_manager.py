@@ -3,7 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-
+from selenium.common.exceptions import SessionNotCreatedException
 class WebDriverManager:
     _instance = None
 
@@ -44,7 +44,11 @@ class WebDriverManager:
                         options.add_argument(argument)
                     for experimental_option, value in custom_options.experimental_options.items():
                         options.add_experimental_option(experimental_option, value)
-                self.driver = webdriver.Chrome(service=Service(ChromeDriverManager(driver_version="126.0").install()),options=options)
+                try:
+                    self.driver = webdriver.Chrome(options=options)
+                except SessionNotCreatedException:
+                    print("ChromeDriver is not compatible with Chrome Browser")
+                    return None
             return self.driver
 
     def stop_driver(self):
@@ -56,6 +60,12 @@ class WebDriverManager:
     def is_stable(self):
         with self.lock:
             if self.driver is not None:
-                return True
+                try:
+                    # Check driver connection by trying to get current URL
+                    self.driver.current_url
+                    return True
+                except Exception as e:
+                    print(f"WebDriver is not stable: {str(e)}")
+                    return False
             else:
                 return False

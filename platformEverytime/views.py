@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from .account import Account
-from .content import Content, temp
-from .post import Post
+from .content import Content
 from page.models import ContentDB, FileDB, AccountDB
 from .webdriver_manager import WebDriverManager
 import json
@@ -10,14 +9,11 @@ from asgiref.sync import sync_to_async
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 
-# 로그인 정보 json으로 받아서 처리
-# 에타에서 로그인 토큰 받아오기
-# conntect=True javascript 함수 어떻게 할 것인지...
-# 현재 로그인 안 한 상태에서 /everytime/가면 json으로 에러 안 뜨ㅢ워짐
+
 
 
 # page 값 init , account 확인 및 로그인 상태까지 보내기
-# driver가 없을 때 로그인화면?
+# driver가 없을 때 로그인화면으로 이동
 
 MAX_POSTS = 10
 
@@ -116,8 +112,12 @@ class Everytime:
     async def ev_login(request):
         if request.method == "POST":  
             try:
-                driver = Everytime.driver_manager.get_driver()
                 
+                driver = Everytime.driver_manager.get_driver()
+                if not Everytime.driver_manager.is_stable(): 
+                    print("driver is None")
+                    return redirect(reverse('login'))
+            
                 user = await sync_to_async(Account)(request, driver)
                 print("user : ", user)
                 if not user:
@@ -131,7 +131,9 @@ class Everytime:
                 else:
                     print("crawling error")
                     return JsonResponse({"error":"crawling error"},status=200)
-            
+                # else:
+                #     print("driver is not stable")
+                #     return redirect(reverse('login'))
             except KeyError:
                 print("no id or password in KeyError")
                 return JsonResponse({"error":"ID or PASSWORD are incorrect"},status=200) # 아이디 혹은 비밀번호 없음
@@ -163,41 +165,6 @@ class Everytime:
         return JsonResponse({"error":"no post provided"})
     
     
-    # # 게시글 작성 (현재 업로드만 막아둠)
-    @staticmethod
-    async def ev_post(request):
-        if request.method == "POST":
-            if Everytime.driver_manager.is_stable(): 
-                driver = Everytime.driver_manager.get_driver()   
-                try:
-                    
-                    
-                    title = request.POST.get('title')
-                    text = request.POST.get('text')
-                    image_list = request.FILES.getlist('file')
-                    print("title : ", title, text, image_list)
-                
-                    valid = text is not None and title is not None
-                    print("text valid : ", valid)
-                    if valid:
-                        posting = await sync_to_async(Post)(driver, title, text, image_list)
-                        if posting:
-                            print("posting : ", posting)
-                            return JsonResponse({"success": posting})
-                        
-                        else:
-                            print("posting error")
-                            return JsonResponse({"error":"posting error"},status=400)
-                            
-                    else:
-                        return JsonResponse({"error":"No text provided"}, status=400)  
-                except json.JSONDecodeError:
-                    return JsonResponse({"error":"Invalid Json data"},status=400)
-            else:
-                print("driver is not stable")
-                return redirect(reverse('login'))
-        return JsonResponse({"error":"No post in ev_post"},status=400)
-    
   
     @staticmethod
     def logout(request):
@@ -208,7 +175,14 @@ class Everytime:
             # 처음에 세션 값이 있는지 검사
             if request.session.get('username') is not None:
                 initial_username = request.session.get('username')
-                AccountDB.objects.filter(name = initial_username).update(connected=False)
+                account = AccountDB.objects.filter(name = initial_username).first()
+                if account:
+                    account.name = ''
+                    account.connected = False
+                    account.token = ''
+                    account.tag = ''
+                    account.save()
+                   
                 if initial_username is None:
                     missing_keys = []
                     if initial_username is None:
@@ -233,16 +207,7 @@ class Everytime:
             error_message = f"Error during logout: {str(e)}"
             return JsonResponse({"error": error_message}, status=400)
     
-    # 세션 저장 수정 필요
-    # def save_session(request, id, password):
-    #     try:
-             
-    #         request.session['ev_id'] = id
-    #         request.session['ev_password'] = password
-    #         request.session.save()
-    #         return request
-    #     except KeyError:
-    #         return None
+
     
                 
     
