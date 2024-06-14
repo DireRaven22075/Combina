@@ -67,7 +67,6 @@ def safe_get_attribute(driver, by, value, attribute):
 
 
 def Content(driver):
-    print("temp")
     try:
         WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.XPATH, "//*[@id=\"submenu\"]/div/div[2]/ul/li[1]/a"))
@@ -89,42 +88,31 @@ def Content(driver):
             
             post = safe_click(driver, post_xpath)
 
-            print("post clicked")
-
             post_title = safe_get_text(driver, By.XPATH, '//*[@id="container"]/div[5]/article/a/h2')
-            print("post_title ", post_title)
-            
             
             post_text = safe_get_text(driver, By.XPATH, '//*[@id="container"]/div[5]/article/a/p')
-            print("post_text ", post_text)
-            
+
             post_user = safe_get_text(driver, By.XPATH, '//*[@id="container"]/div[5]/article/a/div[1]/h3')
-            print("post_user ", post_user)
-            
+
             post_icon = safe_get_attribute(driver, By.XPATH, "//*[@id=\"container\"]/div[5]/article/a/img", "src")
-            print("post_icon ", post_icon)
-            
+
             post_vote = safe_get_text(driver, By.XPATH, '//*[@id="container"]/div[5]/article/a/ul[2]/li[1]')
-            print("vote ", post_vote)
-            
+
             image_list = []
             try:
                 for i in range(1, IMAGE_MAX+1):
                     try:                                             
                         images = safe_get_attribute(driver, By.XPATH, f'//*[@id="container"]/div[5]/article/a/div[2]/figure[{i}]/img', "src")
-                        print("images ",i, images)
+                       
                         image_list.append(images)
                     except:
                         break
             except:
                 images = safe_get_attribute(driver, By.XPATH, "//*[@id=\"container\"]/div[5]/article/a/div[2]/figure/img", "src")
-                print("images ", images)
                 if images:
                     image_list.append(images)
 
-            print("image_list ", image_list)    
-       
-            
+ 
             latest = FileDB.objects.aggregate(max_uid=Max('uid'))['max_uid']
             if latest is None:
                 latest = 0  # 최신 값이 없으면 0으로 초기화
@@ -156,4 +144,3 @@ def Content(driver):
     except Exception as e:
         return False
     return True
-# //*[@id="container"]/div[5]/article/a/div[2]/figure[1]/img

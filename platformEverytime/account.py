@@ -25,20 +25,16 @@ def Account(request, driver):
         id_name = driver.find_element(By.XPATH, "//*[@id=\"container\"]/div[1]/div[1]/form/p[3]").text
         icon_image = driver.find_element(By.XPATH, "//*[@id=\"container\"]/div[1]/div[1]/form/img").get_attribute("src")
         
-        print(name_box, id_name, icon_image)
-        
         request.session['username'] = name_box
         request.session.save()
 
-        print("session saved", request.session['username'])
         
         
         # 로그인 상태 AccountDb에 저장
         try:
-            # 정상적으로 처음에 create 된 경우
+            
             exist = AccountDB.objects.filter(platform="Everytime").last()
             if exist:
-                print("current name", exist.name)
                 exist.connected =True
                 exist.platform="Everytime"
                 exist.token = "None"
@@ -48,21 +44,12 @@ def Account(request, driver):
                 exist.save()        
                 
             else:
-                print("no account")
                 return False
         except Exception as e:
-            print(f"error : {e}")
             return False
      
     except Exception as e:
-        print(f"error : {e}")
         driver.close()
         return False
     return True
     
-    # def __del__(self):
-    #     try:
-    #         if driver is not None:
-    #             manager.stop_driver()
-    #     except Exception as e:
-    #         logging.error("driver close error: %s", e)
