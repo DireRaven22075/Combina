@@ -8,7 +8,7 @@ from google_auth_oauthlib.flow import Flow
 from googleapiclient.discovery import build
 from .auth import get_authenticated_service
 from .view_profile import view_profile
-# from .view_recommended import view_recommended  # Disable this import for now
+from .search_videos import search_recommended_videos
 from page.models import AccountDB, ContentDB, FileDB
 from page.views import parameters
 
@@ -76,27 +76,31 @@ class YouTubeView:
 
     @staticmethod
     def Disconnect(request):
-        """ Disconnects the YouTube account and removes tokens """
         user = AccountDB.objects.filter(platform="Youtube").first()
-        if user:
-            user.name = None
-            user.token = None
-            user.connected = False
-            user.icon = None
-            user.tag = None
-            user.save()
+        user.name = ""
+        user.token = ""
+        user.connected = False
+        user.icon = "http://default.url/icon"
+        user.tag = ""
+        user.save()
         if os.path.exists('token.pickle'):
             os.remove('token.pickle')
-        return redirect('/home')
+        return redirect(request.META.get('HTTP_REFERER', '/home'))
 
     @staticmethod
     def ClearContent(request):
         """ Clears all YouTube related content from ContentDB and FileDB """
-        ContentDB.objects.filter(platform="Youtube").delete()
         FileDB.objects.filter(uid__in=ContentDB.objects.filter(platform="Youtube").values_list('id', flat=True)).delete()
+        ContentDB.objects.filter(platform="Youtube").delete()
         return JsonResponse({'status': 'success'}, safe=False)
 
     @staticmethod
     def GetContent(request):
-        """ Placeholder for GetContent method """
-        return JsonResponse({'status': 'success'}, safe=False)
+        """ Fetches new content after clearing existing content """
+        # Clear existing content silently
+        YouTubeView.ClearContent()
+        
+        # Fetch new content
+        videos = search_recommended_videos()
+        
+        return JsonResponse(videos, safe=False)

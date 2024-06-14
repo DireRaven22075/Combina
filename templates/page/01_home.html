@@ -50,7 +50,7 @@
                 {% for file in files %}
                 {% if file.uid == content.image_url %}
                 {% if content.platform == 'Youtube' %}
-                <video src="{{content.video}}" controls></video>
+                <video src="{{file.url}}" controls></video>
                 {% else %}
                 <img src="{{file.url}}" />
                 {% endif %}
