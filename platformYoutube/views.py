@@ -98,8 +98,7 @@ class YouTubeView:
     @staticmethod
     def GetContent(request):
         """ Fetches new content after clearing existing content """
-        # Clear existing content silently
-        YouTubeView.ClearContent()
+        YouTubeView.ClearContent(request)
         
         # Fetch new content
         videos = search_recommended_videos()
