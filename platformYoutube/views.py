@@ -2,6 +2,7 @@ import os
 import pickle
 import logging
 import requests
+from django.middleware.csrf import get_token
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from google_auth_oauthlib.flow import Flow
@@ -85,7 +86,7 @@ class YouTubeView:
         user.save()
         if os.path.exists('token.pickle'):
             os.remove('token.pickle')
-        return redirect(request.META.get('HTTP_REFERER', '/home'))
+        return redirect('http://127.0.0.1:8000/accounts', cookies={'csrftoken', get_token(request)})
 
     @staticmethod
     def ClearContent(request):
