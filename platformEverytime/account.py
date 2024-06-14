@@ -9,11 +9,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from page.models import AccountDB   
 from .utils import sleep, delete_cookies_with_cdp, is_logged_in, quit_driver_forcefully
 import logging
-prefs={
-    "profile.managed_default_content_settings.images": 2,  # 이미지 로드 비활성화
-    "profile.managed_default_content_settings.stylesheets": 2,  # CSS 로드 비활성화
-    #"profile.managed_default_content_settings.javascript": 1  # 자바스크립트 비활성화 (필요시 활성화)
-}
 
 
 def Account(request, driver):

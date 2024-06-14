@@ -20,6 +20,7 @@ default_user_icon = "https://cf-fpi.everytime.kr/0.png"
 def Content(driver):
         
     try:
+        print("start content")
         WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.XPATH, "//*[@id=\"submenu\"]/div/div[2]/ul/li[1]/a"))
         )
@@ -27,7 +28,7 @@ def Content(driver):
         
         free_field_box = driver.find_element(By.XPATH, "//*[@id=\"submenu\"]/div/div[2]/ul/li[1]/a")
         free_field_box.click()
-        driver.refresh()
+        
         WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.XPATH, "//*[@id=\"writeArticleButton\"]"))
         )

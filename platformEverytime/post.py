@@ -31,9 +31,9 @@ def Post(driver, title, text, images = None):
         )
         sleep()
 
+        driver.refresh()
         free_field_box = driver.find_element(By.XPATH, "//*[@id=\"submenu\"]/div/div[2]/ul/li[1]/a")
         free_field_box.click()
-        driver.refresh()
    
         WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.XPATH, "//*[@id=\"writeArticleButton\"]"))
@@ -66,7 +66,7 @@ def Post(driver, title, text, images = None):
             # 이미지 업로드 비활성화
         #에타 포스팅 함부로 주석처리 해제하지 말 것
         #submit_box = driver.find_element(By.XPATH, "//*[@id=\"container\"]/div[5]/form/ul/li[3]").click()
-
+        driver.refresh()
     except Exception as e:
         return False
     finally:

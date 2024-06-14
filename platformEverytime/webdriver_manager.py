@@ -1,6 +1,8 @@
 import threading
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 
 class WebDriverManager:
     _instance = None
@@ -22,9 +24,11 @@ class WebDriverManager:
         #options.add_argument("--headless") # 브라우저 띄우지 않음
         options.add_argument("--log-level=3")
         options.add_argument("--remote-debugging-port=9222")
+        options.add_argument('--disable-blink-features=AutomationControlled')
+        #options.add_argument("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36")
         #options.add_argument("--profile-default-content-settings.cookies=1") # 쿠키 허용
-        # subprocess.Popen(r'C:\\Program Files\\Google\\Chrome\Application\\chrome.exe --remote-debugging-port=9222 --user-data-dir="C:\\chromeCookie"')
-        # options.add_experimental_option("debuggerAddress", "127.0.0.1:8000") # 디버거 주소
+        #subprocess.Popen(r'C:\\Program Files\\Google\\Chrome\Application\\chrome.exe --remote-debugging-port=9222 --user-data-dir="C:\\chromeCookie"')
+        #options.add_experimental_option("debuggerAddress", "127.0.0.1:8000") # 디버거 주소
         #options.add_experimental_option("prefs", prefs) # 이미지, CSS, 자바스크립트 로드 설정
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-shm-usage")
@@ -40,7 +44,7 @@ class WebDriverManager:
                         options.add_argument(argument)
                     for experimental_option, value in custom_options.experimental_options.items():
                         options.add_experimental_option(experimental_option, value)
-                self.driver = webdriver.Chrome(options=options)
+                self.driver = webdriver.Chrome(service=Service(ChromeDriverManager(driver_version="126.0").install()),options=options)
             return self.driver
 
     def stop_driver(self):
