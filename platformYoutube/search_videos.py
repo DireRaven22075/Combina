@@ -38,24 +38,22 @@ def search_recommended_videos(max_results=20):
             channel_info = channel_response['items'][0]['snippet']
             channel_profile_picture = channel_info['thumbnails']['high']['url']
 
-            video_url = f'https://www.youtube.com/watch?v={video_id}'
-     
-            # Save to ContentDB
-            content = ContentDB.objects.create(
-                platform="Youtube",
-                userID=channel_title,  # Store channel name instead of channel ID
-                text=description,
-                image_url=0,  # Setting this to 0 as per your original model
-                userIcon=channel_profile_picture
-            )
+            video_url = f'https://www.youtube.com/embed/{video_id}'
 
-            # Save to FileDB
-            file = FileDB.objects.create(
-                uid=content.id,
-                url=video_url
-            )
+            data = ContentDB.objects.create()
+            data.platform = "Youtube"
+            data.userID = channel_title
+            data.text = description
+            data.image_url = 0
+            data.userIcon = channel_profile_picture
+            data.save()
+            data.image_url = data.id
             
-            content.image_url =content.id
+            file = FileDB.objects.create(uid=0)
+            file.uid = data.image_url
+            file.url = video_url
+            file.save()
+            data.save()
             
             videos.append({
                 'video_url': video_url,

@@ -21,9 +21,7 @@
         <div class="noselect header"><h2>Connect Account</h2></div>
         {% for account in accounts %}
         {% if account.connected %}
-        {% with platformDisconnect='/'|add:account.platform|add:'/disconnect' %}
-        <div class="account noselect" onclick="js:goto('{{platformDisconnect}}')">
-        {% endwith %}
+        <div class="account noselect">
         {% else %}
         {% with platformConnect='/'|add:account.platform|add:'/connect' %}
         <div class="account  noselect" onclick="js:goto('{{platformConnect}}')">

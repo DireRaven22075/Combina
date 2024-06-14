@@ -29,8 +29,10 @@ class ServerView:
                 'csrfmiddlewaretoken': get_token(request),  # 'X-CSRFToken': 'token
                 'X-CSRFToken': get_token(request)
         }
-        for platform in platforms:
-            url = f'http://127.0.0.1:8000/{platform}/get-content/'
+        for account in AccountDB.objects.all():
+            if (account.connected == False):
+                continue
+            url = f'http://127.0.0.1:8000/{account.platform}/get-content/'
             response = requests.post(url, cookies=cookies, headers=headers)
         return redirect('http://127.0.0.1:8000/home/', cookies=cookies)
     
