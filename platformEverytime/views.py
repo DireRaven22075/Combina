@@ -178,7 +178,6 @@ class Everytime:
                     error_message = f"Failed to remove session keys: {', '.join(remaining_keys)}"
                     return JsonResponse({"error": error_message}, status=400)
             
-            referer = request.META.get('HTTP_REFERER')
             return redirect(request.META.get('HTTP_REFERER', '/home'))
 
 
