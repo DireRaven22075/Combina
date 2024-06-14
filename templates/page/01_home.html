@@ -59,6 +59,7 @@
         {% for file in files %}
         {% if file.uid == content.image_url %}
         <div onclick="js:ElectronOpen('{{file.url}}');" class="content {{content.platform}}">
+            {{content}}
             <div class="header">
                 <img class="icon noselect" src="{{content.userIcon}}" />
                 <span class="info">
@@ -78,6 +79,7 @@
             <input type="text" style="display: none" value='{{content.platform}}' />
             <input type="text" style="display: none" value='{{content.userID}}' />
             <input type="text" style="display: none" value='{{content.text}}' />
+            <input type="text" style="display: none" value='{{content.url}}' />
             {% for file in files %}
             {% if file.uid == content.image_url %}
             <input type="text" style="display: none" value="{{file.url}}" />
