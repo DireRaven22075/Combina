@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 
 
-
+LOGIN_STATUS = True
 
 # page 값 init , account 확인 및 로그인 상태까지 보내기
 # driver가 없을 때 로그인화면으로 이동
@@ -76,7 +76,7 @@ class Everytime:
             if page == 'init':
                 url = 'http://127.0.0.1:8000' 
             else:
-                url = 'http://127.0.0.1:8000/account'
+                url = 'http://127.0.0.1:8000/accounts'
 
             response_data = {
                 'redirect_url': url,
@@ -104,23 +104,24 @@ class Everytime:
         if request.method == "POST":  
             try:
                 
+                LOGIN_STATUS = True
                 driver = Everytime.driver_manager.get_driver()
                 if not Everytime.driver_manager.is_stable(): 
                     return redirect(reverse('login'))
-            
+
                 user = await sync_to_async(Account)(request, driver)
+
                 if not user:
+                    LOGIN_STATUS = False
                     return JsonResponse({"error":"Account error"},status=200)
                 
-                crawling = await sync_to_async(Content)(driver)
-                if crawling:
-                    return JsonResponse({"connection":"crawling success"})
-                else:
-                    return JsonResponse({"error":"crawling error"},status=200)
+                Everytime.driver_manager.switch_to_headless()
+                return redirect('/start')
             except KeyError:
                 return JsonResponse({"error":"ID or PASSWORD are incorrect"},status=200) # 아이디 혹은 비밀번호 없음
 
         return JsonResponse({"error":"no post provided"},status=400)    
+    
     
     
     
@@ -151,6 +152,7 @@ class Everytime:
         try:
             if Everytime.driver_manager.is_stable():
                 Everytime.driver_manager.stop_driver()
+                
             
             # 처음에 세션 값이 있는지 검사
             if request.session.get('username') is not None:
@@ -178,7 +180,7 @@ class Everytime:
                     error_message = f"Failed to remove session keys: {', '.join(remaining_keys)}"
                     return JsonResponse({"error": error_message}, status=400)
             
-            return redirect(request.META.get('HTTP_REFERER', '/home'))
+            return redirect('http://127.0.0.1:8000/accounts')
 
 
         except Exception as e:
