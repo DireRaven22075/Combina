@@ -10,6 +10,8 @@ from .account import Account
 from django.db.models import Count, Max
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import StaleElementReferenceException
+
 
 # 포스트 하나하나 들어가서 이미지, icon 다 긁어오기
 MAX_POSTS = 10
@@ -17,7 +19,7 @@ default_user_icon = "https://cf-fpi.everytime.kr/0.png"
 
 
     
-def Content(driver):
+def temp(driver):
         
     try:
         print("start content")
@@ -91,84 +93,143 @@ def Content(driver):
             
     except Exception as e:
         return False
-    finally:
-        return True
+    return True
             
-def temp(driver):
+
+def safe_click(driver, xpath):
+    attempts = 0
+    while attempts < 5:
+        try:
+            element = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, xpath))
+            )
+            element.click()
+            return element
+        except StaleElementReferenceException:
+            attempts += 1
+            sleep()
+    raise Exception(f"Failed to click on element with xpath: {xpath} after {attempts} attempts")
+
+def safe_get_text(driver, by, value):
+    attempts = 0
+    while attempts < 5:
+        try:
+            element = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((by, value))
+            )
+            return element.text
+        except StaleElementReferenceException:
+            attempts += 1
+            sleep()
+    raise Exception(f"Failed to get text from element with {by} and value: {value} after {attempts} attempts")
+
+
+def safe_get_attribute(driver, by, value, attribute):
+    attempts = 0
+    while attempts < 5:
+        try:
+            element = WebDriverWait(driver, 5).until(
+                EC.presence_of_element_located((by, value))
+            )
+            return element.get_attribute(attribute)
+        except StaleElementReferenceException:
+            attempts += 1
+            sleep()
+    raise Exception(f"Failed to get attribute from element with {by} and value: {value} after {attempts} attempts")
+
+
+
+
+
+
+
+def Content(driver):
     print("temp")
     try:
         WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.XPATH, "//*[@id=\"submenu\"]/div/div[2]/ul/li[1]/a"))
         )
         sleep()
-        
-        free_field_box = driver.find_element(By.XPATH, "//*[@id=\"submenu\"]/div/div[12]/ul/li[1]/a")
+        test_xpath = '//*[@id=\"submenu\"]/div/div[12]/ul/li[1]/a'
+        free_xpath = '//*[@id="submenu"]/div/div[2]/ul/li[1]/a'
+        free_field_box = driver.find_element(By.XPATH, test_xpath)
         free_field_box.click()
-
+        
         WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.XPATH, "//*[@id=\"writeArticleButton\"]"))
         )
         sleep()
         
         for i in range(MAX_POSTS, 0, -1):
-            post = driver.find_element(By.XPATH, f'//*[@id="container"]/div[5]/article[{i}]/a')
-            info = driver.find_element(By.XPATH, f'//*[@id="container"]/div[5]/article[{i}]/a/div/div')
             
-            post.click() # 상세 페이지 이동
-            sleep()
-            post_title = post.find_element(By.XPATH, '//*[@id="container"]/div[5]/article/a/h2').text
-            post_text = post.find_element(By.XPATH, f"//*[@id=\"container\"]/div[5]/article/a/p").text
+            post_xpath = f'//*[@id="container"]/div[5]/article[{i}]/a'
+            #info = driver.find_element(By.XPATH, f'//*[@id="container"]/div[5]/article[{i}]/a/div/div')
             
+            post = safe_click(driver, post_xpath)
+
+            print("post clicked")
+
+            post_title = safe_get_text(driver, By.XPATH, '//*[@id="container"]/div[5]/article/a/h2')
             print("post_title ", post_title)
+            
+            
+            post_text = safe_get_text(driver, By.XPATH, '//*[@id="container"]/div[5]/article/a/p')
             print("post_text ", post_text)
             
-            post_user = info.find_element(By.XPATH, f"//*[@id=\"container\"]/div[5]/article/a/div[1]/h3").text
+            post_user = safe_get_text(driver, By.XPATH, '//*[@id="container"]/div[5]/article/a/div[1]/h3')
             print("post_user ", post_user)
-            try:
-                post_vote = info.find_element(By.CLASS_NAME, "vote").text
 
+            post_icon = safe_get_attribute(driver, By.XPATH, "//*[@id=\"container\"]/div[5]/article/a/img", "src")
+            print("post_icon ", post_icon)
+            
+            post_vote = safe_get_text(driver, By.XPATH, '//*[@id="container"]/div[5]/article/a/ul[2]/li[1]')
+            print("vote ", post_vote)
+            
+
+           
+                # latest = FileDB.objects.aggregate(max_uid=Max('uid'))['max_uid']
+                # if latest is None:
+                #     latest = 0  # 최신 값이 없으면 0으로 초기화
+            image_list = []
+
+            try:
+                for i in range(5, 0 , -1):
+                    try:
+                        images = safe_get_attribute(driver, By.XPATH, f'//*[@id="container"]/div[5]/article/a/div[2]/figure[{i}]/img', "src")
+                        print("images ", images)
+                        image_list.append(images)
+                    except:
+                        break
             except:
-                post_vote = 0
+                images = safe_get_attribute(driver, By.XPATH, "//*[@id=\"container\"]/div[5]/article/a/div[2]/figure/img", "src")
+                print("images ", images)
+                if images:
+                    image_list.append(images)
 
-            image_url = 0
+            print("image_list ", image_list)    
+            # image_list 내 이미지를 DB에 저장
+            
+            latest = FileDB.objects.aggregate(max_uid=Max('uid'))['max_uid']
+            if latest is None:
+                latest = 0  # 최신 값이 없으면 0으로 초기화
 
-            try:
-                image_list = []
-                print("in try image")
-                #이미지 uid 이용해서 contentDB's image_url, FileDB's uid uid 값 주고 FileDB url 에 이미지 url 저장
-                post_image = post.find_element(By.CLASS_NAME, f"attach").get_attribute("style")
-                print("images ", post_image)
-                image_list.append(post_image.split("\"")[1])
-                
-                # //*[@id="container"]/div[5]/article[1]/a/div[2] 
-                # //*[@id="container"]/div[5]/article/a/div[2]/figure/img 이미지 큰 경우
-                # //*[@id="container"]/div[5]/article/a/div[2]/figure[1]
-                # //*[@id="container"]/div[5]/article/a/div[2]/figure[2]
-                latest = FileDB.objects.aggregate(max_uid=Max('uid'))['max_uid']
-                if latest is None:
-                    latest = 0  # 최신 값이 없으면 0으로 초기화
+            if image_list:
+                for i, image in enumerate(image_list, start=1):
+                    image_url = latest + 1
 
-                image = None
-                if image_list:
-                    for i, image in enumerate(image_list, start=1):
-                        image_url = latest + 1
+                    
+                    FileDB.objects.create(
+                        uid=image_url,
+                        url=image,
+                    ).save()
 
-                        # # 이미지가 존재하는지 확인
-                        # if not FileDB.objects.filter(url=image).exists():
-                        #     # 이미지가 존재하지 않는 경우에만 저장
-                        FileDB.objects.create(
-                            uid=image_url,
-                            url=image,
-                        ).save()
-
-            except NoSuchElementException:
-                image_url = 0
+            
             ContentDB.objects.create(
                 platform = "Everytime",
                 userID = post_user,
                 text = post_title+"|||" + post_text,
                 image_url = image_url,
-                userIcon = default_user_icon,
+                userIcon = post_icon,
                 vote = post_vote,
             ).save()   
             driver.back()    
@@ -176,5 +237,4 @@ def temp(driver):
             
     except Exception as e:
         return False
-    finally:
-        return True
+    return True

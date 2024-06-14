@@ -51,7 +51,7 @@ def quit_driver_forcefully(driver):
             try:
                 # 드라이버 프로세스의 PID를 가져옴
                 driver_pid = driver_process.pid
-                os.kill(driver_pid, signal.SIGKILL)
+                os.kill(driver_pid, signal.SIGTERM)
                 print("Driver process kill.")
             except Exception as e:
                 print("Error occurred while terminating driver process:", e)

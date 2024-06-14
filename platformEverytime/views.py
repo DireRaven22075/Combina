@@ -140,18 +140,19 @@ class Everytime:
     
     
     
-    # 최신 컨텐츠 가져오기
+    # 최신 컨텐츠 가져오기 왜 세부 컨텐츠를 못 불러오는가?
+    # 크롬 드라이버 강제 종료시 왜 driver가 남는가
     @staticmethod
     async def ev_free_field(request):
         if request.method == "POST":
             if Everytime.driver_manager.is_stable():    
                 driver = Everytime.driver_manager.get_driver()
-                if driver is None: # 수정 필요
+                if driver is None: 
                     print("driver is None")
                     return redirect(reverse('login'))
                 
                 
-                crawling = await sync_to_async(temp)(driver)
+                crawling = await sync_to_async(Content)(driver)
                 if crawling:
                     return JsonResponse({"success":"crawling success in free_field"})
                 else:
@@ -163,39 +164,39 @@ class Everytime:
     
     
     # # 게시글 작성 (현재 업로드만 막아둠)
-    # @staticmethod
-    # async def ev_post(request):
-    #     if request.method == "POST":
-    #         if Everytime.driver_manager.is_stable(): 
-    #             driver = Everytime.driver_manager.get_driver()   
-    #             try:
+    @staticmethod
+    async def ev_post(request):
+        if request.method == "POST":
+            if Everytime.driver_manager.is_stable(): 
+                driver = Everytime.driver_manager.get_driver()   
+                try:
                     
                     
-    #                 title = request.POST.get('title')
-    #                 text = request.POST.get('text')
-    #                 image_list = request.FILES.getlist('file')
-    #                 print("title : ", title, text, image_list)
+                    title = request.POST.get('title')
+                    text = request.POST.get('text')
+                    image_list = request.FILES.getlist('file')
+                    print("title : ", title, text, image_list)
                 
-    #                 valid = text is not None and title is not None
-    #                 print("text valid : ", valid)
-    #                 if valid:
-    #                     posting = await sync_to_async(Post)(driver, title, text, image_list)
-    #                     if posting:
-    #                         print("posting : ", posting)
-    #                         return JsonResponse({"success": posting})
+                    valid = text is not None and title is not None
+                    print("text valid : ", valid)
+                    if valid:
+                        posting = await sync_to_async(Post)(driver, title, text, image_list)
+                        if posting:
+                            print("posting : ", posting)
+                            return JsonResponse({"success": posting})
                         
-    #                     else:
-    #                         print("posting error")
-    #                         return JsonResponse({"error":"posting error"},status=400)
+                        else:
+                            print("posting error")
+                            return JsonResponse({"error":"posting error"},status=400)
                             
-    #                 else:
-    #                     return JsonResponse({"error":"No text provided"}, status=400)  
-    #             except json.JSONDecodeError:
-    #                 return JsonResponse({"error":"Invalid Json data"},status=400)
-    #         else:
-    #             print("driver is not stable")
-    #             return redirect(reverse('login'))
-    #     return JsonResponse({"error":"No post in ev_post"},status=400)
+                    else:
+                        return JsonResponse({"error":"No text provided"}, status=400)  
+                except json.JSONDecodeError:
+                    return JsonResponse({"error":"Invalid Json data"},status=400)
+            else:
+                print("driver is not stable")
+                return redirect(reverse('login'))
+        return JsonResponse({"error":"No post in ev_post"},status=400)
     
   
     @staticmethod

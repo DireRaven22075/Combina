@@ -53,13 +53,12 @@ def Account(request, driver):
         except Exception as e:
             print(f"error : {e}")
             return False
-            
+     
     except Exception as e:
         print(f"error : {e}")
         quit_driver_forcefully(driver)
         return False
-    finally:
-        return True
+    return True
     
     # def __del__(self):
     #     try:

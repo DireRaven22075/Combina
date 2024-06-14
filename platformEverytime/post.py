@@ -69,5 +69,5 @@ def Post(driver, title, text, images = None):
         driver.refresh()
     except Exception as e:
         return False
-    finally:
-        return True
+    
+    return True
