@@ -7,13 +7,17 @@ from page.views import *
 
 class ServerView:
     def Disconnect(request):
-        for account in AccountDB.objects.all():
-            account.name = ""
-            account.tag = ""
-            account.token = ""
-            account.connected = False
-            account.save()
-        return redirect(request.META.get('HTTP_REFERER', '/home'))
+        platforms = parameters()['platforms']
+        cookies = {'csrftoken': get_token(request)}
+        headers = {
+                'Content-Type': 'application/json',
+                'csrfmiddlewaretoken': get_token(request),  # 'X-CSRFToken': 'token
+                'X-CSRFToken': get_token(request)
+        }
+        for platform in platforms:
+            url = f'http://127.0.0.1:8000/{platform}/disconnect/'
+            response = requests.post(url, cookies=cookies, headers=headers)
+        return redirect('http://127.0.0.1:8000/accounts', cookies=cookies, headers=headers)
     
     def GetContent(request):
         platforms = parameters()['platforms']

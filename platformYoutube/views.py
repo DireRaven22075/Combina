@@ -8,9 +8,8 @@ from google_auth_oauthlib.flow import Flow
 from googleapiclient.discovery import build
 from .auth import get_authenticated_service
 from .view_profile import view_profile
-from .view_recommended import view_recommended
-from .search_videos import search_videos
-from page.models import AccountDB
+from .search_videos import search_recommended_videos
+from page.models import AccountDB, ContentDB, FileDB
 from page.views import parameters
 
 # Allow insecure transport for local development
@@ -20,7 +19,7 @@ os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 handler = logging.StreamHandler()
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levellevelname)s - %(message)s')
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
@@ -29,6 +28,7 @@ class YouTubeView:
     SCOPES = ['https://www.googleapis.com/auth/youtube.readonly']
     CLIENT_SECRETS_FILE = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'client_secret.json')
 
+    @staticmethod
     def Connect(request):
         """ Initiates the OAuth flow for YouTube """
         flow = Flow.from_client_secrets_file(
@@ -40,13 +40,10 @@ class YouTubeView:
         logger.debug(f"Connect: Saved state {state} in session")
         return redirect(authorization_url)
 
+    @staticmethod
     def ConnectCallback(request):
         """ Handles the OAuth callback from YouTube """
-        stored_state = request.session.get('state')
         state = request.GET.get('state')
-
-        logger.debug(f"ConnectCallback: Retrieved state {stored_state} from session")
-        logger.debug(f"ConnectCallback: State from request {state}")
 
         try:
             flow = Flow.from_client_secrets_file(
@@ -77,37 +74,33 @@ class YouTubeView:
             logger.error(f"Exception during OAuth callback: {e}")
             return JsonResponse({"status": "error", "message": str(e)}, status=400)
 
+    @staticmethod
     def Disconnect(request):
-        """ Disconnects the YouTube account and removes tokens """
         user = AccountDB.objects.filter(platform="Youtube").first()
-        if user:
-            user.name = None
-            user.token = None
-            user.connected = False
-            user.icon = None
-            user.tag = None
-            user.save()
+        user.name = ""
+        user.token = ""
+        user.connected = False
+        user.icon = "http://default.url/icon"
+        user.tag = ""
+        user.save()
         if os.path.exists('token.pickle'):
             os.remove('token.pickle')
-        return redirect('/home')
+        return redirect(request.META.get('HTTP_REFERER', '/home'))
 
+    @staticmethod
+    def ClearContent(request):
+        """ Clears all YouTube related content from ContentDB and FileDB """
+        FileDB.objects.filter(uid__in=ContentDB.objects.filter(platform="Youtube").values_list('id', flat=True)).delete()
+        ContentDB.objects.filter(platform="Youtube").delete()
+        return JsonResponse({'status': 'success'}, safe=False)
+
+    @staticmethod
     def GetContent(request):
-        """ Fetches recommended or searched content from YouTube """
-        user = AccountDB.objects.filter(platform="Youtube").first()
-        if not user or not user.token:
-            return JsonResponse({"status": "error", "message": "Not connected to YouTube"}, status=400)
-
-        headers = {'Authorization': f'Bearer {user.token}', 'Accept': 'application/json'}
-
-        content_type = request.GET.get('type')
-        limit = int(request.GET.get('limit', 5))
-
-        if content_type == 'recommended':
-            content = view_recommended(headers, limit)
-        elif content_type == 'search':
-            query = request.GET.get('query')
-            content = search_videos(headers, query)
-        else:
-            return JsonResponse({"status": "error", "message": "Invalid content type"}, status=400)
-
-        return JsonResponse(content, safe=False)
+        """ Fetches new content after clearing existing content """
+        # Clear existing content silently
+        YouTubeView.ClearContent()
+        
+        # Fetch new content
+        videos = search_recommended_videos()
+        
+        return JsonResponse(videos, safe=False)
