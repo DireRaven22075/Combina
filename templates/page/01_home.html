@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 {% load static %}
+
 <head>
     <title>Combina : Home</title>
     <meta charset="UTF-8" />
@@ -15,7 +16,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/02.home/menuButton.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/02.home/content.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/02.home/iframe.css' %}" />
-    
+
     <!-- Javascript Link -->
     <script src="{% static 'js/00.all/Menubar.js' %}"></script>
     <script src="{% static 'js/00.all/MainContainer.js' %}"></script>
@@ -25,21 +26,30 @@
             window.electronAPI.openExternal(url);
         }
     </script>
+    <style>
+        .target {
+            display: inline-block;
+            width: 75%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
 </head>
 
 <body>
     <header id="Menubar">
         <div class="title"><label><img src="{% static 'img/combinalogo.svg' %}" <label></div>
-            <div onclick="js:goto('/home')" class="element button home-button"><label><img
-                    src="{% static 'img/icon/home.svg'%}" >Home</label></div>
+        <div onclick="js:goto('/home')" class="element button home-button"><label><img
+                    src="{% static 'img/icon/home.svg'%}">Home</label></div>
         <div onclick="js:goto('/create')" class="element button create-button"><label><img
-                    src="{% static 'img/icon/create.svg'%}" >Create</label></div>
+                    src="{% static 'img/icon/create.svg'%}">Create</label></div>
         <div onclick="js:goto('/accounts')" class="element button accounts-button"><label><img
-                    src="{% static 'img/icon/profile.svg'%}" >Accounts</label></div>
+                    src="{% static 'img/icon/profile.svg'%}">Accounts</label></div>
         <div onclick="js:goto('/settings')" class="element button settings-button"><label><img
-                    src="{% static 'img/icon/more.svg'%}" >More</label></div>
+                    src="{% static 'img/icon/more.svg'%}">More</label></div>
     </header>
-    
+
     <div id="Main">
         {% for content in contents %}
         {% if content.platform == 'Youtube' %}
@@ -54,7 +64,8 @@
                 </span>
             </div>
             <div class="body">
-                <p>{{content.text}}</p>
+                <p class="target">{{content.text}}</p>
+                <p>Click to open video</p>
             </div>
         </div>
         {% endif %}
@@ -76,16 +87,10 @@
                 </span>
             </div>
             <div class="body">
-                <p>{{content.text}}</p>
+                <p class="target">{{content.text}}</p>
                 {% for file in files %}
                 {% if file.uid == content.image_url %}
-                    {% if content.platform == 'Youtube' %}
-                        <div onclick="const {shell} = require('electron'); shell.openExternal('{{file.url}}');" style="cursor: pointer;">
-                            TEMP
-                        </div>
-                    {% else %}
-                        <img src="{{file.url}}" />
-                    {% endif %}
+                <img src="{{file.url}}" />
                 {% endif %}
                 {% endfor %}
             </div>
@@ -95,12 +100,14 @@
     </div>
     <div id="Title">
         <div>Home</div>
-        <input style="width: 2rem; height: auto; position: absolute; right: 1rem;" type="image" onclick="goto('/server/get-content/')" src="{% static 'img/icon/explore.svg' %}" />
+        <input style="width: 2rem; height: auto; position: absolute; right: 1rem;" type="image"
+            onclick="goto('/server/get-content/')" src="{% static 'img/icon/reload.svg' %}" />
     </div>
     <div id="Navigation" style="display: flex;">
-        <input type="button" onclick="js:ui_navigation('All'); js:filter('All')" value="All"/>
+        <input type="button" onclick="js:ui_navigation('All'); js:filter('All')" value="All" />
         {% for platform in platforms %}
-        <input type="button" onclick="js:ui_navigation('{{platform}}'); js:filter('{{platform}}')" value="{{platform}}"/>
+        <input type="button" onclick="js:ui_navigation('{{platform}}'); js:filter('{{platform}}')"
+            value="{{platform}}" />
         {% endfor %}
     </div>
     <div id="Sub" style="visibility: hidden;">
@@ -110,7 +117,7 @@
         <div id="DetailImages"></div>
     </div>
     <div id="Subtitle" style="visibility: hidden;">
-        <input onclick="js:closeDetail();" type="image" src= "{% static 'img/icon/close.svg' %}" />
+        <input onclick="js:closeDetail();" type="image" src="{% static 'img/icon/close.svg' %}" />
         <h3 id="DetailUser"></h3>
         <p id="DetailPlatform"></p>
     </div>

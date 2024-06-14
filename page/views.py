@@ -49,19 +49,15 @@ class PageView:
         if (isOkay() == False):
             return redirect('/')
         return render(request, 'page/01_home.html', parameters())
-    def Contacts(request):
-        if (isOkay() == False):
-            return redirect('/')
-        return render(request, 'page/02_contacts.html', parameters())
     def Create(request):
         if (isOkay() == False):
             return redirect('/')
-        return render(request, 'page/03_create.html', parameters())
+        return render(request, 'page/02_create.html', parameters())
     def Accounts(request):
         if (isOkay() == False):
             return redirect('/')
-        return render(request, 'page/04_accounts.html', parameters())
+        return render(request, 'page/03_accounts.html', parameters())
     def Settings(request):
         if (isOkay() == False):
             return redirect('/')
-        return render(request, 'page/05_settings.html', parameters())
+        return render(request, 'page/04_settings.html', parameters())
