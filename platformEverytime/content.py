@@ -16,7 +16,7 @@ from selenium.common.exceptions import StaleElementReferenceException
 # 포스트 하나하나 들어가서 이미지, icon 다 긁어오기
 MAX_POSTS = 10
 IMAGE_MAX = 5
-ATTEMPTS = 10 # 시도 횟수
+ATTEMPTS = 5 # 시도 횟수
 
 def safe_click(driver, xpath):
     attempts = 0

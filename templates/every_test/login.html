@@ -5,40 +5,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        var page = "{{ page }}";
-        console.log("Page:", page);
-        var connection = "{{ connection }}";
-        console.log("Connection:", connection);
-        
-        $(document).ready(function() {
-            $('#backButton').click(function() {
-                var postData={
-                    'page':page
-                };
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        form {
+            margin: 20px 0; /* 간격 조정 */
+        }
+        button {
+            margin: 10px 0;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button[type="submit"] {
+            background-color: #007bff;
+            color: white;
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        button#backButton {
+            background-color: #6c757d;
+            color: white;
+        }
+        button#backButton:hover {
+            background-color: #5a6268;
+        }
+    </style>
 
-                console.log("Sending POST request with data:", postData);
-              
-                $.post('/Everytime/redirect_page/', postData)
-                    .done(function(data) {
-                        if (data.redirect_url) {
-                            console.log("Redirecting to:", data.redirect_url);
-                            if (data.connection) {
-                                console.log("User is logged in. Connection is True.");
-                            } else {
-                                console.log("User is not logged in. Connection is False.");
-                            }
-                            window.location.href = data.redirect_url;
-                        } else {
-                            console.error('No redirect URL found.');
-                        }
-                    })
-                    .fail(function(xhr) {
-                        console.error('Error:', xhr.responseText);
-                    });
-            });
-        });
-    </script>
+   
 </head>
 <body>
     <h1>Login</h1>
@@ -50,7 +62,7 @@
     <form id="login-form" action="{% url 'logout' %}" method="POST">
         {% csrf_token %}
         <button type="submit">Logout</button>
+        <br>
     </form>
-    <button id="backButton">Back</button>
 </body>
 </html>

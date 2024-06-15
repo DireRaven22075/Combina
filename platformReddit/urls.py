@@ -9,4 +9,6 @@ urlpatterns = [
     path('post/', RedditView.Post, name='reddit_post'),
     path('callback/', RedditView.Callback, name='reddit_callback'),
     path('get-content/', RedditView.GetContent, name='reddit_get_content'),
+
+    path('', RedditView.Home, name='reddit_home'),
 ]

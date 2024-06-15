@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+</head>
+<body>
+    {% for content in contents %}
+        {% if content %}
+            <h1>{{ content.userID }}</h1>
+            <p>{{ content.text }}<p>
+            <img src="{{ content.icon }}" alt="Profile Image">
+            <!-- {% if user_profile.change_url %}
+            <img src="{{ content.image_url }}" alt="post image">
+            {% endif %} -->
+        {% else %}
+            <p>No profile image available</p>
+        {% endif %}
+    {% endfor %}
+    <!-- {% if content %}
+        <h1>{{ content.userID }}</h1>
+        <h2>{{ content.text }}</h2>
+        <img src="{{ user_profile.icon.change_url }}" alt="Profile Image">
+        <img src="{{ user_profile.change_url }}" alt="Profile Image">
+    {% else %}
+        <p>No profile image available</p>
+    {% endif %} -->
+</body>
+</html>

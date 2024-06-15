@@ -3,7 +3,7 @@ from django.http import HttpResponse
 import praw
 from urllib.parse import urlencode
 import requests
-from page.models import AccountDB
+from page.models import AccountDB, ContentDB, FileDB
 from .content import Content
 from .config import CLIENT_ID, CLIENT_SECRET, USER_AGENT
 from django.http import JsonResponse
@@ -12,6 +12,29 @@ from django.http import JsonResponse
 
 class RedditView:
     reddit = None
+
+    def Home(request):
+        contents = ContentDB.objects.filter(platform='Reddit').order_by('-id')[:10]
+        uploads = []
+        for content in contents:
+            print(content)
+            print(content.userIcon)
+            if content.image_url:
+                try:
+                    file = FileDB.objects.get(uid=content.image_url)
+                    content.image_url = file.url
+                except FileDB.DoesNotExist:
+                    content.image_url = None
+            upload = {
+                'userID': content.userID,
+                'text': content.text,
+                'platform': content.platform,
+                'icon' : content.userIcon,
+                'image_url': content.image_url,
+                'vote': content.vote
+            }
+            uploads.append(upload)
+        return render(request, 'reddit/home.html', {'contents': uploads})
  
     def Disconnect(request):
         account = AccountDB.objects.filter(platform='Reddit').first()
