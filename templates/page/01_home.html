@@ -85,7 +85,12 @@
             <input type="text" style="display: none" value="{{file.url}}" />
             {% endif %}
             {% endfor %}
-            <div class="header"><img class="icon noselect" src="{{content.icon}}" />
+            <div class="header">
+                {% if content.platform == 'Everytime' %}
+                <img class="icon noselect" src="{% static 'img/profile/everytime.png' %}" />
+                {% else %}
+                <img class="icon noselect" src="{{content.icon}}" />
+                {% endif %}
                 <span class="info">
                     <pre>{{content.userID}}</pre>
                     <pre>{{content.platform}}</pre>
