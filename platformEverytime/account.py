@@ -49,7 +49,6 @@ def Account(request, driver):
             return False
      
     except Exception as e:
-        driver.close()
         return False
     return True
     

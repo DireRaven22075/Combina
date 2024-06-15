@@ -89,7 +89,7 @@ def Content(driver):
             post = safe_click(driver, post_xpath)
 
             post_title = safe_get_text(driver, By.XPATH, '//*[@id="container"]/div[5]/article/a/h2')
-            
+
             post_text = safe_get_text(driver, By.XPATH, '//*[@id="container"]/div[5]/article/a/p')
 
             post_user = safe_get_text(driver, By.XPATH, '//*[@id="container"]/div[5]/article/a/div[1]/h3')

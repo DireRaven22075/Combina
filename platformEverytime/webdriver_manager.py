@@ -4,6 +4,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.common.exceptions import SessionNotCreatedException
+from selenium.common.exceptions import WebDriverException
 
 class WebDriverManager:
     _instance = None
@@ -12,6 +13,7 @@ class WebDriverManager:
         self.driver = None
         self.lock = threading.Lock()
         self.default_options = self._create_default_options()
+        self.DRIVER_STATE = False
 
     @staticmethod
     def get_instance():
@@ -32,28 +34,31 @@ class WebDriverManager:
 
     def get_driver(self, custom_options=None):
         with self.lock:
-            if self.driver is None:
+   
+            if self.driver is None or self.DRIVER_STATE is False:
                 options = self.default_options
                 if custom_options:
                     for argument in custom_options.arguments:
                         options.add_argument(argument)
                     for experimental_option, value in custom_options.experimental_options.items():
                         options.add_experimental_option(experimental_option, value)
-                try:
-                    self.driver = webdriver.Chrome(options=options)
+                try:                  
+                   self.driver = webdriver.Chrome(options=options)
                 except SessionNotCreatedException:
                     return None
+            self.DRIVER_STATE = True
+
             return self.driver
 
     def stop_driver(self):
         with self.lock:
             if self.driver is not None:
                 try:
+                    self.DRIVER_STATE = False
                     self.driver.quit()
-                except Exception as e:
-                    print(f"Error stopping driver: {e}")
-                finally:
                     self.driver = None
+                except Exception as e:
+                    pass
     
     def is_stable(self):
         with self.lock:
@@ -75,15 +80,18 @@ class WebDriverManager:
                 cookies = self.driver.get_cookies()
                 url = self.driver.current_url
 
+                headless_options = self._create_default_options()
+                headless_options.add_argument("--headless")
+
                 # 기존 드라이버 종료
                 self.driver.quit()
                 
                 # headless 모드로 옵션 설정
                 options = self.default_options
-                options.add_argument("--headless")
+                #options.add_argument("--headless")
                 
                 # 새로운 headless 드라이버 시작
-                self.driver = webdriver.Chrome(options=options)
+                self.driver = webdriver.Chrome(options=headless_options)
                 self.driver.get(url)
                 
                 # 쿠키 복원

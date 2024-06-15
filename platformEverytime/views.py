@@ -8,15 +8,14 @@ import json
 from asgiref.sync import sync_to_async
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
+from selenium.common.exceptions import WebDriverException, TimeoutException
 
-
-LOGIN_STATUS = True
 
 # page 값 init , account 확인 및 로그인 상태까지 보내기
 # driver가 없을 때 로그인화면으로 이동
 
 MAX_POSTS = 10
-
+LOGIN_STATUS = True
 
 class Everytime:
     driver_manager = WebDriverManager.get_instance()
@@ -103,16 +102,23 @@ class Everytime:
     async def ev_login(request):
         if request.method == "POST":  
             try:
-                
-                LOGIN_STATUS = True
-                driver = Everytime.driver_manager.get_driver()
-                if not Everytime.driver_manager.is_stable(): 
-                    return redirect(reverse('login'))
+                try:
+                    driver = Everytime.driver_manager.get_driver()
+                    
+                    
+
+                except WebDriverException:
+                    Everytime.driver_manager.stop_driver()
+                    driver = Everytime.driver_manager.get_driver()
+                    return JsonResponse({"error":"driver is not stable, try again"},status=400)  
+                except:
+                    Everytime.driver_manager.stop_driver()
+                    driver = Everytime.driver_manager.get_driver()
+                    return JsonResponse({"error":"driver is not stable, try again"},status=400)
 
                 user = await sync_to_async(Account)(request, driver)
 
                 if not user:
-                    LOGIN_STATUS = False
                     return JsonResponse({"error":"Account error"},status=200)
                 
                 Everytime.driver_manager.switch_to_headless()
@@ -152,6 +158,7 @@ class Everytime:
         try:
             if Everytime.driver_manager.is_stable():
                 Everytime.driver_manager.stop_driver()
+           
                 
             
             # 처음에 세션 값이 있는지 검사
