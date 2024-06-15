@@ -22,7 +22,7 @@ from django.conf import settings
 urlpatterns = [
     path('', include('page.urls')),
     #TODO : Add the other platforms
-    #path('Facebook/', include('platformFacebook.urls')),
+    path('Facebook/', include('platformFacebook.urls')),
     path('Reddit/', include('platformReddit.urls')),
     path('Youtube/', include('platformYoutube.urls')),
     path('Everytime/', include('platformEverytime.urls')),

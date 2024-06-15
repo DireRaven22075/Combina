@@ -48,6 +48,7 @@ def search_recommended_videos(max_results=20):
             data.userIcon = channel_profile_picture
             data.save()
             data.image_url = data.id
+            data.url = video_url
             
             file = FileDB.objects.create(uid=0)
             file.uid = data.image_url
