@@ -187,7 +187,10 @@ class Everytime:
                     error_message = f"Failed to remove session keys: {', '.join(remaining_keys)}"
                     return JsonResponse({"error": error_message}, status=400)
             
-            return redirect('http://127.0.0.1:8000/accounts')
+            if (request.POST.get('page') == 'welcome2'):
+                return redirect('/start')
+            else:
+                return redirect('/accounts')
 
 
         except Exception as e:

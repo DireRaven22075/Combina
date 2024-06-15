@@ -17,7 +17,7 @@ from selenium.common.exceptions import StaleElementReferenceException
 MAX_POSTS = 10
 IMAGE_MAX = 5
 ATTEMPTS = 10 # 시도 횟수
-
+default_icon = "https://cf-fpi.everytime.kr/0.png"
 def safe_click(driver, xpath):
     attempts = 0
     while attempts < 5:
@@ -135,7 +135,7 @@ def Content(driver):
                 userID = post_user,
                 text = post_title+"|||" + post_text,
                 image_url = image_url,
-                userIcon = post_icon,
+                userIcon = default_icon,
                 vote = post_vote,
             ).save()   
             driver.back()    
