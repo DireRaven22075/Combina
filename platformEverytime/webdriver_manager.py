@@ -55,7 +55,7 @@ class WebDriverManager:
             if self.driver is not None:
                 try:
                     self.DRIVER_STATE = False
-                    self.driver.close()
+                    self.driver.quit()
                     self.driver = None
                 except Exception as e:
                     pass
