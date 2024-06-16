@@ -33,9 +33,6 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 INSTALLED_APPS = [
     "page",
     "server",
-    "platformFacebook",
-    "platformInstagram",
-    "platformDiscord",
     "platformReddit",
     "platformEverytime",
     "platformYoutube",

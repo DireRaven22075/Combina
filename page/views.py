@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import *
 def platforms():
-    return ["Facebook", "Reddit", "Youtube", "Everytime", "imgur"]
+    return ["Reddit", "Youtube", "Everytime"]
 def parameters():
     data = {}
     data['platforms'] = platforms()
