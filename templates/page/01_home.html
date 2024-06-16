@@ -88,6 +88,8 @@
             <div class="header">
                 {% if content.platform == 'Everytime' %}
                 <img class="icon noselect" src="{% static 'img/profile/everytime.png' %}" />
+                {% elif content.platform == 'Reddit' %}
+                <img class="icon noselect" src="{% static 'img/profile/reddit.png' %}" />
                 {% else %}
                 <img class="icon noselect" src="{{content.icon}}" />
                 {% endif %}
