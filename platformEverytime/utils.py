@@ -10,7 +10,7 @@ import psutil
 
 
 
-def sleep(a = 1.3, b= 1.5):
+def sleep(a = 1, b= 1.2):
     time.sleep(random.uniform(a, b))
 
 

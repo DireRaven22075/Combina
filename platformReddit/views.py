@@ -82,6 +82,7 @@ class RedditView:
         print("type is ", type(code))
         print("response_info", response_info)
         print("token", refresh_token)
+        
         # PRAW 초기화
         RedditView.reddit = praw.Reddit(
             client_id=CLIENT_ID,
@@ -92,9 +93,11 @@ class RedditView:
     
         try:
             user = RedditView.reddit.user.me()
-            print(user.name) 
+            print("user name", user.name) 
+             
+            print("user profile", user.icon_img) 
             account = AccountDB.objects.filter(platform='Reddit').first()
-            account.token = code
+            account.token = refresh_token
             account.name = user.name
             account.connected = True
             account.icon = user.icon_img

@@ -16,13 +16,16 @@ from selenium.common.exceptions import StaleElementReferenceException
 # 포스트 하나하나 들어가서 이미지, icon 다 긁어오기
 MAX_POSTS = 10
 IMAGE_MAX = 5
-ATTEMPTS = 5 # 시도 횟수
+ATTEMPTS = 2 # 시도 횟수
+
+# Attempts 3 , 1분 20초
+# attempts 2, 
 
 def safe_click(driver, xpath):
     attempts = 0
-    while attempts < 5:
+    while attempts < ATTEMPTS:
         try:
-            element = WebDriverWait(driver, 10).until(
+            element = WebDriverWait(driver, 5).until(
                 EC.element_to_be_clickable((By.XPATH, xpath))
             )
             element.click()
@@ -35,9 +38,9 @@ def safe_click(driver, xpath):
 
 def safe_get_text(driver, by, value):
     attempts = 0
-    while attempts < 5:
+    while attempts < ATTEMPTS:
         try:
-            element = WebDriverWait(driver, 10).until(
+            element = WebDriverWait(driver, 5).until(
                 EC.presence_of_element_located((by, value))
             )
             return element.text
