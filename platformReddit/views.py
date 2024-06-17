@@ -7,11 +7,12 @@ from page.models import AccountDB, ContentDB, FileDB
 from .content import Content
 from .config import CLIENT_ID, CLIENT_SECRET, USER_AGENT
 from django.http import JsonResponse
-
+from .post import Post
+import json
 
 
 class RedditView:
-    reddit = None
+
 
     def Home(request):
         contents = ContentDB.objects.filter(platform='Reddit').order_by('-id')[:10]
@@ -84,7 +85,7 @@ class RedditView:
         print("token", refresh_token)
         
         # PRAW 초기화
-        RedditView.reddit = praw.Reddit(
+        reddit = praw.Reddit(
             client_id=CLIENT_ID,
             client_secret=CLIENT_SECRET,
             user_agent=USER_AGENT,
@@ -92,7 +93,7 @@ class RedditView:
         )
     
         try:
-            user = RedditView.reddit.user.me()
+            user = reddit.user.me()
             print("user name", user.name) 
              
             print("user profile", user.icon_img) 
@@ -111,9 +112,17 @@ class RedditView:
 
   
     def GetContent(request):
-        reddit = RedditView.reddit
-        if reddit:
+        account = AccountDB.objects.filter(platform="Reddit").first()
+        print(account.token)
+        reddit = praw.Reddit(
+            client_id=CLIENT_ID,
+            client_secret=CLIENT_SECRET,
+            user_agent=USER_AGENT,
+            refresh_token=account.token
+        )
+        if reddit and reddit:
             success = Content(reddit)
+
             if success:
                 return JsonResponse({'message': 'success get Content'})
             
@@ -121,7 +130,40 @@ class RedditView:
             return JsonResponse({'error': 'Failed to get Content'}, status=400)
         return redirect('/Reddit/connect')
     
-    def Post(request):
+    # 레딧의 경우 포스팅이 제목, 이미지 혹은 제목 텍스트 만 가능
+    def CreatePost(request):
+        if request.method == 'POST':
+            json_data = json.load(request.body)
+            print(json_data)
+            title = json_data.get('title')
+            text = json_data.get('text')
+            file = json_data.get('file') # base64로 인코딩
+            
+            print("content : " , title,"text : ", text)
+            print("files : ", file)
+            account = AccountDB.objects.filter(platform="Reddit").first()
+            if account is None:
+                return redirect('/Reddit/connect')
+            print(account.token)
+            reddit = praw.Reddit(
+                client_id=CLIENT_ID,
+                client_secret=CLIENT_SECRET,
+                user_agent=USER_AGENT,
+                refresh_token=account.token
+            )
+            # title과 file이 있을 경우
+            if title and file:
+                success = Post(reddit ,title, image=file)
+                if success:
+                    return JsonResponse({"success": "Posting Image"})
+            # title과 text가 있을 경우
+            if title and text:
+                success = Post(reddit ,title, text=text)
+                if success:
+                    return JsonResponse({"success": "Posting Text"})
+                
+                return JsonResponse({"error":"Posting failed"}, status=400)
+            return JsonResponse({"error":"Posting failed, The requirements are not satisfied"}, status=400)
         return HttpResponse('Post')
     # Compare this snippet from platformReddit/views.py:
 
