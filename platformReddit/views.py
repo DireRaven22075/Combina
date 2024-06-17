@@ -4,11 +4,13 @@ import praw
 from urllib.parse import urlencode
 import requests
 from page.models import AccountDB, ContentDB, FileDB
+from page.views import parameters
 from .content import Content
 from .config import CLIENT_ID, CLIENT_SECRET, USER_AGENT
 from django.http import JsonResponse
 from .post import Post
 import json
+import base64
 
 
 class RedditView:
@@ -59,7 +61,7 @@ class RedditView:
         }
         auth_url_full = f'{auth_url}?{urlencode(params)}'
 
-        return render(request, 'reddit/login.html', {'auth_url': auth_url_full})
+        return redirect(auth_url_full)
     
     def Callback(request):
         code = request.GET.get('code')
@@ -103,14 +105,14 @@ class RedditView:
             account.connected = True
             account.icon = user.icon_img
             account.save()
+
+            return render(request, 'page/00_welcome2.html', parameters())
         except Exception as e:
             print(f'Failed to get user: {e}')
             RedditView.reddit = None
             return redirect('/Reddit/connect')
-        
-        return redirect('/Reddit/connect?code=' + code)
 
-  
+
     def GetContent(request):
         account = AccountDB.objects.filter(platform="Reddit").first()
         print(account.token)
@@ -133,12 +135,12 @@ class RedditView:
     # 레딧의 경우 포스팅이 제목, 이미지 혹은 제목 텍스트 만 가능
     def CreatePost(request):
         if request.method == 'POST':
-            json_data = json.load(request.body)
+            json_data = json.loads(request.body) # 현재 파일불러오면 None
             print(json_data)
             title = json_data.get('title')
             text = json_data.get('text')
-            file = json_data.get('file') # base64로 인코딩
-            
+            file = json_data.get('file') # base64로 인코딩 
+
             print("content : " , title,"text : ", text)
             print("files : ", file)
             account = AccountDB.objects.filter(platform="Reddit").first()
