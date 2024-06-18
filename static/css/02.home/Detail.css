@@ -3,6 +3,7 @@
 }
 .temp {
     width: 90%;
+    margin:0; padding:0;
     height: auto;
 }
 #DetailTitle {
@@ -13,9 +14,11 @@
 }
 #DetailContent {
     margin:0;padding:0;
+    font-family: 'Moto Sans';
     width: 100%;
     white-space: pre-wrap;
     word-wrap: break-word;
+    padding-bottom: 12rem;
 }
 #DetailVideo {
     margin-left: 2rem;

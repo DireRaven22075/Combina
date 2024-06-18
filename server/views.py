@@ -4,7 +4,7 @@ from django.http import HttpResponse, JsonResponse
 from django.middleware.csrf import get_token
 from page.models import *
 from page.views import platforms
-
+import threading
 class ServerView:
     def Disconnect(request):
         cookies = {'csrftoken': get_token(request)}
@@ -17,8 +17,14 @@ class ServerView:
             url = f'http://127.0.0.1:8000/{platform}/disconnect/'
             requests.post(url, cookies=cookies, headers=headers)
         return redirect('http://127.0.0.1:8000/accounts', cookies=cookies, headers=headers)
-    
+
     def GetContent(request):
+        count = 0
+        def sendRequest(url, cookies, headers):
+            requests.post(url, cookies=cookies, headers=headers)
+            print(f"Successfully requested content from {url}")
+            count += 1
+        
         ContentDB.objects.all().delete()
         FileDB.objects.all().delete()
         cookies = {
@@ -33,9 +39,13 @@ class ServerView:
             if (account.connected == False):
                 continue
             url = f'http://127.0.0.1:8000/{account.platform}/get-content/'
-            requests.post(url, cookies=cookies, headers=headers)
-        return redirect('http://127.0.0.1:8000/home/', cookies=cookies)
-    
+            t = threading.Thread(target=sendRequest, args=(url, cookies, headers))
+            t.start()
+        
+        if (count >= len(AccountDB.objects.all())):
+            count = 0
+            return redirect('http://127.0.0.1:8000/home/', cookies=cookies)
+        
     def Post(request):
         if request.method == "POST":
             data = {
@@ -70,8 +80,16 @@ class ServerView:
             
             return redirect('http://127.0.0.1:8000/create')
         return redirect(request.META.get('HTTP_REFERER', '/home'))
-
     def ClearContent(request):
         ContentDB.objects.all().delete()
         FileDB.objects.all().delete()
+        headers = {
+            'Content-Type': 'application/json',
+            'csrfmiddlewaretoken': get_token(request),  # 'X-CSRFToken': 'token
+            'X-CSRFToken': get_token(request)
+        }
+        cookies = {
+            'csrftoken': get_token(request)
+        }
+        redirect('http://127.0.0.1:8000/server/get-content/', cookies=cookies, headers=headers)
         return redirect(request.META.get('HTTP_REFERER', '/home'))
