@@ -3,6 +3,7 @@ const Detail = {};
 document.addEventListener("DOMContentLoaded", function () {
     Detail['name'] = document.getElementById('DetailUser');
     Detail['platform'] = document.getElementById('DetailPlatform');
+    Detail['title'] = document.getElementById('DetailTitle');
     Detail['content'] = document.getElementById('DetailContent');
     Detail['image'] = document.getElementById('DetailImage');
     Detail['images'] = document.getElementById('DetailImages');
@@ -14,7 +15,8 @@ document.addEventListener("DOMContentLoaded", function () {
 function setDetail(element) {
     Detail['platform'].innerHTML = element.children[0].value;
     Detail['name'].innerHTML = element.children[1].value;
-    Detail['content'].innerHTML = element.children[2].innerHTML.replace('|||', '<br>');
+    Detail['title'].innerHTML = element.children[2].innerHTML.split('|||')[0];
+    Detail['content'].innerHTML = element.children[2].innerHTML.split('|||')[1];
     Detail['images'].innerHTML = "";
     Detail['video'].style.display = 'none';
     if (element.children.length > 5) {

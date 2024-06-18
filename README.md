@@ -20,10 +20,6 @@ Combina: Combine + @
 2. front-end 메인 프로그래밍
 3. django 시스템 구축
 
-- 2023041004 - [오현승@scalar0114](https://www.github.com/scalar0114)
-1. chatting 시스템 구축
-2. django 시스템 서브 구축
-
 - 2023041033 - [한철연@hcy0157](https://github.com/hcy0157)
 1. API 시스템 프로그래밍
 2. Data Conversion
@@ -31,10 +27,7 @@ Combina: Combine + @
 
 ## Supported social accounts/platforms
 
-- Facebook
-- Instagram
 - Youtube
 - Everytime
-- Discord
 - Reddit
 
