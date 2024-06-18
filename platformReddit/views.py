@@ -11,6 +11,7 @@ from django.http import JsonResponse
 from .post import Post
 import json
 import base64
+from django.core.files.base import ContentFile
 
 
 class RedditView:
@@ -135,14 +136,15 @@ class RedditView:
     # 레딧의 경우 포스팅이 제목, 이미지 혹은 제목 텍스트 만 가능
     def CreatePost(request):
         if request.method == 'POST':
-            json_data = json.loads(request.body) # 현재 파일불러오면 None
-            print(json_data)
+            json_data = json.loads(request.body.decode('utf-8')) # 현재 파일불러오면 None
+            print("here is json", json_data)
             title = json_data.get('title')
             text = json_data.get('text')
             file = json_data.get('file') # base64로 인코딩 
 
-            print("content : " , title,"text : ", text)
-            print("files : ", file)
+
+                
+
             account = AccountDB.objects.filter(platform="Reddit").first()
             if account is None:
                 return redirect('/Reddit/connect')
@@ -155,11 +157,20 @@ class RedditView:
             )
             # title과 file이 있을 경우
             if title and file:
+                print("title, and file")
+
+                file_data = base64.b64decode(file)
+                file_name = "uploaded_image.png"  # 적절한 파일 이름 지정
+
+            # 파일 객체로 생성 (Django를 사용하는 경우)
+                file = ContentFile(file_data, name=file_name)
+                print("decoding success")
                 success = Post(reddit ,title, image=file)
                 if success:
                     return JsonResponse({"success": "Posting Image"})
             # title과 text가 있을 경우
-            if title and text and file is None:
+            if title and text and file=='':
+                print("title and text")
                 success = Post(reddit ,title, text=text)
                 if success:
                     return JsonResponse({"success": "Posting Text"})
