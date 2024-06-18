@@ -19,32 +19,25 @@ class ServerView:
         return redirect('http://127.0.0.1:8000/accounts', cookies=cookies, headers=headers)
 
     def GetContent(request):
-        count = 0
+        thread = []
         def sendRequest(url, cookies, headers):
             requests.post(url, cookies=cookies, headers=headers)
             print(f"Successfully requested content from {url}")
-            count += 1
-        
+
         ContentDB.objects.all().delete()
         FileDB.objects.all().delete()
-        cookies = {
-                'csrftoken': get_token(request)
-        }
-        headers = {
-                'Content-Type': 'application/json',
-                'csrfmiddlewaretoken': get_token(request),  # 'X-CSRFToken': 'token
-                'X-CSRFToken': get_token(request)
-        }
+        cookies = { 'csrftoken': get_token(request) }
+        headers = { 'Content-Type': 'application/json','csrfmiddlewaretoken': get_token(request),'X-CSRFToken': get_token(request) }
         for account in AccountDB.objects.all():
             if (account.connected == False):
                 continue
             url = f'http://127.0.0.1:8000/{account.platform}/get-content/'
             t = threading.Thread(target=sendRequest, args=(url, cookies, headers))
             t.start()
-        
-        if (count >= len(AccountDB.objects.all())):
-            count = 0
-            return redirect('http://127.0.0.1:8000/home/', cookies=cookies)
+            thread.append(t)
+        for t in thread:
+            t.join()
+        return redirect('http://127.0.0.1:8000/home/', cookies=cookies)
         
     def Post(request):
         if request.method == "POST":
