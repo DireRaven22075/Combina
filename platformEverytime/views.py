@@ -74,13 +74,13 @@ class Everytime:
                  
             except:
                 Everytime.driver_manager.stop_driver()
-                return JsonResponse({"error":"driver is not stable, try again"},status=400)
+                return redirect('/start')
 
             user = await sync_to_async(Account)(request, driver)
 
             if not user:
                 Everytime.driver_manager.stop_driver()
-                return JsonResponse({"error":"Account error"},status=200)
+                return redirect('/start')
             
             Everytime.driver_manager.switch_to_headless()
             return redirect('/start')

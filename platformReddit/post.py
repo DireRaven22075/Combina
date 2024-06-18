@@ -4,16 +4,17 @@ import base64
 from django.core.files.base import ContentFile
 
 def Post(reddit ,title, text=None, image=None):
+  
     if reddit:
         try:
+
             user = reddit.user.me()
             subreddit_name = 'u_' + user.name
-            
+            print("subreddit_name : ", subreddit_name)
             if image:
-                format, imgstr = image.split(';base64,')
-                ext = format.split('/')[-1]
-                image = ContentFile(base64.b64decode(imgstr), name=f'temp.{ext}')
-                print("image : ", image)
+                print("in image")
+     
+                # 임시 폴더
                 with tempfile.NamedTemporaryFile(delete=False) as temp:
                     temp.write(image.read())
                     temp_path = temp.name
