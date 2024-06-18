@@ -130,9 +130,9 @@
     </div>
     <div id="Subtitle" style="visibility: hidden;">
         <input onclick="js:closeDetail();" type="image" src="{% static 'img/icon/close.svg' %}" />
-        <h3 id="DetailUser"></h3>
+        <h3 id="DetailUser" style="margin-right: 1rem;"></h3>
         <p id="DetailPlatform"></p>
-        <input onclick="js:ElectronOpen('http://youtube.com')" type="image" src="{% static 'img/icon/send.svg' %}" />
+        <!-- <input onclick="js:ElectronOpen('http://youtube.com')" type="image" src="{% static 'img/icon/send.svg' %}" /> -->
     </div>
     <input type="image" id="Redirect" src = "{% static 'img/icon/send.svg' %}" value="http://youtube.com" style="visibility: hidden;" onclick="js:redirect(this)" />
 </body>

@@ -1,18 +1,14 @@
 #Sub {
-    width: calc(100% - 14rem - 33rem - 0.2rem - 2rem - 6rem);
-    height: calc(100% - 2rem);
+    width: calc(100% - 14rem - 33rem - 0.4rem - 6rem);
+    height: 100%;
     position:fixed;
     padding: 3rem;
     background-color: white;
     top: 0;
     right: 0;
-    border-radius:  0.4em;
-    overflow-y: scroll;
     overflow-x:hidden;
     text-wrap: warp;
     pre{
-        width: calc(100% - 6rem);
-        max-width: calc(100% - 6rem);
         font-size: 1em;
         font-weight: normal;
         margin-left: 1rem;
@@ -29,22 +25,19 @@
     position: fixed;
     display:flex;
     flex-direction: row;
-    width: calc(100% - 14rem - 33rem - 0.2rem - 2rem);
+    width: calc(100% - 14rem - 33rem - 0.4rem - 0rem);
     height: 2.5rem;
     top:0;
     right:0;
     justify-content: flex-start;
     align-items: center;
-    background-color: #F9F9F9;
-    border-bottom: 0px solid #EBEBEB;
-    border-top-left-radius: 0.3em;
-    border-top-right-radius: 0.3em;
+    background-color: white;
     white-space: pre-warp;
     
     input[type=image] {
         width: 1.1rem;
         height: 1.1rem;
-        margin-left: 1rem;
+        margin-left: 2rem;
         margin-right: 2rem;
     }
 }
