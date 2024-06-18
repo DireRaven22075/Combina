@@ -44,16 +44,16 @@ class Everytime:
             return render(request, "every_test/home.html")
     
     # 로그인 페이지 렌더링
-    @staticmethod
-    def login_page(request):
+    # @staticmethod
+    # def login_page(request):
         
-        if request.method == 'POST':
-            page = request.POST.get('page', 'None')  # 기본값 'init'
+    #     if request.method == 'POST':
+    #         page = request.POST.get('page', 'None')  # 기본값 'init'
 
-            request.session['page'] = page
-            request.session.save()
+    #         request.session['page'] = page
+    #         request.session.save()
         
-        return render(request, 'every_test/login.html' )
+    #     return render(request, 'every_test/login.html' )
     
     @staticmethod
     def check_login_status(request):
@@ -67,32 +67,26 @@ class Everytime:
 
     #로그인 처리, 세션 저장과 동시에 컨텐츠 크롤링
     @staticmethod
-    async def ev_login(request):
-        if request.method == "POST":  
+    async def ev_login(request): 
+        try:
             try:
-                try:
-                    driver = Everytime.driver_manager.get_driver()
-                    
+                driver = Everytime.driver_manager.get_driver()
+                 
+            except:
+                Everytime.driver_manager.stop_driver()
+                return JsonResponse({"error":"driver is not stable, try again"},status=400)
 
-                except WebDriverException:
-                    Everytime.driver_manager.stop_driver()
-                    return JsonResponse({"error":"driver is not stable, try again"},status=400)  
-                except:
-                    Everytime.driver_manager.stop_driver()
-                    return JsonResponse({"error":"driver is not stable, try again"},status=400)
+            user = await sync_to_async(Account)(request, driver)
 
-                user = await sync_to_async(Account)(request, driver)
-
-                if not user:
-                    Everytime.driver_manager.stop_driver()
-                    return JsonResponse({"error":"Account error"},status=200)
-                
-                Everytime.driver_manager.switch_to_headless()
-                return redirect('/start')
-            except KeyError:
-                return JsonResponse({"error":"ID or PASSWORD are incorrect"},status=200) # 아이디 혹은 비밀번호 없음
-
-        return JsonResponse({"error":"no post provided"},status=400)    
+            if not user:
+                Everytime.driver_manager.stop_driver()
+                return JsonResponse({"error":"Account error"},status=200)
+            
+            Everytime.driver_manager.switch_to_headless()
+            return redirect('/start')
+        except KeyError:
+            return JsonResponse({"error":"ID or PASSWORD are incorrect"},status=200) # 아이디 혹은 비밀번호 없음
+  
     
     
     # 최신 컨텐츠 가져오기 왜 세부 컨텐츠를 못 불러오는가?
