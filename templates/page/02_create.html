@@ -44,7 +44,7 @@
         {% for account in accounts %}
         {% if account.connected %}
         <input type="checkbox" name="{{account.platform}}" value="True" />
-        <label>{{account.platform}}</label>
+        <label>{{account.platform}}</label><br/>
         {% endif %}
         {% endfor %}
         <input type="submit" value="Post" />
