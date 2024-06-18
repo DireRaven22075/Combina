@@ -43,7 +43,7 @@ class ServerView:
                 "text": request.POST.get("text"),
                 "file": request.FILES.get("file")
             }
-
+            print(data['file'])
             headers = {
                 'Content-Type': 'application/json',
                 'csrfmiddlewaretoken': get_token(request),  # 'X-CSRFToken': 'token

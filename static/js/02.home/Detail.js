@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
 function setDetail(element) {
     Detail['platform'].innerHTML = element.children[0].value;
     Detail['name'].innerHTML = element.children[1].value;
-    Detail['content'].innerHTML = element.children[2].value.replace('|||', '<br>');
+    Detail['content'].innerHTML = element.children[2].innerHTML.replace('|||', '<br>');
     Detail['images'].innerHTML = "";
     Detail['video'].style.display = 'none';
     if (element.children.length > 5) {

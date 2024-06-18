@@ -16,6 +16,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/02.home/menuButton.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/02.home/content.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/02.home/iframe.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/02.home/Detail.css' %}" />
 
     <!-- Javascript Link -->
     <script src="{% static 'js/00.all/Menubar.js' %}"></script>
@@ -59,12 +60,11 @@
         {% for file in files %}
         {% if file.uid == content.image_url %}
         <div onclick="js:ElectronOpen('{{file.url}}');" class="content {{content.platform}}">
-            {{content}}
             <div class="header">
                 <img class="icon noselect" src="{{content.userIcon}}" />
                 <span class="info">
-                    <pre>{{content.userID}}</pre>
-                    <pre>{{content.platform}}</pre>
+                    <p>{{content.userID}}</p>
+                    <p>{{content.platform}}</p>
                 </span>
             </div>
             <div class="body">
@@ -78,7 +78,9 @@
         <div onclick="js:setDetail(this); js:openDetail()" class="content {{content.platform}}">
             <input type="text" style="display: none" value='{{content.platform}}' />
             <input type="text" style="display: none" value='{{content.userID}}' />
-            <input type="text" style="display: none" value='{{content.text}}' />
+            <div style="display: none">
+                {{content.text}}
+            </div>
             <input type="text" style="display: none" value='{{content.url}}' />
             {% for file in files %}
             {% if file.uid == content.image_url %}
@@ -94,8 +96,8 @@
                 <img class="icon noselect" src="{{content.icon}}" />
                 {% endif %}
                 <span class="info">
-                    <pre>{{content.userID}}</pre>
-                    <pre>{{content.platform}}</pre>
+                    <p>{{content.userID}}</p>
+                    <p>{{content.platform}}</p>
                 </span>
             </div>
             <div class="body">
@@ -124,7 +126,9 @@
     </div>
     <div id="Sub" style="visibility: hidden;">
         <pre id="DetailTitle"></pre>
-        <pre id="DetailContent"></pre>
+        <div classs="temp">
+            <pre id="DetailContent"></pre>
+        </div>
         <video id="DetailVideo" controls></video>
         <div id="DetailImages"></div>
     </div>

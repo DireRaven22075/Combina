@@ -1,13 +1,21 @@
 #DetailName {
     margin-left: 2rem;
 }
+.temp {
+    width: 90%;
+    height: auto;
+}
+#DetailTitle {
+
+}
 #DetailPlatform {
     margin-left: 2rem;
 }
 #DetailContent {
-    margin-left: 2rem;
-    margin-right: 2rem;
+    margin:0;padding:0;
+    width: 100%;
     white-space: pre-wrap;
+    word-wrap: break-word;
 }
 #DetailVideo {
     margin-left: 2rem;

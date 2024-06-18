@@ -1,8 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
-
 .content {
     width: 31rem;
-    font-family: 'Noto Sans', sans-serif;
     margin-left: 1rem;
     border-bottom: 1px solid #f4f4f4;
     justify-self: center;
@@ -47,7 +44,6 @@
     .body {
         width: 100%;
         font-size: 0.9em;
-        font-family: 'Noto Sans', sans-serif;
         height: auto;
         pre {
             width: 100%;
