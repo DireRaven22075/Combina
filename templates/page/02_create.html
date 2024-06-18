@@ -23,14 +23,13 @@
 <body>
     <header id="Menubar">
         <div class="title"><label><img src="{% static 'img/combinalogo.svg' %}" <label></div>
-            <div onclick="js:goto('/home')" class="element button home-button"><label><img
-                    src="{% static 'img/icon/home.svg'%}" >Home</label></div>
+        <div onclick="js:goto('/home')" class="element button home-button"><label><img
+                    src="{% static 'img/icon/home.svg'%}">Home</label></div>
         <div onclick="js:goto('/create')" class="element button create-button"><label><img
-                    src="{% static 'img/icon/create.svg'%}" >Create</label></div>
+                    src="{% static 'img/icon/create.svg'%}">Create</label></div>
         <div onclick="js:goto('/accounts')" class="element button accounts-button"><label><img
-                    src="{% static 'img/icon/profile.svg'%}" >Accounts</label></div>
-        <div class="element button settings-button"><label><img
-                    src="{% static 'img/icon/more.svg'%}" >More</label></div>
+                    src="{% static 'img/icon/profile.svg'%}">Accounts</label></div>
+        <div class="element button settings-button"><label><img src="{% static 'img/icon/more.svg'%}">More</label></div>
     </header>
 
     <form id="Main" method="POST" class="post" action="/server/post/">
@@ -41,20 +40,25 @@
         <textarea required maxlength="200" id="PostContent" name="text" placeholder="Write..."></textarea>
         <h4 class="noselect">Media</h4>
         <input type="file" id="PostImage" name="File" multiple accept="image/*" />
-        
-        <div>
-            {% for account in accounts %}
-            {% if account.connected %}
-            <input type="checkbox" name="{{account.platform}}" value="True" />
-            <label>{{account.platform}}</label>
-            {% endif %}
-            {% endfor %}
-        </div>
+
+        {% for account in accounts %}
+        {% if account.connected %}
+        <input type="checkbox" name="{{account.platform}}" value="True" />
+        <label>{{account.platform}}</label>
+        {% endif %}
+        {% endfor %}
         <input type="submit" value="Post" />
     </form>
-    <div id="Title"><div>Create</div></div>
+    <div id="Title">
+        <div>Create</div>
+    </div>
     <div id="Sub" class="noselect">
-        <div id="Preview"><h1 id="PreviewTitle"></h1><pre id="PreviewContent"></pre><div id="PreviewImage"></div><div id="PreviewImages"></div></div>
+        <div id="Preview">
+            <h1 id="PreviewTitle"></h1>
+            <pre id="PreviewContent"></pre>
+            <div id="PreviewImage"></div>
+            <div id="PreviewImages"></div>
+        </div>
     </div>
     <div id="Navigation">
     </div>

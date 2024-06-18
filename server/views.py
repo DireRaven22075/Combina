@@ -41,7 +41,7 @@ class ServerView:
             data = {
                 "title": request.POST.get("title"),
                 "text": request.POST.get("text"),
-                "file": request.FILES.get("file")
+                "file": request.POST.get("File")
             }
             print(data['file'])
             headers = {
