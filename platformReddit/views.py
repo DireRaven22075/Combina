@@ -159,7 +159,7 @@ class RedditView:
                 if success:
                     return JsonResponse({"success": "Posting Image"})
             # title과 text가 있을 경우
-            if title and text:
+            if title and text and file is None:
                 success = Post(reddit ,title, text=text)
                 if success:
                     return JsonResponse({"success": "Posting Text"})
