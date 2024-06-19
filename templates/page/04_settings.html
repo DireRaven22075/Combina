@@ -105,11 +105,13 @@
     </header>
     <form class="settings" id="Main" action="/server/setting/" method="post">
         <h3>Theme</h3>
-        <div class="container">
-            <input type="radio" name="theme" value="light" id="light" checked>
-            <label for="light">Light</label>
-            <input type="radio" name="theme" value="dark" id="dark">
-            <label for="dark">Dark</label>
+        <div class="container" disabled>
+            <input disabled type="radio" name="theme" value="light" id="light" checked>
+            <label disabled for="light">Light</label>
+            <input disabled type="radio" name="theme" value="dark" id="dark">
+            <label disabled for="dark">Dark</label>
+
+            <p style="margin: 0; margin-right: 1rem; float: right;">현재 시스템의 설정을 따라갑니다..</p>
         </div>
         <h3>Reddit</h3>
         <div class="container">
