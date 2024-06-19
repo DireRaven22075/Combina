@@ -33,27 +33,28 @@
                     src="{% static 'img/icon/more.svg'%}">More</label></div>
     </header>
 
-    <form id="Main" method="POST" class="post" action="/server/post/">
+    <form id="Main" method="POST" class="post" action="/server/post/", enctype="multipart/form-data">
         {% csrf_token %}
         <h3 class="noselect">Title</h3>
         <input required maxlength="100" id="PostTitle" name="title" type="text" placeholder="Write..." />
         <h3 class="noselect">Details</h3>
         <textarea required maxlength="200" id="PostContent" name="text" placeholder="Write..."></textarea>
-        <h4 class="noselect">Media</h4>
+        <h3 class="noselect">Media</h4>
         <input type="file" id="PostImage" name="File" multiple accept="image/*" />
-
-        {% for account in accounts %}
-        {% if account.connected %}
-        <input type="checkbox" name="{{account.platform}}" value="True" />
-        <label>{{account.platform}}</label><br />
-        {% endif %}
-        {% endfor %}
+        <div class="platform-checkbox">
+            {% for account in accounts %}
+            {% if account.connected %}
+            <input type="checkbox" name="{{account.platform}}" value="True" />
+            <label>{{account.platform}}</label><br />
+            {% endif %}
+            {% endfor %}
+        </div>
         <input type="submit" value="Post" />
     </form>
     <div id="Title">
         <div>Create</div>
     </div>
-    <div id="Sub" class="noselect">
+    <div id="Sub" class="noselect" style="display: none;">
         <div id="Preview">
             <h1 id="PreviewTitle"></h1>
             <pre id="PreviewContent"></pre>
@@ -63,7 +64,7 @@
     </div>
     <div id="Navigation">
     </div>
-    <div id="Subtitle">Preview</div>
+    <div id="Subtitle" style="display: none;">Preview</div>
     {% if status == "success" %}
 
     {% elif status == "error" %}

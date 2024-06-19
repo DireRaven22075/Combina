@@ -1,5 +1,13 @@
 .post {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    overflow-x: auto;
     h3 {
+        width: 90%;
         font-size: 1.5em;
         margin: 0;
     }
@@ -55,12 +63,23 @@
             object-fit: cover;
         }
     }
-    input[type=submit] {
+    .platform-checkbox {
         width: 90%;
-        padding: 0.5em;
-        margin: 0.5em;
-        border: 1px solid black;
-        border-radius: 0.5em;
-        background-color: #E9E9E9;
+        height: auto;
+        display: block;
+
+    }
+    input[type=submit] {
+        background-color: rgb(0, 60, 255);
+        color: white;
+        font-size: 1.5rem;
+        border: none;
+        outline: none;
+        border-radius: 0.3rem;
+        cursor: pointer;
+        height: 3rem;
+        width: 90%;
+        bottom: 1rem;
+        position: absolute;
     }
 }
