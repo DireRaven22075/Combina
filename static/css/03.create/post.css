@@ -1,30 +1,30 @@
 @media (prefers-color-scheme: dark) {
     .post {
         textarea {
-            background-color: #202020;
+            background-color: #151515;
             color: white;
         }
         textarea:focus {
-            background-color: #2A2A2A;
+            background-color: #151515;
             outline: none;
         }
         input[type=text] {
-            background-color: #202020;
+            background-color: #151515;
             color: white;
         }
         input[type=text]:focus {
-            background-color: #2A2A2A;
+            background-color: #151515;
             outline: none;
         }
         input[type=submit] {
-            background-color: #2A2A2A;
+            background-color: #151515;
         }
     }
 }
 @media (prefers-color-scheme: light) {
     .post {
         textarea {
-            background-color: whtite;
+            background-color: #e9e9e9;
             color: black;
         }
         textarea:focus {
@@ -32,7 +32,7 @@
             outline: none;
         }
         input[type=text] {
-            background-color: white;
+            background-color: #e9e9e9;
             color: black;
         }
         input[type=text]:focus {
@@ -63,7 +63,7 @@
         margin: 0.5em;
         /*border: 1px solid black;*/
         border: none;
-        border-radius: 0.5em;
+        border-radius: 0.3em;
         background-color: whites;
     }
     textarea {
@@ -73,16 +73,17 @@
         padding: 0.5em;
         margin: 0.5em;
         border: none;
+        border-radius: 0.3em;
     }
     textarea:focus {
-        border-radius: 0.5rem;
+        border-radius: 0.3rem;
         outline: none;
     }
     input[type=file] {
         width: 90%;
         padding: 0.5em;
         margin: 0.5em;
-        border-radius: 0.5em;
+        border-radius: 0.3em;
     }
     .platform-checkbox {
         width: 90%;
@@ -91,7 +92,7 @@
     }
     input[type=submit] {
         color: white;
-        font-size: 1.5rem;
+        font-size: 1rem;
         border: none;
         outline: none;
         border-radius: 0.3rem;
