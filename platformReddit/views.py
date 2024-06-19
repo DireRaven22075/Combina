@@ -12,6 +12,11 @@ from .post import Post
 import json
 import base64
 from django.core.files.base import ContentFile
+import tempfile
+import os
+from PIL import Image
+from io import BytesIO
+import matplotlib.pyplot as plt
 
 class RedditView:
 
@@ -132,18 +137,20 @@ class RedditView:
             
             return JsonResponse({'error': 'Failed to get Content'}, status=400)
         return redirect('/Reddit/connect')
-    
+
+
     # 레딧의 경우 포스팅이 제목, 이미지 혹은 제목 텍스트 만 가능
     def CreatePost(request):
         if request.method == 'POST':
-            json_data = json.loads(request.body.decode('utf-8')) # 현재 파일불러오면 None
-            print("here is json", json_data)
-            title = json_data.get('title')
-            text = json_data.get('text')
-            file = json_data.get('file') # base64로 인코딩 
-
-
-                
+            
+            json_data = json.loads(request.body) # 
+            print("json_data : ", json_data)
+            title = json_data['title']
+            text = json_data['text']
+            file = json_data['file']
+            print("content : " , title,"text : ", text)
+            print("file : ", file)
+            # base64로 인코딩된 이미지를 디코딩
 
             account = AccountDB.objects.filter(platform="Reddit").first()
             if account is None:
@@ -155,17 +162,10 @@ class RedditView:
                 user_agent=USER_AGENT,
                 refresh_token=account.token
             )
+
             # title과 file이 있을 경우
             if title and file:
-                print("title, and file")
-
-                file_data = base64.b64decode(file)
-                file_name = "uploaded_image.png"  # 적절한 파일 이름 지정
-
-            # 파일 객체로 생성 (Django를 사용하는 경우)
-                file = ContentFile(file_data, name=file_name)
-                print("decoding success")
-                success = Post(reddit ,title, image=file)
+                success = Post(reddit, title, image=temp_path)
                 if success:
                     return JsonResponse({"success": "Posting Image"})
             # title과 text가 있을 경우
