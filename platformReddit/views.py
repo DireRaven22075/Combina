@@ -13,7 +13,6 @@ import json
 import base64
 from django.core.files.base import ContentFile
 
-
 class RedditView:
 
 
@@ -45,6 +44,7 @@ class RedditView:
         account.token = ''
         account.connected = False
         account.save()
+        request.session.flush()
         if (request.POST.get('page') == 'welcome2'):
             return redirect('/start')
         else:
