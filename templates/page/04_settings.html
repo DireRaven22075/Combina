@@ -14,10 +14,6 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/05.settings/menuButton.css' %}" />
 
     <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
         .title-bar {
             display: flex;
             align-items: center;
@@ -49,6 +45,69 @@
 
     <!-- Javascript Link (ui-updates) -->
     <script src="{% static 'js/ui-updates/navigation.js' %}"></script>
+    <script>
+        const theme = '{{setting.theme}}';
+        const redditSize = {{setting.redditSize}};
+        const youtubeSize = {{setting.youtubeSize}};
+        const everytimeSize = {{setting.everytimeSize}};
+        const light = document.getElementById('light');
+        const dark = document.getElementById('dark');
+        const reddit = document.getElementById('Reddit');
+        const youtube = document.getElementById('Youtube');
+        const everytime = document.getElementById('Everytime');
+        var rbool = false;
+        var ybool = false;
+        var ebool = false;
+        reddit.addEventListener('change', () => {
+            if (reddit.value > 50) {
+                reddit.value = 50;
+            } else if (reddit.value < 1) {
+                reddit.value = 1;
+            }
+            if (reddit.value != redditSize) {
+                rbool = true;
+            } else {
+                rbool = false;
+            }
+            if (rbool || ybool || ebool) {
+                document.querySelector('input[type="submit"]').removeAttribute('disabled');
+                document.querySelector('input[type="submit"]').value = "Save";
+            } else {
+                document.querySelector('input[type="submit"]').setAttribute('disabled', 'true');
+                document.querySelector('input[type="submit"]').value = "Nothing to save";
+            }
+        });
+        everytime.addEventListener('change', () => {
+            everytime.value = Math.clamp(everytime.value, 1, 50);
+            ebool = everytime.value != everytimeSize;
+            if (rbool || ybool || ebool) {
+                document.querySelector('input[type="submit"]').removeAttribute('disabled');
+                document.querySelector('input[type="submit"]').value = "Save";
+            } else {
+                document.querySelector('input[type="submit"]').setAttribute('disabled', 'true');
+                document.querySelector('input[type="submit"]').value = "Nothing to save";
+            }
+        });
+        youtube.addEventListener('change', () => {
+            if (reddit.value > 50) {
+                reddit.value = 50;
+            } else if (reddit.value < 1) {
+                reddit.value = 1;
+            }
+            if (reddit.value != redditSize) {
+                rbool = true;
+            } else {
+                rbool = false;
+            }
+            if (rbool || ybool || ebool) {
+                document.querySelector('input[type="submit"]').removeAttribute('disabled');
+                document.querySelector('input[type="submit"]').value = "Save";
+            } else {
+                document.querySelector('input[type="submit"]').setAttribute('disabled', 'true');
+                document.querySelector('input[type="submit"]').value = "Nothing to save";
+            }
+        });
+    </script>
 </head>
 
 <body>
@@ -64,7 +123,31 @@
                     src="{% static 'img/icon/more.svg'%}" >More</label></div>
     </header>
 
-    <div id="Main"></div>
+    <form id="Main" action="/server/setting" method="post">
+        <h3>Theme</h3>
+        <div>
+            <input type="radio" name="theme" value="light" id="light" checked>
+            <label for="light">Light</label>
+            <input type="radio" name="theme" value="dark" id="dark">
+            <label for="dark">Dark</label>
+        </div>
+        <h3>Reddit</h3>
+        <div>
+            <label for="reddit">Number of post to recieve </label>
+            <input type="number" max="50" min="1" id=Rreddit" name="reddit" value="{{setting.redditSize}}">
+        </div>
+        <h3>Youtube</h3>
+        <div>
+            <label for="reddit">Number of post to recieve </label>
+            <input type="number" max="50" min="1" id="Youtube" name="reddit" value="{{setting.youtubeSize}}">
+        </div>
+        <h3>Everytime</h3>
+        <div>
+            <label for="reddit">Number of post to recieve </label>
+            <input type="number" max="50" min="1" id="reddit" name="reddit" value="{{setting.everytimeSize}}">
+        </div>
+        <input type="submit" value="Nothing to save" disabled>
+    </form>
     <div id="Title"></div>
     <div id="Sub" style="display: none;"></div>
     <div id="Subtitle" style="display: none;"></div>

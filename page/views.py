@@ -10,6 +10,7 @@ def parameters():
     data['accounts'] = AccountDB.objects.all()
     data['files'] = FileDB.objects.all()
     data['connected'] = isOkay()
+    data['setting'] = Setting.objects.all().first()
     return data
 def isOkay():
     for account in AccountDB.objects.all():
@@ -18,6 +19,9 @@ def isOkay():
     return False
 class PageView:
     def Welcome(request):
+        if (Setting.objects.all().count() == 0):
+            setting = Setting()
+            setting.save()
         if (AccountDB.objects.all().count() == 0):
             for platform in platforms():
                 account = AccountDB(connected=False)

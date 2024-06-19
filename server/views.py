@@ -47,27 +47,16 @@ class ServerView:
                 "file": request.POST.get("File")
             }
             print(data['file'])
-            headers = {
-                'Content-Type': 'application/json',
-                'csrfmiddlewaretoken': get_token(request),  # 'X-CSRFToken': 'token
-                'X-CSRFToken': get_token(request)
-            }
+            headers = request.headers
+            body = request.body
             base_url = "http://localhost:8000"  # 기본 URL 설정
 
             for platform in platforms():
                 if request.POST.get(platform):
                     url = f'{base_url}/{platform}/post/'
                     try:
-                        
-                        cookies = {
-                            'csrftoken': get_token(request),
-                        }
-
-                        response = requests.post(url, json=data, headers=headers, cookies=cookies)
-                        if response.status_code == 200:
-                            print(f"Successfully posted to {platform}")
-                        else:
-                            print(f"Failed to post to {platform}: {response.status_code} {response.text}")
+                        response = requests.post(url, json=data, data=body, headers=headers)
+                        print(response.status_code)
                     except requests.exceptions.RequestException as e:
                         print(f"Request to {platform} failed: {e}")
             

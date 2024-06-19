@@ -21,10 +21,9 @@ class FileDB(models.Model):
     uid = models.IntegerField(null=False)
     url = models.URLField(default='http://default.url/icon.png')  # URL 기본 값 설정
 
-class ContactDB(models.Model):
-    platform = models.CharField(max_length=30)
-    token = models.TextField()
-    name = models.CharField(max_length=100)
-    tag = models.CharField(max_length=30)
-    connected = models.BooleanField(default=False, null=False)
-    icon = models.URLField()
+class Setting(models.Model):
+    theme = models.CharField(max_length=30, default='light')  # 테마 설정
+    redditSize = models.IntegerField(default=10, null=False)  # 레딧 컨텐츠 불러오는 개수
+    youtubeSize = models.IntegerField(default=10, null=False)  # 유튜브 컨텐츠 불러오는 개수
+    everytimeSize = models.IntegerField(default=10, null=False)  # 에브리타임 컨텐츠 불러오는 개수
+    url = models.URLField(default='http://default.url/icon.png')  # URL 기본 값 설정
