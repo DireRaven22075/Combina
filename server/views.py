@@ -38,12 +38,22 @@ class ServerView:
     
     def Post(request):
         if request.method == "POST":
+            files = None
+            print("post try")
+            if 'File' in request.FILES:
+                print("file exist")
+                file = request.FILES['File']
+                files = {'file':[file.name, file.read(), file.content_type]}
+                print("file name", file.name)
+                print("file type", file.content_type)
+               
+                
             data = {
                 "title": request.POST.get("title"),
                 "text": request.POST.get("text"),
-                "file": request.POST.get("File")
+                "file" : files,
             }
-            print(data['file'])
+  
             headers = {
                 'Content-Type': 'application/json',
                 'csrfmiddlewaretoken': get_token(request),  # 'X-CSRFToken': 'token
@@ -59,9 +69,10 @@ class ServerView:
                         cookies = {
                             'csrftoken': get_token(request),
                         }
-
-                        response = requests.post(url, json=data, headers=headers, cookies=cookies)
+                       
+                        response = requests.post(url, json=data,files=files,headers=headers, cookies=cookies)
                         if response.status_code == 200:
+                            print("post success")
                             print(f"Successfully posted to {platform}")
                         else:
                             print(f"Failed to post to {platform}: {response.status_code} {response.text}")

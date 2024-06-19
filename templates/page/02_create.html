@@ -32,7 +32,7 @@
         <div class="element button settings-button"><label><img src="{% static 'img/icon/more.svg'%}">More</label></div>
     </header>
 
-    <form id="Main" method="POST" class="post" action="/server/post/">
+    <form id="Main" method="POST" class="post" action="/server/post/", enctype="multipart/form-data">
         {% csrf_token %}
         <h3 class="noselect">Title</h3>
         <input required maxlength="100" id="PostTitle" name="title" type="text" placeholder="Write..." />
