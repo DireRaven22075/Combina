@@ -2,19 +2,21 @@
 /* 메인 컨테이너 저장공간 */
 :root {
     --main-container-background-color: #ffffff;
-    --navigation-background-color: #f9f9f9;
+    --navigation-background-color: #e9e9e9;
     --title-text-color: #000000;
     --navigation-text-color: #000000;
     --border-color: #e9e9e9;
+    --image-filter: none;
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
         --main-container-background-color: #202020;
-        --navigation-background-color: #202020;
+        --navigation-background-color: #151515;
         --title-text-color: #ffffff;
         --navigation-text-color: #ffffff;
         --border-color: #000000;
+        --image-filter: invert(100%);
     }
 }
 
@@ -53,6 +55,11 @@
     color: var(--title-text-color);
     border-bottom: 0.2rem solid var(--border-color);
     text-align: center; display: flex; justify-content: center; align-items: center;
+
+    input[type=image] {
+        filter: var(--image-filter);
+    }
+
 }
 
 #Navigation {
@@ -65,7 +72,7 @@
     left: calc(14rem + 0.2rem);
     height: 2.5rem;
     background-color: var(--navigation-background-color);
-    color: var(--title-text-color);
+    color: var(--navigation-text-color);
     border-bottom: 0.2rem solid var(--border-color);
 
     input[type=button] {
@@ -74,6 +81,6 @@
         background: none;
         border: none;
         font-size: 0.95rem;
-        color: var(--title-text-color);
+        color: var(--navigation-text-color);
     }
 }

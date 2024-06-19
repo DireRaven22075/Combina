@@ -1,9 +1,23 @@
+:root {
+    --sub-background-color: white;
+    --subtitle-background-color: white;
+    --image-filter: none;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --sub-background-color: #202020;
+        --subtitle-background-color: #202020;
+        --image-filter: invert(100%);
+    }
+}
+
 #Sub {
     width: calc(100% - 14rem - 33rem - 0.4rem - 6rem);
     height: 100%;
     position:fixed;
     padding: 3rem;
-    background-color: white;
+    background-color: var(--sub-background-color);
     top: 0;
     right: 0;
     overflow-x:hidden;
@@ -31,13 +45,15 @@
     right:0;
     justify-content: flex-start;
     align-items: center;
-    background-color: white;
+    background-color: var(--subtitle-background-color);
     white-space: pre-warp;
+    
     
     input[type=image] {
         width: 1.1rem;
         height: 1.1rem;
         margin-left: 2rem;
         margin-right: 2rem;
+        filter: var(--image-filter);
     }
 }
