@@ -6,6 +6,6 @@
 
 # combina_test
 CLIENT_ID = 'a-TpD_hJiCllSc7JG3seaA'
-CLIENT_SECRET = '	grifUSnHoHW5n8Y-bATjE3DsQmNoTg'
+CLIENT_SECRET = 'grifUSnHoHW5n8Y-bATjE3DsQmNoTg'
 USER_AGENT = 'Combina-webengine_v1.0'
 REDIRECT_URI = 'http://localhost:8000/Reddit/callback/'
