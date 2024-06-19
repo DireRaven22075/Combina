@@ -14,9 +14,7 @@ import base64
 from django.core.files.base import ContentFile
 import tempfile
 import os
-from PIL import Image
-from io import BytesIO
-import matplotlib.pyplot as plt
+
 
 class RedditView:
 
@@ -147,35 +145,18 @@ class RedditView:
             print("json_data : ", json_data)
             title = json_data['title']
             text = json_data['text']
-            file = json_data['file']
-            print("content : " , title,"text : ", text)
-            print("file : ", file)
-            # base64로 인코딩된 이미지를 디코딩
+            # file = json_data['file']
+            # print("content : " , title,"text : ", text)
+            # print("file : ", file)
+            # # base64로 인코딩된 이미지를 디코딩
 
             account = AccountDB.objects.filter(platform="Reddit").first()
             if account is None:
                 return redirect('/Reddit/connect')
             print(account.token)
-            reddit = praw.Reddit(
-                client_id=CLIENT_ID,
-                client_secret=CLIENT_SECRET,
-                user_agent=USER_AGENT,
-                refresh_token=account.token
-            )
-
-            # title과 file이 있을 경우
-            if title and file:
-                success = Post(reddit, title, image=temp_path)
-                if success:
-                    return JsonResponse({"success": "Posting Image"})
-            # title과 text가 있을 경우
-            if title and text and file=='':
-                print("title and text")
-                success = Post(reddit ,title, text=text)
-                if success:
-                    return JsonResponse({"success": "Posting Text"})
-                
-                return JsonResponse({"error":"Posting failed"}, status=400)
+          
+            print("title and text", title, text)
+           
             return JsonResponse({"error":"Posting failed, The requirements are not satisfied"}, status=400)
         return HttpResponse('Post')
     # Compare this snippet from platformReddit/views.py:
