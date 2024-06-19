@@ -110,7 +110,7 @@ class RedditView:
             account.icon = user.icon_img
             account.save()
 
-            return render(request, 'page/00_welcome2.html', parameters())
+            return redirect('/start/')
         except Exception as e:
             print(f'Failed to get user: {e}')
             RedditView.reddit = None
