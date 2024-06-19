@@ -52,10 +52,8 @@ class ServerView:
         
     def Post(request):
         if request.method == "POST":
-            print("posting ")
             file = None
             if 'File' in request.FILES:
-                print("file exist")
                 file = request.FILES['File']              
             data = {
                 "title": request.POST.get("title"),
@@ -80,14 +78,11 @@ class ServerView:
                         }
                     
                         response = requests.post(url, json=data,headers=headers, cookies=cookies)
-                        print(response.status_code)
-                        print("respon")
                         if response.status_code:
-                            print("post success")
+                    
                             if platform == 'Reddit':
-                                print("in reddit")
+                                print("Reddit")
                                 success = Post(data['title'], text=data['text'], image=file)
-                                print("posting " , success)
                             elif platform == "Youtube":
                                 print("Youtube")
                             print(f"Successfully posted to {platform}")

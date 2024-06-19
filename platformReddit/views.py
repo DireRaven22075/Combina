@@ -145,25 +145,18 @@ class RedditView:
             print("json_data : ", json_data)
             title = json_data['title']
             text = json_data['text']
-            file = json_data['file']
-            print("content : " , title,"text : ", text)
-            print("file : ", file)
-            # base64로 인코딩된 이미지를 디코딩
+            # file = json_data['file']
+            # print("content : " , title,"text : ", text)
+            # print("file : ", file)
+            # # base64로 인코딩된 이미지를 디코딩
 
             account = AccountDB.objects.filter(platform="Reddit").first()
             if account is None:
                 return redirect('/Reddit/connect')
             print(account.token)
           
-         
-            #title과 text가 있을 경우
-            if title and text and file=='':
-                print("title and text")
-                success = Post(title, text=text)
-                if success:
-                    return JsonResponse({"success": "Posting Text"})
-                
-                return JsonResponse({"error":"Posting failed"}, status=400)
+            print("title and text", title, text)
+           
             return JsonResponse({"error":"Posting failed, The requirements are not satisfied"}, status=400)
         return HttpResponse('Post')
     # Compare this snippet from platformReddit/views.py:
