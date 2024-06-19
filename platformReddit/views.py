@@ -14,9 +14,7 @@ import base64
 from django.core.files.base import ContentFile
 import tempfile
 import os
-from PIL import Image
-from io import BytesIO
-import matplotlib.pyplot as plt
+
 
 class RedditView:
 
@@ -156,22 +154,12 @@ class RedditView:
             if account is None:
                 return redirect('/Reddit/connect')
             print(account.token)
-            reddit = praw.Reddit(
-                client_id=CLIENT_ID,
-                client_secret=CLIENT_SECRET,
-                user_agent=USER_AGENT,
-                refresh_token=account.token
-            )
-
-            # title과 file이 있을 경우
-            if title and file:
-                success = Post(reddit, title, image=temp_path)
-                if success:
-                    return JsonResponse({"success": "Posting Image"})
-            # title과 text가 있을 경우
+          
+         
+            #title과 text가 있을 경우
             if title and text and file=='':
                 print("title and text")
-                success = Post(reddit ,title, text=text)
+                success = Post(title, text=text)
                 if success:
                     return JsonResponse({"success": "Posting Text"})
                 

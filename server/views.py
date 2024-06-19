@@ -5,6 +5,9 @@ from django.middleware.csrf import get_token
 from page.models import *
 from page.views import platforms
 import threading
+from platformReddit.post import Post
+
+
 class ServerView:
     def UpdateSetting(request):
         setting = Setting.objects.all().first()
@@ -49,20 +52,14 @@ class ServerView:
         
     def Post(request):
         if request.method == "POST":
-            files = None
-            print("post try")
+            print("posting ")
+            file = None
             if 'File' in request.FILES:
                 print("file exist")
-                file = request.FILES['File']
-                files = {'file':[file.name, file.read(), file.content_type]}
-                print("file name", file.name)
-                print("file type", file.content_type)
-               
-                
+                file = request.FILES['File']              
             data = {
                 "title": request.POST.get("title"),
                 "text": request.POST.get("text"),
-                "file" : files,
             }
   
             headers = {
@@ -74,16 +71,25 @@ class ServerView:
 
             for platform in platforms():
                 if request.POST.get(platform):
+              
                     url = f'{base_url}/{platform}/post/'
                     try:
                         
                         cookies = {
                             'csrftoken': get_token(request),
                         }
-                       
-                        response = requests.post(url, json=data,files=files,headers=headers, cookies=cookies)
-                        if response.status_code == 200:
+                    
+                        response = requests.post(url, json=data,headers=headers, cookies=cookies)
+                        print(response.status_code)
+                        print("respon")
+                        if response.status_code:
                             print("post success")
+                            if platform == 'Reddit':
+                                print("in reddit")
+                                success = Post(data['title'], text=data['text'], image=file)
+                                print("posting " , success)
+                            elif platform == "Youtube":
+                                print("Youtube")
                             print(f"Successfully posted to {platform}")
                         else:
                             print(f"Failed to post to {platform}: {response.status_code} {response.text}")

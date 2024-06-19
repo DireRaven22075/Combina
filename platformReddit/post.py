@@ -1,10 +1,25 @@
 import tempfile
 import os
 import base64
+import praw
+from django.shortcuts import render, redirect
 from django.core.files.base import ContentFile
+from page.models import AccountDB, ContentDB, FileDB
+from .config import CLIENT_ID, CLIENT_SECRET, USER_AGENT
 
-def Post(reddit ,title, text=None, image=None):
-  
+def Post(title, text=None, image=None):
+    print("IN pOST")
+    account = AccountDB.objects.filter(platform="Reddit").first()
+    if account is None:
+        return redirect('/Reddit/connect')
+    print(account.token)
+    reddit = praw.Reddit(
+        client_id=CLIENT_ID,
+        client_secret=CLIENT_SECRET,
+        user_agent=USER_AGENT,
+        refresh_token=account.token
+    )
+    
     if reddit:
         try:
 
