@@ -14,7 +14,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/SubContainer.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/03.create/menuButton.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/03.create/Post.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/03.create/Preview.css' %}" />
+    <!--<link rel="stylesheet" type="text/css" href="{% static 'css/03.create/Preview.css' %}" />-->
 
     <script src="{% static 'js/00.all/Menubar.js' %}"></script>
     <script src="{% static 'js/03.create/Preview.js' %}"></script>
@@ -54,22 +54,6 @@
     <div id="Title">
         <div>Create</div>
     </div>
-    <div id="Sub" class="noselect" style="display: none;">
-        <div id="Preview">
-            <h1 id="PreviewTitle"></h1>
-            <pre id="PreviewContent"></pre>
-            <div id="PreviewImage"></div>
-            <div id="PreviewImages"></div>
-        </div>
-    </div>
-    <div id="Navigation">
-    </div>
-    <div id="Subtitle" style="display: none;">Preview</div>
-    {% if status == "success" %}
-
-    {% elif status == "error" %}
-
-    {% endif %}
 </body>
 
 </html>
