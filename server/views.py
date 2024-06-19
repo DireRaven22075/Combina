@@ -9,9 +9,9 @@ class ServerView:
     def UpdateSetting(request):
         setting = Setting.objects.all().first()
         setting.theme = request.POST.get('theme')
-        setting.redditSize = request.POST.get('redditSize')
-        setting.youtubeSize = request.POST.get('youtubeSize')
-        setting.everytimeSize = request.POST.get('everytimeSize')
+        setting.redditSize = request.POST.get('reddit')
+        setting.youtubeSize = request.POST.get('youtube')
+        setting.everytimeSize = request.POST.get('everytime')
         setting.save()
         return redirect(request.META.get('HTTP_REFERER', '/home'))
     def Disconnect(request):

@@ -12,7 +12,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/MainContainer.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/00.all/SubContainer.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/05.settings/menuButton.css' %}" />
-
+    <link rel="stylesheet" type="text/css" href="{% static 'css/05.settings/settings.css' %}" />
     <style>
         .title-bar {
             display: flex;
@@ -55,19 +55,22 @@
         var ebool = false;
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('Reddit').addEventListener('change', () => {
+                var btn = document.querySelector('input[type="submit"]');
                 rbool = redditSize != document.getElementById('Reddit').value;
                 if (rbool || ybool || ebool) {
-                document.querySelector('input[type="submit"]').removeAttribute('disabled');
-                document.querySelector('input[type="submit"]').value = "Save";
-            } else {
-                document.querySelector('input[type="submit"]').setAttribute('disabled', 'true');
-                document.querySelector('input[type="submit"]').value = "Nothing to save";
-            }
+                    btn.removeAttribute('disabled');
+                    btn.value = "Save";
+                } else {
+                    btn.setAttribute('disabled', 'true');
+                    btn.value = "Nothing to save";
+                }
             });
             document.getElementById('Youtube').addEventListener('change', () => {
                 ybool = youtubeSize != document.getElementById('Youtube').value;
                 if (rbool || ybool || ebool) {
+                    var name = document.querySelector('input[type="submit"]');
                 document.querySelector('input[type="submit"]').removeAttribute('disabled');
+                
                 document.querySelector('input[type="submit"]').value = "Save";
             } else {
                 document.querySelector('input[type="submit"]').setAttribute('disabled', 'true');
@@ -100,33 +103,33 @@
         <div onclick="js:goto('/settings')" class="element button settings-button"><label><img
                     src="{% static 'img/icon/more.svg'%}" >More</label></div>
     </header>
-
-    <form id="Main" action="/server/setting" method="post">
+    <form class="settings" id="Main" action="/server/setting/" method="post">
         <h3>Theme</h3>
-        <div>
+        <div class="container">
             <input type="radio" name="theme" value="light" id="light" checked>
             <label for="light">Light</label>
             <input type="radio" name="theme" value="dark" id="dark">
             <label for="dark">Dark</label>
         </div>
         <h3>Reddit</h3>
-        <div>
+        <div class="container">
             <label for="reddit">Number of post to recieve </label>
             <input type="number" max={50} min={1} id="Reddit" name="reddit" value="{{setting.redditSize}}">
         </div>
         <h3>Youtube</h3>
-        <div>
+        <div class="container">
             <label for="reddit">Number of post to recieve </label>
             <input type="number" max={50} min={1} id="Youtube" name="youtube" value="{{setting.youtubeSize}}">
         </div>
         <h3>Everytime</h3>
-        <div>
+        <div class="container">
             <label for="reddit">Number of post to recieve </label>
             <input type="number" max={50} min={1} id="Everytime" name="everytime" value="{{setting.everytimeSize}}">
         </div>
         <input type="submit" value="Nothing to save" disabled>
     </form>
-    <div id="Title"></div>
+    <div id="Title">Settings</div>
+    <div id="Navigation"></div>
     <div id="Sub" style="display: none;"></div>
     <div id="Subtitle" style="display: none;"></div>
 </body>

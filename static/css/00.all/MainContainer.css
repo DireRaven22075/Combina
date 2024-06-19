@@ -11,8 +11,6 @@
     left: calc(14rem + 0.2rem);
     background-color: #ffffff;
     padding-top: 7rem;
-    align-items: center;
-    justify-content: center;
     overflow: scroll;
     scrollbar-width: none;
 }
