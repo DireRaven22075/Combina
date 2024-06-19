@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="ko">
 {% load static %}
+
 <head>
-    
+
     <title>Combina : Accounts</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -25,14 +26,14 @@
 <body>
     <header id="Menubar">
         <div class="title"><label><img src="{% static 'img/combinalogo.svg' %}" <label></div>
-            <div onclick="js:goto('/home')" class="element button home-button"><label><img
-                    src="{% static 'img/icon/home.svg'%}" >Home</label></div>
+        <div onclick="js:goto('/home')" class="element button home-button"><label><img
+                    src="{% static 'img/icon/home.svg'%}">Home</label></div>
         <div onclick="js:goto('/create')" class="element button create-button"><label><img
-                    src="{% static 'img/icon/create.svg'%}" >Create</label></div>
+                    src="{% static 'img/icon/create.svg'%}">Create</label></div>
         <div onclick="js:goto('/accounts')" class="element button accounts-button"><label><img
-                    src="{% static 'img/icon/profile.svg'%}" >Accounts</label></div>
-        <div class="element button settings-button"><label><img
-                    src="{% static 'img/icon/more.svg'%}" >More</label></div>
+                    src="{% static 'img/icon/profile.svg'%}">Accounts</label></div>
+        <div onclick="js:goto('/settings')" class="element button settings-button"><label><img
+                    src="{% static 'img/icon/more.svg'%}">More</label></div>
     </header>
 
     <div id="Main">
@@ -42,25 +43,29 @@
         {% with platformIcon='img/icon/platform/'|add:account.platform|add:'.svg' %}
         {% if account.connected %}
         <div class="account noselect" onclick="js:goto('{{platformDisconnect}}')" style="width: 90%; margin-left: 3%;">
-        {% else %}
-        <div class="account  noselect" onclick="js:goto('{{platformConnect}}')" style="width: 90%; margin-left: 3%;">
-        {% endif %}
-            <img class="icon" src="{% static platformIcon %}" />
-            {% if account.connected %} {{account.platform}} - {{account.name}}
-            {% else %} {{account.platform}} {% endif %}
+            {% else %}
+            <div class="account  noselect" onclick="js:goto('{{platformConnect}}')"
+                style="width: 90%; margin-left: 3%;">
+                {% endif %}
+                <img class="icon" src="{% static platformIcon %}" />
+                {% if account.connected %} {{account.platform}} - {{account.name}}
+                {% else %} {{account.platform}} {% endif %}
+            </div>
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+            {% endfor %}
+            <div class="account noselect" onclick="js:goto('/server/disconnect')" style="width: 90%; margin-left: 3%">
+                <img class="icon" src="{% static 'img/icon/combina.svg' %}" />
+                Disconnect All Accounts
+            </div>
         </div>
-        {% endwith %}
-        {% endwith %}
-        {% endwith %}
-        {% endfor %}
-        <div class="account noselect" onclick="js:goto('/server/disconnect')" style="width: 90%; margin-left: 3%">
-            <img class="icon" src="{% static 'img/icon/combina.svg' %}" />
-            Disconnect All Accounts
+        <div id="Title">
+            <div>Accounts</div>
         </div>
-    </div>
-    <div id="Title"><div>Accounts</div></div>
-    <div id="Navigation"></div>
-    <div id="Sub" style="display: none;"></div>
-    <div id="Subtitle" style="display: none;"></div>
+        <div id="Navigation"></div>
+        <div id="Sub" style="display: none;"></div>
+        <div id="Subtitle" style="display: none;"></div>
 </body>
+
 </html>

@@ -5,4 +5,5 @@ urlpatterns = [
     path('post/', ServerView.Post),
     path('get-content/', ServerView.GetContent),
     path('clear-content/', ServerView.ClearContent),
+    path('setting/', ServerView.UpdateSetting),
 ]

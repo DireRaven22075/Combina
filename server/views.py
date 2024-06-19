@@ -6,6 +6,14 @@ from page.models import *
 from page.views import platforms
 import threading
 class ServerView:
+    def UpdateSetting(request):
+        setting = Setting.objects.all().first()
+        setting.theme = request.POST.get('theme')
+        setting.redditSize = request.POST.get('redditSize')
+        setting.youtubeSize = request.POST.get('youtubeSize')
+        setting.everytimeSize = request.POST.get('everytimeSize')
+        setting.save()
+        return redirect(request.META.get('HTTP_REFERER', '/home'))
     def Disconnect(request):
         cookies = {'csrftoken': get_token(request)}
         headers = {

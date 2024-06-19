@@ -29,7 +29,8 @@
                     src="{% static 'img/icon/create.svg'%}">Create</label></div>
         <div onclick="js:goto('/accounts')" class="element button accounts-button"><label><img
                     src="{% static 'img/icon/profile.svg'%}">Accounts</label></div>
-        <div class="element button settings-button"><label><img src="{% static 'img/icon/more.svg'%}">More</label></div>
+        <div onclick="js:goto('/settings')" class="element button settings-button"><label><img
+                    src="{% static 'img/icon/more.svg'%}">More</label></div>
     </header>
 
     <form id="Main" method="POST" class="post" action="/server/post/">
@@ -44,7 +45,7 @@
         {% for account in accounts %}
         {% if account.connected %}
         <input type="checkbox" name="{{account.platform}}" value="True" />
-        <label>{{account.platform}}</label><br/>
+        <label>{{account.platform}}</label><br />
         {% endif %}
         {% endfor %}
         <input type="submit" value="Post" />
