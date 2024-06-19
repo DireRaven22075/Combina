@@ -19,13 +19,13 @@ function setDetail(element) {
     Detail['content'].innerHTML = element.children[2].innerHTML.split('|||')[1];
     Detail['images'].innerHTML = "";
     Detail['video'].style.display = 'none';
-    if (element.children.length > 5) {
+    if (element.children.length > 6) {
         if (Detail['platform'].innerHTML == 'Youtube') {
             Detail['video'].style.display = 'block';
             Detail['video'].src = element.children[3].value;
         }
         else {
-            for (var i = 4; i < element.children.length; i++) {
+            for (var i = 4; i < element.children.length - 2; i++) {
                 var src = element.children[i].value;
                 var img = document.createElement('img');
                 img.classList.add('detail-image');
