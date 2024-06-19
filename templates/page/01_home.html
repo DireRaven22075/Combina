@@ -23,11 +23,8 @@
     <script src="{% static 'js/00.all/MainContainer.js' %}"></script>
     <script src="{% static 'js/02.home/Detail.js' %}"></script>
     <script>
-        function ElectronOpen(url) {
+        function ElectronOpen(url) { 
             window.electronAPI.openExternal(url);
-        }
-        function redirect(element) {
-            window.electronAPI.openExternal(element.value);
         }
     </script>
     <style>
@@ -115,7 +112,7 @@
     <div id="Title">
         <div>Home</div>
         <input style="width: 2rem; height: auto; position: absolute; right: 1rem;" type="image"
-            onclick="goto('/server/clear-content/')" src="{% static 'img/icon/reload.svg' %}" />
+            onclick="goto('/server/get-content/')" src="{% static 'img/icon/reload.svg' %}" />
     </div>
     <div id="Navigation" style="display: flex;">
         <input type="button" onclick="js:ui_navigation('All'); js:filter('All')" value="All" />
