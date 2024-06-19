@@ -25,13 +25,26 @@ document.addEventListener("DOMContentLoaded", function() {
 
 //#region ui-updates
 function ui_navigation(platform) {
+    const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
     const target = document.getElementById("Navigation");
     for (const child of target.children) {
-        child.style.color = (platform == "All") ? "#000000" : "#FFFFFF";
+        if (prefersDarkScheme.matches) {
+            child.style.color = '#FFFFFF';
+        }
+        else {
+            child.style.color = (platform == "All") ? "#000000" : "#FFFFFF";
+        }
         child.disabled = child.value == platform;
     }
     switch(platform) {
-        case "All": target.style.background = "#f9f9f9"; break;
+        case "All":
+            if (prefersDarkScheme.matches) {
+                target.style.background = "#151515";
+            }
+            else {
+                target.style.background = "#F9F9F9";
+            }
+        break;
         case "Facebook": target.style.background = "#0052FF"; break;
         case "Instagram": target.style.backgroundImage = 'linear-gradient(to right, rgb(255, 0, 169), rgb(255, 139, 0))'; break;
         case "X": target.style.background = "#101010"; element.style.color = "#FFFFFF"; break;
