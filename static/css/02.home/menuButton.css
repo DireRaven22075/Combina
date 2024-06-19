@@ -1,3 +1,13 @@
+:root {
+    --home-button-background-color: #E9E9E9;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --home-button-background-color: #323232;
+    }
+}
+
 .home-button {
-    background-color: #E9E9E9;
+    background-color: var(--home-button-background-color);
 }

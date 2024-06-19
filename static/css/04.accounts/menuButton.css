@@ -1,1 +1,14 @@
-.accounts-button {background-color: #E9E9E9;}
+:root {
+    --accounts-button-background-color: #E9E9E9;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --accounts-button-background-color: #323232;
+    }
+}
+
+.accounts-button {
+    background-color: var(--accounts-button-background-color);
+    /* ...rest of your styles... */
+}

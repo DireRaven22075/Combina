@@ -1,1 +1,14 @@
-.settings-button {background-color: #E9E9E9;}
+:root {
+    --settings-button-background-color: #E9E9E9;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --settings-button-background-color: #323232;
+    }
+}
+
+.settings-button {
+    background-color: var(--settings-button-background-color);
+    /* ...rest of your styles... */
+}

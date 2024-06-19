@@ -1,5 +1,23 @@
 /* 중앙 부분 메인 화면 컨테이너를 위한 css */
 /* 메인 컨테이너 저장공간 */
+:root {
+    --main-container-background-color: #ffffff;
+    --navigation-background-color: #f9f9f9;
+    --title-text-color: #000000;
+    --navigation-text-color: #000000;
+    --border-color: #e9e9e9;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --main-container-background-color: #202020;
+        --navigation-background-color: #202020;
+        --title-text-color: #ffffff;
+        --navigation-text-color: #ffffff;
+        --border-color: #000000;
+    }
+}
+
 #Main {
     width: 33rem;
     position: fixed;
@@ -9,7 +27,8 @@
     top: 0rem;
     bottom: 0rem;
     left: calc(14rem + 0.2rem);
-    background-color: #ffffff;
+    background-color: var(--main-container-background-color);
+    color: var(--title-text-color);
     padding-top: 7rem;
     overflow: scroll;
     scrollbar-width: none;
@@ -30,8 +49,9 @@
     left: calc(14rem + 0.2rem);
     height: 3rem;
     position: fixed;
-    background-color: #ffffff;
-    border-bottom: 0em solid #EBEBEB;
+    background-color: var(--main-container-background-color);
+    color: var(--title-text-color);
+    border-bottom: 0.2rem solid var(--border-color);
     text-align: center; display: flex; justify-content: center; align-items: center;
 }
 
@@ -44,8 +64,9 @@
     align-items: center;
     left: calc(14rem + 0.2rem);
     height: 2.5rem;
-    background-color: #f9f9f9;
-    border-bottom: 0.2rem solid #e9e9e9;
+    background-color: var(--navigation-background-color);
+    color: var(--title-text-color);
+    border-bottom: 0.2rem solid var(--border-color);
 
     input[type=button] {
         align-self: center;
@@ -53,5 +74,6 @@
         background: none;
         border: none;
         font-size: 0.95rem;
+        color: var(--title-text-color);
     }
 }

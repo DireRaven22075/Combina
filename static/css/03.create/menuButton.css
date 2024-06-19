@@ -1,1 +1,14 @@
-.create-button {background-color: #E9E9E9;}
+:root {
+    --create-button-background-color: #E9E9E9;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --create-button-background-color: #323232;
+    }
+}
+
+.create-button {
+    background-color: var(--create-button-background-color);
+    /* ...rest of your styles... */
+}
