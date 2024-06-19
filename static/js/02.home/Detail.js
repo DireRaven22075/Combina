@@ -52,7 +52,3 @@ function closeDetail() {
     document.getElementById("Subtitle").style.visibility = "hidden";
 }
 //#endregion
-
-//#region 
-
-//#endregion

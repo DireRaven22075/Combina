@@ -19,19 +19,11 @@
 </head>
 
 <body>
-    {% if connected %}
-    <div id="First" style="display:flex; background-color: #E0E0E0;">
-        <div class="header">
-            <img src="{% static 'img/combinalogo.svg' %}" />
-        </div>
-    </div>
-    {% else %}
     <div id="First" style="display:flex;">
         <div class="header">
             <img src="{% static 'img/combinalogo.svg' %}" />
         </div>
     </div>
-    {% endif %}
     <input id="Btn" type="button" onclick="js:goto('/start')" value="Get started..." />
 
 <!--

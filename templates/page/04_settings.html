@@ -50,62 +50,40 @@
         const redditSize = {{setting.redditSize}};
         const youtubeSize = {{setting.youtubeSize}};
         const everytimeSize = {{setting.everytimeSize}};
-        const light = document.getElementById('light');
-        const dark = document.getElementById('dark');
-        const reddit = document.getElementById('Reddit');
-        const youtube = document.getElementById('Youtube');
-        const everytime = document.getElementById('Everytime');
         var rbool = false;
         var ybool = false;
         var ebool = false;
-        reddit.addEventListener('change', () => {
-            if (reddit.value > 50) {
-                reddit.value = 50;
-            } else if (reddit.value < 1) {
-                reddit.value = 1;
-            }
-            if (reddit.value != redditSize) {
-                rbool = true;
-            } else {
-                rbool = false;
-            }
-            if (rbool || ybool || ebool) {
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('Reddit').addEventListener('change', () => {
+                rbool = redditSize != document.getElementById('Reddit').value;
+                if (rbool || ybool || ebool) {
                 document.querySelector('input[type="submit"]').removeAttribute('disabled');
                 document.querySelector('input[type="submit"]').value = "Save";
             } else {
                 document.querySelector('input[type="submit"]').setAttribute('disabled', 'true');
                 document.querySelector('input[type="submit"]').value = "Nothing to save";
             }
-        });
-        everytime.addEventListener('change', () => {
-            everytime.value = Math.clamp(everytime.value, 1, 50);
-            ebool = everytime.value != everytimeSize;
-            if (rbool || ybool || ebool) {
+            });
+            document.getElementById('Youtube').addEventListener('change', () => {
+                ybool = youtubeSize != document.getElementById('Youtube').value;
+                if (rbool || ybool || ebool) {
                 document.querySelector('input[type="submit"]').removeAttribute('disabled');
                 document.querySelector('input[type="submit"]').value = "Save";
             } else {
                 document.querySelector('input[type="submit"]').setAttribute('disabled', 'true');
                 document.querySelector('input[type="submit"]').value = "Nothing to save";
             }
-        });
-        youtube.addEventListener('change', () => {
-            if (reddit.value > 50) {
-                reddit.value = 50;
-            } else if (reddit.value < 1) {
-                reddit.value = 1;
-            }
-            if (reddit.value != redditSize) {
-                rbool = true;
-            } else {
-                rbool = false;
-            }
-            if (rbool || ybool || ebool) {
+            });
+            document.getElementById('Everytime').addEventListener('change', () => {
+                ebool = everytimeSize != document.getElementById('Everytime').value;
+                if (rbool || ybool || ebool) {
                 document.querySelector('input[type="submit"]').removeAttribute('disabled');
                 document.querySelector('input[type="submit"]').value = "Save";
             } else {
                 document.querySelector('input[type="submit"]').setAttribute('disabled', 'true');
                 document.querySelector('input[type="submit"]').value = "Nothing to save";
             }
+            });
         });
     </script>
 </head>
@@ -134,17 +112,17 @@
         <h3>Reddit</h3>
         <div>
             <label for="reddit">Number of post to recieve </label>
-            <input type="number" max="50" min="1" id=Rreddit" name="reddit" value="{{setting.redditSize}}">
+            <input type="number" max={50} min={1} id="Reddit" name="reddit" value="{{setting.redditSize}}">
         </div>
         <h3>Youtube</h3>
         <div>
             <label for="reddit">Number of post to recieve </label>
-            <input type="number" max="50" min="1" id="Youtube" name="reddit" value="{{setting.youtubeSize}}">
+            <input type="number" max={50} min={1} id="Youtube" name="reddit" value="{{setting.youtubeSize}}">
         </div>
         <h3>Everytime</h3>
         <div>
             <label for="reddit">Number of post to recieve </label>
-            <input type="number" max="50" min="1" id="reddit" name="reddit" value="{{setting.everytimeSize}}">
+            <input type="number" max={50} min={1} id="Everytime" name="reddit" value="{{setting.everytimeSize}}">
         </div>
         <input type="submit" value="Nothing to save" disabled>
     </form>
