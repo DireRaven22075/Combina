@@ -32,3 +32,6 @@ Combina: Combine + @
 
 ## Requirements
 
+```
+pip install -r module.txt
+```
