@@ -1,4 +1,5 @@
 # Combina
+
 ![app-logo](https://github.com/DireRaven22075/202401_Project/assets/19562627/cda47f99-0136-4200-9a23-bef7a699111b)
 
 Combina: Combine + @
@@ -32,6 +33,6 @@ Combina: Combine + @
 
 ## Requirements
 
-```
+``` Terminal
 pip install -r module.txt
 ```
